@@ -1,0 +1,795 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+:root {
+  --nblm-primary: #1a73e8;
+  --nblm-bg-hover: rgba(26, 115, 232, 0.04);
+  --nblm-border: #dadce0;
+  --nblm-text: #3c4043;
+  --nblm-tag-bg: #1a73e8; 
+  --nblm-tag-text: #ffffff;
+}
+
+/* Forzar Roboto */
+.nblm-popover, .nblm-tag, .nblm-menu-item, .nblm-modal, .nblm-tools-container, .nblm-tags-tooltip {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+/* Contenedor de etiquetas */
+.nblm-tag-container {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin-top: 0;
+  padding: 0 16px 12px;
+  height: 26px;
+  align-items: center;
+  position: relative;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.mat-mdc-cell .nblm-tag-container, td .nblm-tag-container {
+    margin-top: 2px;
+    padding: 0;
+    height: auto;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 12px;
+}
+
+/* Etiquetas de filtrado en la barra superior */
+.nblm-filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.nblm-filter-tag {
+    padding: 6px 16px; /* Más padding para click fácil */
+    border-radius: 16px;
+    background: #ffffff;
+    color: #1a73e8;
+    font-size: 13px; /* Un poco más grande para leer mejor */
+    cursor: pointer;
+    border: 1px solid #dadce0;
+    transition: all 0.2s;
+    user-select: none;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.nblm-filter-tag:hover {
+    background: #e8f0fe;
+    border-color: #1a73e8;
+}
+
+/* Estado activo: IDÉNTICO a las etiquetas de los cuadernos (.nblm-tag) */
+.nblm-filter-tag.active {
+    background-color: var(--nblm-tag-bg); /* #1a73e8 */
+    color: var(--nblm-tag-text); /* #ffffff */
+    border-color: transparent;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
+.nblm-filter-tag.active:hover {
+    background-color: #174ea6;
+}
+
+/* Botón discreto para limpiar filtros */
+.nblm-clear-filters {
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: transparent;
+    color: #5f6368;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nblm-clear-filters:hover {
+    background: #f1f3f4;
+    color: #202124;
+}
+
+.nblm-clear-filters span {
+    font-size: 16px;
+    line-height: 1;
+    font-weight: bold;
+}
+
+/* Selector de Modo de Filtro (AND/OR) */
+.nblm-filter-mode-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f3f4;
+    border-radius: 16px;
+    padding: 2px;
+    border: 1px solid #dadce0;
+    margin-left: 8px;
+    margin-right: 4px;
+}
+
+.nblm-mode-btn {
+    padding: 2px 8px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #5f6368;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.nblm-mode-btn.active {
+    background: #ffffff;
+    color: var(--nblm-primary);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.nblm-mode-btn:hover:not(.active) {
+    color: #202124;
+}
+
+/* Estilos de la barra de búsqueda */
+.nblm-search-input {
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.nblm-search-input:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.nblm-tag {
+  background-color: var(--nblm-tag-bg);
+  color: var(--nblm-tag-text);
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  max-width: 110px; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  cursor: default;
+  border: 1px solid transparent;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  line-height: 1;
+  height: 18px;
+}
+
+.nblm-tag:hover {
+    background-color: #174ea6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
+/* Botón de eliminar (X) en blanco */
+.nblm-tag .remove-tag {
+  margin-left: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  opacity: 0.7;
+  padding: 1px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 14px;
+  width: 14px;
+  color: white;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.nblm-tag .remove-tag:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Chip para mostrar "+X" etiquetas más */
+.nblm-more-tags {
+    font-size: 10px;
+    color: #5f6368;
+    background: #f1f3f4;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-weight: 500;
+    border: 1px solid #dadce0;
+    transition: all 0.2s;
+    box-sizing: border-box;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    height: 18px; /* Altura fija para asegurar paridad */
+}
+
+.nblm-more-tags:hover {
+    background: #e8f0fe;
+    color: #1967d2;
+    border-color: #1967d2;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Icono de advertencia por colisión de metadatos */
+.nblm-collision-warning {
+    color: #f4b400;
+    cursor: help;
+    margin-left: 8px;
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Tooltip interactivo */
+.nblm-tags-tooltip {
+    position: fixed;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 12px;
+    border-radius: 8px;
+    z-index: 10000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 280px;
+}
+
+.nblm-tags-tooltip .nblm-tag {
+    max-width: 100%; 
+}
+
+/* Popover de añadir etiqueta - CHECKBOX STYLE */
+.nblm-popover {
+  position: fixed;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  border: 1px solid var(--nblm-border);
+  padding: 0; /* Padding movido a los elementos internos */
+  z-index: 10000;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.nblm-popover-header {
+    padding: 12px;
+    border-bottom: 1px solid #f1f3f4;
+    background: #f8f9fa;
+}
+
+.nblm-popover input {
+  padding: 8px 12px;
+  border: 1px solid var(--nblm-border);
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nblm-popover input:focus {
+    border-color: var(--nblm-primary);
+    box-shadow: 0 0 0 1px var(--nblm-primary);
+}
+
+.nblm-popover .tag-list {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+/* Item de la lista con checkbox */
+.nblm-check-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--nblm-text);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.1s;
+}
+
+.nblm-check-item:hover {
+  background: var(--nblm-bg-hover);
+}
+
+.nblm-check-item.checked {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    font-weight: 500;
+}
+
+/* Checkbox visual simulado o real */
+.nblm-check-icon {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #5f6368;
+    border-radius: 2px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.nblm-check-item.checked .nblm-check-icon {
+    background-color: #1a73e8;
+    border-color: #1a73e8;
+    color: white;
+}
+
+.nblm-check-icon::after {
+    content: '✓';
+    font-size: 12px;
+    display: none;
+}
+
+.nblm-check-item.checked .nblm-check-icon::after {
+    display: block;
+}
+
+/* Botón de crear nueva */
+.nblm-create-option {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #1a73e8;
+    border-top: 1px solid #f1f3f4;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nblm-create-option:hover {
+    background: #e8f0fe;
+}
+
+
+/* Resto de estilos (Tools, Modal, Menú) */
+.nblm-tools-container {
+  padding: 16px 24px;
+  background: white;
+  border-bottom: 1px solid var(--nblm-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  /* Asegurar que ocupe todo el ancho y rompa flujos flex */
+  width: 100%;
+  box-sizing: border-box;
+  flex: 0 0 100%;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 10;
+  
+  /* Soporte para CSS Grid containers */
+  grid-column: 1 / -1;
+  max-width: 100%;
+}
+
+.nblm-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nblm-manage-btn {
+  background: white;
+  border: 1px solid #dadce0;
+  padding: 6px 16px;
+  border-radius: 18px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #1a73e8;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.nblm-manage-btn:hover {
+    background-color: #f1f3f4;
+    border-color: #d2e3fc;
+}
+
+/* Modal Overlay */
+.nblm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 20000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal de Gestión de Etiquetas Mejorado */
+.nblm-modal {
+  background: white;
+  border-radius: 12px;
+  width: 500px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14);
+  overflow: hidden;
+  border: none;
+}
+
+.nblm-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f3f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+}
+
+.nblm-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #202124;
+}
+
+.nblm-modal-close {
+  cursor: pointer;
+  font-size: 24px;
+  color: #5f6368;
+  line-height: 1;
+}
+
+.nblm-modal-body {
+  padding: 0;
+  overflow-y: auto;
+}
+
+.nblm-manage-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.nblm-manage-item {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f3f4;
+  transition: background 0.2s;
+}
+
+.nblm-manage-item:hover {
+  background: #f8f9fa;
+}
+
+.nblm-manage-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.nblm-tag-edit-input {
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  flex: 1;
+  background: transparent;
+  cursor: text;
+  transition: all 0.2s;
+}
+
+.nblm-tag-edit-input:hover {
+  background: #ffffff;
+  border-color: #dadce0;
+}
+
+.nblm-tag-edit-input:focus {
+  border-color: var(--nblm-primary);
+  background: white;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Sección de creación en el modal */
+.nblm-manage-create-row {
+    padding: 16px 24px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #f1f3f4;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.nblm-manage-create-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+.nblm-manage-create-input:focus {
+    border-color: var(--nblm-primary);
+}
+
+.nblm-btn-primary {
+    background: var(--nblm-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.nblm-btn-primary:hover {
+    background: #174ea6;
+}
+
+/* Animación de resaltado para nueva etiqueta */
+@keyframes nblm-flash-highlight {
+    0% { background-color: rgba(24, 128, 56, 0.2); }
+    100% { background-color: transparent; }
+}
+
+.nblm-manage-item.newly-created {
+    animation: nblm-flash-highlight 2s ease-out;
+}
+
+/* Selector de Color */
+.nblm-color-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.nblm-color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.1s;
+}
+
+.nblm-color-swatch:hover {
+  transform: scale(1.2);
+}
+
+.nblm-color-swatch.active {
+  border-color: #202124;
+  box-shadow: inset 0 0 0 2px white;
+  transform: scale(1.1);
+}
+
+.nblm-color-swatch.active::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.nblm-custom-color-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px dashed #dadce0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #5f6368;
+  overflow: hidden;
+  position: relative;
+}
+
+.nblm-custom-color-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.nblm-btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: #5f6368;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nblm-btn-icon:hover {
+  background: #e8eaed;
+  color: #202124;
+}
+
+.nblm-btn-icon.danger:hover {
+  color: #d93025;
+  background: #fce8e6;
+}
+
+/* Modal de Alerta de Colisión Personalizado */
+.nblm-alert-modal {
+    background: white;
+    border-radius: 12px;
+    width: 400px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 30000;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-alert-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.nblm-alert-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #202124;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-alert-message {
+    font-size: 14px;
+    color: #5f6368;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-alert-button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-alert-button:hover {
+    background: #174ea6;
+}
+
+/* Estilos menú contextual */
+.nblm-menu-item {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 16px !important;
+    height: 48px !important;
+    width: 100% !important;
+    background: none !important;
+    border: none !important;
+    font-size: 14px !important;
+    color: #3c4043 !important;
+    cursor: pointer !important;
+    text-align: left !important;
+}
+
+.nblm-menu-item:hover {
+    background-color: rgba(60, 64, 67, 0.04) !important;
+}
+
+/* Modal de Confirmación Personalizado */
+.nblm-confirm-modal {
+    background: white;
+    border-radius: 12px;
+    width: 350px;
+    padding: 24px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 30000;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-confirm-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #202124;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-confirm-message {
+    font-size: 14px;
+    color: #5f6368;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.nblm-btn-cancel {
+    background: white;
+    color: #5f6368;
+    border: 1px solid #dadce0;
+    padding: 8px 16px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.nblm-btn-cancel:hover {
+    background: #f1f3f4;
+}
+
+.nblm-btn-danger {
+    background: #d93025;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.nblm-btn-danger:hover {
+    background: #b21f16;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
