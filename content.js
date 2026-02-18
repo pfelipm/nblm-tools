@@ -20,7 +20,7 @@ let saveTimeout = null;
 function saveAllData() {
     if (saveTimeout) clearTimeout(saveTimeout);
     saveTimeout = setTimeout(() => {
-        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig };
+        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode };
         const jsonString = JSON.stringify(fullData);
         
         // 1. Guardado en LOCAL (sin límites restrictivos)
@@ -296,22 +296,28 @@ function injectMenuItem(overlay) {
     }
 }
 
-function showCollisionAlert() {
+function showAlertDialog(icon, title, message) {
     const overlay = document.createElement('div');
     overlay.className = 'nblm-modal-overlay';
+    overlay.style.zIndex = '30000';
     overlay.innerHTML = `
         <div class="nblm-alert-modal">
-            <div class="nblm-alert-icon">⚠️</div>
-            <div class="nblm-alert-title">Acción bloqueada por seguridad</div>
-            <div class="nblm-alert-message">
-                Existen varios cuadernos con nombre, fuentes y fecha idénticos en esta lista.<br><br>
-                Para evitar errores, renombra uno de los cuadernos o utiliza la <b>vista de miniaturas</b> para etiquetarlos.
-            </div>
+            <div class="nblm-alert-icon">${icon}</div>
+            <div class="nblm-alert-title">${title}</div>
+            <div class="nblm-alert-message">${message}</div>
             <button class="nblm-alert-button">Entendido</button>
         </div>
     `;
     overlay.querySelector('.nblm-alert-button').onclick = () => overlay.remove();
     document.body.appendChild(overlay);
+}
+
+function showCollisionAlert() {
+    showAlertDialog(
+        '⚠️',
+        'Acción bloqueada por seguridad',
+        'Existen varios cuadernos con nombre, fuentes y fecha idénticos en esta lista.<br><br>Para evitar errores, renombra uno de los cuadernos o utiliza la <b>vista de miniaturas</b> para etiquetarlos.'
+    );
 }
 
 function toggleTag(id, tag) {
@@ -513,14 +519,125 @@ function showManagementModal() {
         <div class="nblm-modal">
             <div class="nblm-modal-header">
                 <h2>Gestionar etiquetas</h2>
-                <span class="nblm-modal-close">&times;</span>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <button class="nblm-btn-icon" id="nblm-export" title="Exportar configuración (JSON)">💾</button>
+                    <button class="nblm-btn-icon" id="nblm-import" title="Importar configuración (JSON)">📂</button>
+                    <span class="nblm-modal-close" style="margin-left:8px;">&times;</span>
+                </div>
             </div>
             <div class="nblm-modal-body"></div>
         </div>
     `;
+
+    overlay.querySelector('#nblm-export').onclick = () => {
+        const data = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `nblm-backup-${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    overlay.querySelector('#nblm-import').onclick = () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.json';
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (re) => {
+                try {
+                    const imported = JSON.parse(re.target.result);
+                    if (!imported.globalTags || !Array.isArray(imported.globalTags)) {
+                        showAlertDialog('❌', 'Error de formato', 'El archivo no parece ser un backup válido de NBLM Organizer.');
+                        return;
+                    }
+                    
+                    // Mostrar diálogo de selección granular
+                    showImportGranularModal(imported, () => {
+                        saveAllData();
+                        updateUI();
+                        render();
+                    });
+
+                } catch (err) {
+                    showAlertDialog('❌', 'Error de lectura', 'No se ha podido procesar el archivo JSON correctamente.');
+                }
+            };
+            reader.readAsText(file);
+        };
+        fileInput.click();
+    };
+
     overlay.querySelector('.nblm-modal-close').onclick = () => overlay.remove();
     document.body.appendChild(overlay);
     render();
+}
+
+function showImportGranularModal(data, onComplete) {
+    const overlay = document.createElement('div');
+    overlay.className = 'nblm-modal-overlay';
+    overlay.style.zIndex = '30001';
+    overlay.innerHTML = `
+        <div class="nblm-confirm-modal" style="width:400px;">
+            <div class="nblm-confirm-title">Importar configuración</div>
+            <div class="nblm-confirm-message">Selecciona qué elementos deseas sobrescribir del archivo seleccionado:</div>
+            
+            <div style="text-align:left; background:#f8f9fa; padding:16px; border-radius:8px; display:flex; flex-direction:column; gap:12px; margin-bottom:24px; width:100%; box-sizing:border-box;">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="import-opt-tags" checked style="width:16px; height:16px; cursor:pointer;">
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-weight:500; font-size:13px; color:#202124;">Repositorio de etiquetas</span>
+                        <span style="font-size:11px; color:#5f6368;">Nombres y colores globales (${data.globalTags.length} etiquetas)</span>
+                    </div>
+                </label>
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="import-opt-notebooks" checked style="width:16px; height:16px; cursor:pointer;">
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-weight:500; font-size:13px; color:#202124;">Etiquetado de cuadernos</span>
+                        <span style="font-size:11px; color:#5f6368;">Asociaciones actuales y preferencias de filtro</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="nblm-confirm-actions" style="display:flex; gap:12px; justify-content:flex-end; width:100%;">
+                <button class="nblm-btn-cancel">Cancelar</button>
+                <button class="nblm-btn-primary" id="nblm-confirm-import">Importar selección</button>
+            </div>
+        </div>
+    `;
+
+    overlay.querySelector('.nblm-btn-cancel').onclick = () => overlay.remove();
+    overlay.querySelector('#nblm-confirm-import').onclick = () => {
+        const importTags = overlay.querySelector('#import-opt-tags').checked;
+        const importNotebooks = overlay.querySelector('#import-opt-notebooks').checked;
+
+        if (!importTags && !importNotebooks) {
+            overlay.remove();
+            return;
+        }
+
+        if (importTags) {
+            globalTags = data.globalTags;
+            tagConfig = data.tagConfig || {};
+        }
+
+        if (importNotebooks) {
+            notebookTags = data.notebookTags || {};
+            titleToIdMap = data.titleToIdMap || {};
+            filterMode = data.filterMode || 'AND';
+        }
+
+        overlay.remove();
+        onComplete();
+        showAlertDialog('✅', 'Importación completada', 'Se han actualizado los elementos seleccionados.');
+    };
+
+    document.body.appendChild(overlay);
 }
 
 function renameTag(oldName, newName) {
@@ -748,10 +865,12 @@ chrome.storage.sync.get(null, (syncData) => {
   }
 
   // Si Sync falló o está vacío, probar Local
-  chrome.storage.local.get(['notebookTags', 'globalTags', 'titleToIdMap'], (localRes) => {
+  chrome.storage.local.get(['notebookTags', 'globalTags', 'titleToIdMap', 'tagConfig', 'filterMode'], (localRes) => {
     notebookTags = finalData.notebookTags || localRes.notebookTags || {};
     globalTags = finalData.globalTags || localRes.globalTags || [];
     titleToIdMap = finalData.titleToIdMap || localRes.titleToIdMap || {};
+    tagConfig = finalData.tagConfig || localRes.tagConfig || {};
+    filterMode = finalData.filterMode || localRes.filterMode || 'AND';
     init();
   });
 });
