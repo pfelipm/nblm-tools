@@ -471,6 +471,23 @@
   overflow-y: auto;
 }
 
+.nblm-modal-footer {
+  padding: 12px 24px;
+  border-top: 1px solid #dadce0;
+  text-align: center;
+  font-size: 11px;
+  color: #5f6368;
+}
+
+.nblm-modal-footer a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.nblm-modal-footer a:hover {
+  text-decoration: underline;
+}
+
 .nblm-manage-list {
   display: flex;
   flex-direction: column;

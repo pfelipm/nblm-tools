@@ -18,9 +18,34 @@ const PRESET_COLORS = ['#1a73e8', '#d93025', '#188038', '#f9ab00', '#e37400', '#
 // 1. UTILIDADES
 let saveTimeout = null;
 
+function sanitizeData() {
+    // 1. Limpiar etiquetas inexistentes de los cuadernos
+    Object.keys(notebookTags).forEach(id => {
+        // Solo mantener etiquetas que existan en globalTags
+        notebookTags[id] = notebookTags[id].filter(tag => globalTags.includes(tag));
+        
+        // 2. Eliminar entrada del cuaderno si ya no tiene etiquetas
+        if (notebookTags[id].length === 0) {
+            delete notebookTags[id];
+            
+            // Si el ID estaba en el mapa de huellas, también lo evaluamos
+            // (No eliminamos de titleToIdMap aquí por seguridad, ya que es un mapa técnico)
+        }
+    });
+
+    // 3. Limpiar configuraciones de color de etiquetas que ya no existen
+    Object.keys(tagConfig).forEach(tag => {
+        if (!globalTags.includes(tag)) {
+            delete tagConfig[tag];
+        }
+    });
+}
+
 function saveAllData() {
     if (saveTimeout) clearTimeout(saveTimeout);
     saveTimeout = setTimeout(() => {
+        sanitizeData(); // Limpieza profunda antes de persistir
+        
         const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode };
         const jsonString = JSON.stringify(fullData);
         
@@ -530,6 +555,9 @@ function showManagementModal() {
                 </div>
             </div>
             <div class="nblm-modal-body"></div>
+            <div class="nblm-modal-footer">
+                Creado con 🩵 por <a href="https://www.linkedin.com/in/pfelipm/" target="_blank">Pablo Felip</a> | <a href="https://github.com/pfelipm/notebooklm-organizer" target="_blank">GitHub</a>
+            </div>
         </div>
     `;
 
