@@ -6,37 +6,45 @@
 
 ---
 
-## 🔒 Privacidad y Seguridad
+## 🔒 Privacidad y seguridad
 
 La privacidad es el pilar fundamental de esta extensión. NotebookLM Organizer ha sido diseñada bajo el principio de **mínimo acceso necesario**:
 
-- **Sin acceso al contenido:** La extensión **en ningún momento** lee, accede ni procesa el contenido del texto, documentos o fuentes que guardas dentro de tus cuadernos.
-- **Solo metadatos organizativos:** Únicamente detecta el **nombre del cuaderno, el número de fuentes y la fecha de creación**. Estos datos se utilizan exclusivamente para identificar el cuaderno y asociarle tus etiquetas.
-- **Sin manipulación de datos:** La extensión no modifica ni manipula tus cuadernos de ninguna forma. Solo añade una capa visual de organización sobre la interfaz existente de Google.
-- **Tus datos son tuyos:** Toda la configuración se almacena en tu cuenta de Google (vía Chrome Sync) y solo tú tienes acceso a ella.
+- **Sin acceso al contenido:** la extensión **en ningún momento** lee, accede ni procesa el contenido del texto, documentos o fuentes que guardas dentro de tus cuadernos.
+- **Solo metadatos organizativos:** únicamente detecta el **nombre del cuaderno, el número de fuentes y la fecha de creación**. Estos datos se utilizan exclusivamente para identificar el cuaderno y asociarle tus etiquetas.
+- **Sin manipulación de datos:** la extensión no modifica ni manipula tus cuadernos de ninguna forma. Solo añade una capa visual de organización sobre la interfaz existente de Google.
+- **Tus datos son tuyos:** toda la configuración se almacena en tu cuenta de Google (vía Chrome Sync) y solo tú tienes acceso a ella.
 
 ---
 
-## ✨ Características Destacadas
+## ✨ Características destacadas
 
-- 🏷️ **Etiquetado con colores:** Crea etiquetas personalizadas con una paleta de colores vibrantes para categorizar tus proyectos visualmente.
-- 🔍 **Filtrado Avanzado:** Localiza cuadernos al instante combinando búsqueda por texto y filtros de etiquetas con lógica **Y (AND)** u **O (OR)**.
-- 🔄 **Sincronización Automática:** Tus etiquetas y preferencias se sincronizan automáticamente entre todos tus dispositivos mediante tu cuenta de Chrome.
-- 💾 **Backup Granular:** Exporta e importa tu configuración en formato JSON, permitiendo elegir qué elementos restaurar.
-- 🌐 **Soporte Multi-idioma:** Interfaz localizada íntegramente en **Español, Inglés y Català**, con cambio de idioma instantáneo desde la interfaz.
-- ⚡ **Interfaz Nativa:** Diseñada para ofrecer una experiencia de uso con funciones ampliadas que se sientan como nativas de NotebookLM, sin romper tu flujo de trabajo.
+- 🏷️ **Etiquetado con colores:** crea etiquetas personalizadas con una paleta de colores vibrantes para categorizar tus proyectos visualmente.
+- 🔍 **Filtrado avanzado:** localiza cuadernos al instante combinando búsqueda por texto y filtros de etiquetas con lógica **Y (AND)** u **O (OR)**.
+- 🔄 **Sincronización automática:** tus etiquetas y preferencias se sincronizan automáticamente entre todos tus dispositivos mediante tu cuenta de Chrome.
+- 💾 **Respaldo granular:** exporta e importa tu configuración en formato JSON, permitiendo elegir qué elementos restaurar.
+- 🌐 **Soporte multi-idioma:** interfaz localizada íntegramente en **español, inglés y català**, con cambio de idioma instantáneo desde la interfaz.
+- ⚡ **Interfaz nativa:** diseñada para ofrecer una experiencia de uso con funciones ampliadas que se sientan como nativas de NotebookLM, sin romper tu flujo de trabajo.
 
 ---
 
-## ⚙️ Detalles Técnicos
+## ⚠️ Nota importante sobre la vista de lista
 
-*   **Manifest V3:** La extensión utiliza la última versión del manifiesto de Chrome para garantizar la máxima seguridad y rendimiento.
-*   **Chrome Storage Sync & Local:** Utiliza la API de almacenamiento para mantener las etiquetas sincronizadas entre dispositivos y realizar caché local.
-*   **i18n Dinámico:** Implementa un sistema de localización propio que permite el cambio de idioma instantáneo sin necesidad de recargar la página.
-*   **MutationObserver:** Se utiliza para detectar de forma eficiente y reactiva cuándo se añaden nuevos cuadernos a la lista o se producen cambios en la navegación.
-*   **Fragmentación de Datos (Chunking):** Sistema avanzado para superar el límite de 8KB de Chrome Sync mediante la división de datos en fragmentos.
+Debido a que NotebookLM no expone identificadores únicos internos en todas sus vistas, la extensión utiliza una "huella digital" basada en metadatos para identificar cada cuaderno. 
+
+Si tienes varios cuadernos con el **mismo nombre, mismo número de fuentes y misma fecha**, la extensión detectará una **colisión** en la vista de lista y bloqueará el etiquetado por seguridad para evitar errores de asociación. En estos casos, aparecerá un icono de aviso (⚠️) y deberás utilizar la **vista de miniaturas** (cuadrícula) para etiquetarlos, ya que en esa vista sí es posible obtener un identificador único real.
+
+---
+
+## ⚙️ Detalles técnicos
+
+*   **Manifest V3:** la extensión utiliza la última versión del manifiesto de Chrome para garantizar la máxima seguridad y rendimiento.
+*   **Chrome Storage Sync & Local:** utiliza la API de almacenamiento para mantener las etiquetas sincronizadas entre dispositivos y realizar caché local.
+*   **i18n dinámico:** implementa un sistema de localización propio que permite el cambio de idioma instantáneo sin necesidad de recargar la página.
+*   **MutationObserver:** se utiliza para detectar de forma eficiente y reactiva cuándo se añaden nuevos cuadernos a la lista o se producen cambios en la navegación.
+*   **Fragmentación de datos (chunking):** sistema avanzado para superar el límite de 8 KB de Chrome Sync mediante la división de datos en fragmentos.
 *   **Permisos:**
-    *   `storage`: Para guardar y sincronizar tus etiquetas y preferencias.
+    *   `storage`: para guardar y sincronizar tus etiquetas y preferencias.
 
 ---
 
