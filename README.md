@@ -1,18 +1,18 @@
+[🇺🇸 English version](README.en.md)
+
 # NotebookLM Organizer 🏷️
 
-[**English version below**](#english-version)
-
-**NotebookLM Organizer** es una extensión de navegador diseñada para potenciar la organización de tu espacio de trabajo en [NotebookLM](https://notebooklm.google.com). Mediante un sistema de etiquetado avanzado y filtrado dinámico, permite gestionar grandes volúmenes de cuadernos con una experiencia de usuario fluida y completamente integrada, que se siente como una funcionalidad nativa de la plataforma.
+**NotebookLM Organizer** es una extensión de navegador diseñada para potenciar la organización de tu espacio de trabajo en [NotebookLM](https://notebooklm.google.com). Mediante un sistema de etiquetas de colores y filtrado avanzado, permite gestionar tus cuadernos con una experiencia de usuario fluida y completamente integrada, que se siente como una funcionalidad nativa de la plataforma.
 
 ---
 
 ## 🔒 Privacidad y Seguridad
 
-La privacidad es el núcleo de esta extensión. NotebookLM Organizer ha sido diseñada bajo el principio de **mínimo acceso necesario**:
+La privacidad es el pilar fundamental de esta extensión. NotebookLM Organizer ha sido diseñada bajo el principio de **mínimo acceso necesario**:
 
 - **Sin acceso al contenido:** La extensión **en ningún momento** lee, accede ni procesa el contenido del texto, documentos o fuentes que guardas dentro de tus cuadernos.
 - **Solo metadatos organizativos:** Únicamente detecta el **nombre del cuaderno, el número de fuentes y la fecha de creación**. Estos datos se utilizan exclusivamente para identificar el cuaderno y asociarle tus etiquetas.
-- **Sin manipulación de datos:** La extensión no modifica ni manipula tus cuadernos de ninguna forma. Solo añade una capa visual de organización sobre la interfaz existente.
+- **Sin manipulación de datos:** La extensión no modifica ni manipula tus cuadernos de ninguna forma. Solo añade una capa visual de organización sobre la interfaz existente de Google.
 - **Tus datos son tuyos:** Toda la configuración se almacena en tu cuenta de Google (vía Chrome Sync) y solo tú tienes acceso a ella.
 
 ---
@@ -22,18 +22,40 @@ La privacidad es el núcleo de esta extensión. NotebookLM Organizer ha sido dis
 - 🏷️ **Etiquetado con colores:** Crea etiquetas personalizadas con una paleta de colores vibrantes para categorizar tus proyectos visualmente.
 - 🔍 **Filtrado Avanzado:** Localiza cuadernos al instante combinando búsqueda por texto y filtros de etiquetas con lógica **Y (AND)** u **O (OR)**.
 - 🔄 **Sincronización Automática:** Tus etiquetas y preferencias se sincronizan automáticamente entre todos tus dispositivos mediante tu cuenta de Chrome.
-- 💾 **Backup Granular:** Exporta e importa tu configuración en formato JSON. Permite elegir si quieres importar solo el repositorio de etiquetas o también las asociaciones con los cuadernos.
-- 🌐 **Internacionalización Dinámica:** Soporte completo para **Inglés, Español, Català, Gallego y Euskera**, con cambio de idioma instantáneo desde la interfaz.
+- 💾 **Backup Granular:** Exporta e importa tu configuración en formato JSON, permitiendo elegir qué elementos restaurar.
+- 🌐 **Soporte Multi-idioma:** Interfaz localizada íntegramente en **Español, Inglés y Català**, con cambio de idioma instantáneo desde la interfaz.
 - ⚡ **Interfaz Nativa:** Diseñada para ofrecer una experiencia de uso con funciones ampliadas que se sientan como nativas de NotebookLM, sin romper tu flujo de trabajo.
 
 ---
 
-## 🛠️ Instalación
+## ⚙️ Detalles Técnicos
 
-1. Descarga este repositorio como un archivo ZIP y descomprímelo.
-2. Abre tu navegador Chrome y ve a `chrome://extensions/`.
-3. Activa el **Modo de desarrollador** (esquina superior derecha).
-4. Haz clic en **Cargar descomprimida** y selecciona la carpeta del proyecto.
+*   **Manifest V3:** La extensión utiliza la última versión del manifiesto de Chrome para garantizar la máxima seguridad y rendimiento.
+*   **Chrome Storage Sync & Local:** Utiliza la API de almacenamiento para mantener las etiquetas sincronizadas entre dispositivos y realizar caché local.
+*   **i18n Dinámico:** Implementa un sistema de localización propio que permite el cambio de idioma instantáneo sin necesidad de recargar la página.
+*   **MutationObserver:** Se utiliza para detectar de forma eficiente y reactiva cuándo se añaden nuevos cuadernos a la lista o se producen cambios en la navegación.
+*   **Fragmentación de Datos (Chunking):** Sistema avanzado para superar el límite de 8KB de Chrome Sync mediante la división de datos en fragmentos.
+*   **Permisos:**
+    *   `storage`: Para guardar y sincronizar tus etiquetas y preferencias.
+
+---
+
+## 🛠️ Instalación (en modo desarrollador)
+
+Sigue estos pasos para instalar la extensión de forma local:
+
+1. Descarga y descomprime el archivo zip o clona este repositorio en tu equipo.
+2. Abre Google Chrome y dirígete a la página de extensiones: `chrome://extensions`.
+3. Activa el **"Modo de desarrollador"** en la parte superior derecha.
+4. Haz clic en el botón **"Cargar descomprimida"**.
+5. Selecciona la carpeta del proyecto que has descargado.
+6. ¡Listo! La extensión aparecerá en tu listado de extensiones y estará activa en `notebooklm.google.com`.
+
+---
+
+## 📝 Nota sobre la publicación en la Chrome Web Store
+
+Dado que la extensión se basa en el análisis de la estructura del DOM de la aplicación NotebookLM, y esta puede cambiar en cualquier momento sin previo aviso, el autor prefiere no publicarla por ahora en la Chrome Web Store. El coste de mantenimiento y la necesidad de adaptarla a cambios frecuentes hacen que sea más práctico distribuirla como un proyecto de código abierto para su instalación manual.
 
 ---
 
@@ -46,54 +68,3 @@ Este proyecto ha sido creado y es mantenido por **Pablo Felip** ([LinkedIn](http
 ## 📄 Licencia
 
 Este proyecto se distribuye bajo los términos del archivo [LICENSE](LICENSE).
-
----
-
-<a name="english-version"></a>
-
-# NotebookLM Organizer 🏷️ (English)
-
-**NotebookLM Organizer** is a browser extension designed to enhance your workspace organization in [NotebookLM](https://notebooklm.google.com). Featuring an advanced tagging system and dynamic filtering, it allows you to manage large volumes of notebooks with a fluid, fully integrated user experience that feels like a native functionality.
-
----
-
-## 🔒 Privacy & Security
-
-Privacy is at the core of this extension. NotebookLM Organizer is built following the **principle of least privilege**:
-
-- **No Content Access:** The extension **never** reads, accesses, or processes the content of your notes, documents, or sources within your notebooks.
-- **Organizational Metadata Only:** It only detects the **notebook name, source count, and creation date**. This data is used strictly to identify the notebook and link it to your tags.
-- **No Data Manipulation:** The extension does not modify or manipulate your notebooks in any way. It only adds a visual organization layer on top of the existing UI.
-- **Your Data is Yours:** All configurations are stored in your Google account (via Chrome Sync), and only you have access to them.
-
----
-
-## ✨ Key Features
-
-- 🏷️ **Color-Coded Tags:** Create custom tags with a vibrant color palette to categorize your projects visually.
-- 🔍 **Advanced Filtering:** Find notebooks instantly by combining text search and tag filters with **AND** or **OR** logic.
-- 🔄 **Automatic Sync:** Your tags and preferences are automatically synced across all your devices via your Chrome account.
-- 💾 **Granular Backup:** Export and import your settings in JSON format. Choose between importing just the tag repository or full notebook associations.
-- 🌐 **Dynamic Internationalization:** Full support for **English, Spanish, Catalan, Galician, and Basque**, with instant language switching from the UI.
-- ⚡ **Native Interface:** Designed to provide an extended organization and search experience that feels like a native NotebookLM feature, without disrupting your workflow.
-
----
-
-## 🛠️ Installation
-
-1. Download this repository as a ZIP file and extract it.
-2. Open Chrome and navigate to `chrome://extensions/`.
-3. Enable **Developer mode** (top right corner).
-4. Click **Load unpacked** and select the project folder.
-
----
-
-## 🤝 Credits
-
-This project was created and is maintained by **Pablo Felip** ([LinkedIn](https://www.linkedin.com/in/pfelipm/) | [GitHub](https://github.com/pfelipm)).
-
----
-
-## 📄 License
-
-This project is distributed under the terms of the [LICENSE](LICENSE) file.
