@@ -753,6 +753,36 @@
     font-family: 'Roboto', sans-serif !important;
 }
 
+.nblm-import-options {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 24px;
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nblm-import-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #3c4043;
+    cursor: pointer;
+    user-select: none;
+}
+
+.nblm-import-option input {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
 .nblm-confirm-actions {
     display: flex;
     gap: 12px;

@@ -10,6 +10,7 @@ let currentPopover = null;
 let lastClickedNotebookId = null;
 let activeTooltip = null; 
 let tooltipTimeout = null; 
+let lastTooltipNotebookId = null;
 let titleToIdMap = {}; 
 
 const PRESET_COLORS = ['#1a73e8', '#d93025', '#188038', '#f9ab00', '#e37400', '#9334e6', '#0097a7', '#607d8b'];
@@ -265,13 +266,16 @@ function createTagElement(tag, id, inTooltip = false) {
         removeTagFromNotebook(id, tag);
     };
     if (!inTooltip) {
-        tagEl.onmouseenter = () => showFullTagsTooltip(tagEl, id, false);
+        tagEl.onmouseenter = () => {
+            if (tooltipTimeout) clearTimeout(tooltipTimeout);
+            showFullTagsTooltip(tagEl, id, false);
+        };
         tagEl.onmouseleave = () => { 
-            setTimeout(() => {
+            tooltipTimeout = setTimeout(() => {
                 if (activeTooltip && activeTooltip.dataset.sticky !== 'true' && activeTooltip.dataset.hovered !== 'true') {
                     closeTooltip();
                 }
-            }, 100);
+            }, 150);
         };
     }
     return tagEl;
