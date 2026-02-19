@@ -5,6 +5,7 @@ let globalTags = [];
 let tagConfig = {}; // { tagName: { color: '#1a73e8' } }
 let activeFilters = new Set();
 let filterMode = 'AND'; // 'AND' o 'OR'
+let uiLang = 'auto'; // 'auto', 'es', 'en', 'ca'
 let searchQuery = '';
 let currentPopover = null;
 let lastClickedNotebookId = null;
@@ -12,10 +13,41 @@ let activeTooltip = null;
 let tooltipTimeout = null; 
 let lastTooltipNotebookId = null;
 let titleToIdMap = {}; 
+let overriddenMessages = null; // Cache para traducciones manuales
 
 const PRESET_COLORS = ['#1a73e8', '#d93025', '#188038', '#f9ab00', '#e37400', '#9334e6', '#0097a7', '#607d8b'];
 
-// 1. UTILIDADES
+// 1. UTILIDADES Y TRADUCCIÓN
+function t(key, ...args) {
+    let msg = "";
+    if (uiLang === 'auto' || !overriddenMessages) {
+        msg = chrome.i18n.getMessage(key, args);
+    } else {
+        msg = overriddenMessages[key]?.message || chrome.i18n.getMessage(key, args);
+        // Reemplazo manual para el caso de idioma forzado
+        args.forEach((val, i) => {
+            msg = msg.replace(`$${i + 1}`, val);
+        });
+    }
+    return msg || key;
+}
+
+async function loadLanguage(lang) {
+    if (!lang || lang === 'auto') {
+        overriddenMessages = null;
+        return;
+    }
+    try {
+        const url = chrome.runtime.getURL(`_locales/${lang}/messages.json`);
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        overriddenMessages = await res.json();
+    } catch (e) {
+        console.error("NBLM Organizer - Error cargando idioma:", e);
+        overriddenMessages = null;
+    }
+}
+
 let saveTimeout = null;
 
 function sanitizeData() {
@@ -46,7 +78,7 @@ function saveAllData() {
     saveTimeout = setTimeout(() => {
         sanitizeData(); // Limpieza profunda antes de persistir
         
-        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode };
+        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode, uiLang };
         const jsonString = JSON.stringify(fullData);
         
         // 1. Guardado en LOCAL (sin límites restrictivos)
@@ -266,7 +298,7 @@ function renderTags(container, id) {
       moreEl.innerText = `+${tags.length - limit}`;
       
       const isPinned = activeTooltip?.dataset.id === id && activeTooltip?.dataset.sticky === 'true';
-      moreEl.title = isPinned ? "Cerrar lista de etiquetas" : "Ver todas las etiquetas";
+      moreEl.title = isPinned ? t('tooltip_close_tags') : t('tooltip_more_tags');
       
       moreEl.onclick = (e) => { 
           e.stopPropagation(); 
@@ -311,7 +343,7 @@ function injectMenuItem(overlay) {
     if (menuContent && !menuContent.querySelector('.nblm-menu-item')) {
         const item = document.createElement('button');
         item.className = 'mat-mdc-menu-item nblm-menu-item';
-        item.innerHTML = '<span class="mat-mdc-menu-item-text">🏷️ Etiquetar cuaderno</span>';
+        item.innerHTML = `<span class="mat-mdc-menu-item-text">${t('menu_item_tag')}</span>`;
         item.onclick = (e) => {
             e.preventDefault(); e.stopPropagation();
             document.querySelector('.cdk-overlay-backdrop')?.click();
@@ -334,7 +366,7 @@ function showAlertDialog(icon, title, message) {
             <div class="nblm-alert-icon">${icon}</div>
             <div class="nblm-alert-title">${title}</div>
             <div class="nblm-alert-message">${message}</div>
-            <button class="nblm-alert-button">Entendido</button>
+            <button class="nblm-alert-button">${t('alert_understood')}</button>
         </div>
     `;
     overlay.querySelector('.nblm-alert-button').onclick = () => overlay.remove();
@@ -344,8 +376,8 @@ function showAlertDialog(icon, title, message) {
 function showCollisionAlert() {
     showAlertDialog(
         '⚠️',
-        'Acción bloqueada por seguridad',
-        'Existen varios cuadernos con nombre, fuentes y fecha idénticos en esta lista.<br><br>Para evitar errores, renombra uno de los cuadernos o utiliza la <b>vista de miniaturas</b> para etiquetarlos.'
+        t('alert_collision_title'),
+        t('alert_collision_msg')
     );
 }
 
@@ -397,7 +429,7 @@ function injectSearchTools() {
   if (target) {
     const tools = document.createElement('div');
     tools.className = 'nblm-tools-container';
-    tools.innerHTML = `<div class="nblm-header-row"><input type="text" class="nblm-search-input" style="flex:1; margin-right:12px;" placeholder="Buscar cuadernos..."><button class="nblm-manage-btn">Gestionar etiquetas</button></div><div class="nblm-filter-tags" id="nblm-filter-tags"></div>`;
+    tools.innerHTML = `<div class="nblm-header-row"><input type="text" class="nblm-search-input" style="flex:1; margin-right:12px;" placeholder="${t('search_placeholder')}"><button class="nblm-manage-btn">${t('btn_manage_tags')}</button></div><div class="nblm-filter-tags" id="nblm-filter-tags"></div>`;
     tools.querySelector('input').oninput = (e) => { searchQuery = e.target.value.toLowerCase(); applyFilters(); };
     tools.querySelector('.nblm-manage-btn').onclick = showManagementModal;
     
@@ -420,8 +452,8 @@ function showConfirmDialog(title, message, onConfirm, confirmBtnClass = 'nblm-bt
             <div class="nblm-confirm-title" style="font-family: 'Roboto', sans-serif !important;">${title}</div>
             <div class="nblm-confirm-message" style="font-family: 'Roboto', sans-serif !important;">${message}</div>
             <div class="nblm-confirm-actions">
-                <button class="nblm-btn-cancel" style="font-family: 'Roboto', sans-serif !important;">Cancelar</button>
-                <button class="${confirmBtnClass}" style="font-family: 'Roboto', sans-serif !important;">Confirmar</button>
+                <button class="nblm-btn-cancel" style="font-family: 'Roboto', sans-serif !important;">${t('btn_cancel')}</button>
+                <button class="${confirmBtnClass}" style="font-family: 'Roboto', sans-serif !important;">${t('btn_confirm')}</button>
             </div>
         </div>
     `;
@@ -446,11 +478,11 @@ function showManagementModal() {
         body.innerHTML = `
             <div class="nblm-manage-create-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
                 <div style="display:flex; width:100%; gap:12px;">
-                    <input type="text" class="nblm-manage-create-input" placeholder="Nueva etiqueta..." value="${tempNewTagName}">
-                    <button class="nblm-btn-primary">Crear</button>
+                    <input type="text" class="nblm-manage-create-input" placeholder="${t('modal_create_placeholder')}" value="${tempNewTagName}">
+                    <button class="nblm-btn-primary">${t('modal_btn_create')}</button>
                 </div>
                 <div class="nblm-color-picker-container" style="margin-top:0;">
-                    <span style="font-size:11px; color:#5f6368; margin-right:4px;">Color:</span>
+                    <span style="font-size:11px; color:#5f6368; margin-right:4px;">${t('modal_color_label')}</span>
                     ${PRESET_COLORS.map(c => `<div class="nblm-color-swatch ${c === selectedNewColor ? 'active' : ''}" style="background:${c}" data-new-color="${c}"></div>`).join('')}
                     <div class="nblm-custom-color-btn" style="background:${PRESET_COLORS.includes(selectedNewColor) ? 'transparent' : selectedNewColor}">
                         <span>+</span>
@@ -492,9 +524,9 @@ function showManagementModal() {
             
             item.innerHTML = `
                 <div class="nblm-manage-row">
-                    <input type="text" class="nblm-tag-edit-input" value="${tag}" title="Haz clic para renombrar">
+                    <input type="text" class="nblm-tag-edit-input" value="${tag}" title="${t('modal_rename_hint')}">
                     <div style="display:flex; gap:4px;">
-                        <button class="nblm-btn-icon danger" title="Eliminar"><span style="font-size:18px;">&times;</span></button>
+                        <button class="nblm-btn-icon danger" title="${t('modal_btn_delete_hint')}"><span style="font-size:18px;">&times;</span></button>
                     </div>
                 </div>
                 <div class="nblm-color-picker-container">
@@ -523,8 +555,8 @@ function showManagementModal() {
 
             item.querySelector('.danger').onclick = () => {
                 showConfirmDialog(
-                    "Eliminar etiqueta", 
-                    `¿Estás seguro de que quieres eliminar la etiqueta "${tag}"? Esta acción no se puede deshacer y se borrará de todos tus cuadernos.`, 
+                    t('modal_delete_confirm_title'), 
+                    t('modal_delete_confirm_msg', tag), 
                     () => {
                         globalTags = globalTags.filter(t => t !== tag);
                         delete tagConfig[tag];
@@ -547,19 +579,36 @@ function showManagementModal() {
     overlay.innerHTML = `
         <div class="nblm-modal">
             <div class="nblm-modal-header">
-                <h2>Gestionar etiquetas</h2>
+                <h2>${t('modal_manage_title')}</h2>
                 <div style="display:flex; gap:8px; align-items:center;">
-                    <button class="nblm-btn-icon" id="nblm-export" title="Exportar configuración (JSON)">💾</button>
-                    <button class="nblm-btn-icon" id="nblm-import" title="Importar configuración (JSON)">📂</button>
+                    <div class="nblm-lang-selector" style="margin-right:12px; display:flex; gap:4px;">
+                        <span class="nblm-lang-opt ${uiLang === 'auto' ? 'active' : ''}" data-lang="auto" style="cursor:pointer; font-size:14px; opacity:${uiLang === 'auto' ? '1' : '0.4'}" title="${t('lang_auto')}">🌐</span>
+                        <span class="nblm-lang-opt ${uiLang === 'es' ? 'active' : ''}" data-lang="es" style="cursor:pointer; font-size:14px; opacity:${uiLang === 'es' ? '1' : '0.4'}" title="${t('lang_es')}">ES</span>
+                        <span class="nblm-lang-opt ${uiLang === 'en' ? 'active' : ''}" data-lang="en" style="cursor:pointer; font-size:14px; opacity:${uiLang === 'en' ? '1' : '0.4'}" title="${t('lang_en')}">EN</span>
+                        <span class="nblm-lang-opt ${uiLang === 'ca' ? 'active' : ''}" data-lang="ca" style="cursor:pointer; font-size:14px; opacity:${uiLang === 'ca' ? '1' : '0.4'}" title="${t('lang_ca')}">CA</span>
+                    </div>
+                    <button class="nblm-btn-icon" id="nblm-export" title="${t('modal_export_help')}">💾</button>
+                    <button class="nblm-btn-icon" id="nblm-import" title="${t('modal_import_help')}">📂</button>
                     <span class="nblm-modal-close" style="margin-left:8px;">&times;</span>
                 </div>
             </div>
             <div class="nblm-modal-body"></div>
             <div class="nblm-modal-footer">
-                Creado con 🩵 por <a href="https://www.linkedin.com/in/pfelipm/" target="_blank">Pablo Felip</a> | <a href="https://github.com/pfelipm/notebooklm-organizer" target="_blank">GitHub</a>
+                ${t('attribution_created_by')} 🩵 por <a href="https://www.linkedin.com/in/pfelipm/" target="_blank">Pablo Felip</a> | <a href="https://github.com/pfelipm/notebooklm-organizer" target="_blank">GitHub</a>
             </div>
         </div>
     `;
+
+    overlay.querySelectorAll('.nblm-lang-opt').forEach(opt => {
+        opt.onclick = async () => {
+            uiLang = opt.dataset.lang;
+            await loadLanguage(uiLang);
+            saveAllData();
+            overlay.remove();
+            showManagementModal(); // Reabrir para refrescar
+            updateUI();
+        };
+    });
 
     overlay.querySelector('#nblm-export').onclick = () => {
         const data = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode };
@@ -585,7 +634,7 @@ function showManagementModal() {
                 try {
                     const imported = JSON.parse(re.target.result);
                     if (!imported.globalTags || !Array.isArray(imported.globalTags)) {
-                        showAlertDialog('❌', 'Error de formato', 'El archivo no parece ser un backup válido de NBLM Organizer.');
+                        showAlertDialog('❌', t('import_error_format_title'), t('import_error_format_msg'));
                         return;
                     }
                     
@@ -597,7 +646,7 @@ function showManagementModal() {
                     });
 
                 } catch (err) {
-                    showAlertDialog('❌', 'Error de lectura', 'No se ha podido procesar el archivo JSON correctamente.');
+                    showAlertDialog('❌', t('import_error_read_title'), t('import_error_read_msg'));
                 }
             };
             reader.readAsText(file);
@@ -616,29 +665,29 @@ function showImportGranularModal(data, onComplete) {
     overlay.style.zIndex = '30001';
     overlay.innerHTML = `
         <div class="nblm-confirm-modal" style="width:400px;">
-            <div class="nblm-confirm-title">Importar configuración</div>
-            <div class="nblm-confirm-message">Selecciona qué elementos deseas sobrescribir del archivo seleccionado:</div>
+            <div class="nblm-confirm-title">${t('import_granular_title')}</div>
+            <div class="nblm-confirm-message">${t('import_granular_msg')}</div>
             
             <div style="text-align:left; background:#f8f9fa; padding:16px; border-radius:8px; display:flex; flex-direction:column; gap:12px; margin-bottom:24px; width:100%; box-sizing:border-box;">
                 <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
                     <input type="checkbox" id="import-opt-tags" checked style="width:16px; height:16px; cursor:pointer;">
                     <div style="display:flex; flex-direction:column;">
-                        <span style="font-weight:500; font-size:13px; color:#202124;">Repositorio de etiquetas</span>
-                        <span style="font-size:11px; color:#5f6368;">Nombres y colores globales (${data.globalTags.length} etiquetas)</span>
+                        <span style="font-weight:500; font-size:13px; color:#202124;">${t('import_opt_tags')}</span>
+                        <span style="font-size:11px; color:#5f6368;">${t('import_opt_tags_desc', data.globalTags.length)}</span>
                     </div>
                 </label>
                 <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
                     <input type="checkbox" id="import-opt-notebooks" checked style="width:16px; height:16px; cursor:pointer;">
                     <div style="display:flex; flex-direction:column;">
-                        <span style="font-weight:500; font-size:13px; color:#202124;">Etiquetado de cuadernos</span>
-                        <span style="font-size:11px; color:#5f6368;">Asociaciones actuales y preferencias de filtro</span>
+                        <span style="font-weight:500; font-size:13px; color:#202124;">${t('import_opt_notebooks')}</span>
+                        <span style="font-size:11px; color:#5f6368;">${t('import_opt_notebooks_desc')}</span>
                     </div>
                 </label>
             </div>
 
             <div class="nblm-confirm-actions" style="display:flex; gap:12px; justify-content:flex-end; width:100%;">
-                <button class="nblm-btn-cancel">Cancelar</button>
-                <button class="nblm-btn-primary" id="nblm-confirm-import">Importar selección</button>
+                <button class="nblm-btn-cancel">${t('btn_cancel')}</button>
+                <button class="nblm-btn-primary" id="nblm-confirm-import">${t('import_btn_confirm')}</button>
             </div>
         </div>
     `;
@@ -666,7 +715,7 @@ function showImportGranularModal(data, onComplete) {
 
         overlay.remove();
         onComplete();
-        showAlertDialog('✅', 'Importación completada', 'Se han actualizado los elementos seleccionados.');
+        showAlertDialog('✅', t('import_success_title'), t('import_success_msg'));
     };
 
     document.body.appendChild(overlay);
@@ -719,8 +768,8 @@ function renderFilterTags() {
       const modeToggle = document.createElement('div');
       modeToggle.className = 'nblm-filter-mode-toggle';
       modeToggle.innerHTML = `
-          <div class="nblm-mode-btn ${filterMode === 'AND' ? 'active' : ''}" data-mode="AND">Y</div>
-          <div class="nblm-mode-btn ${filterMode === 'OR' ? 'active' : ''}" data-mode="OR">O</div>
+          <div class="nblm-mode-btn ${filterMode === 'AND' ? 'active' : ''}" data-mode="AND">${t('filter_mode_and')}</div>
+          <div class="nblm-mode-btn ${filterMode === 'OR' ? 'active' : ''}" data-mode="OR">${t('filter_mode_or')}</div>
       `;
       modeToggle.querySelectorAll('.nblm-mode-btn').forEach(btn => {
           btn.onclick = () => {
@@ -732,7 +781,7 @@ function renderFilterTags() {
 
       const clearBtn = document.createElement('div');
       clearBtn.className = 'nblm-clear-filters';
-      clearBtn.innerHTML = '<span>×</span> Limpiar filtros';
+      clearBtn.innerHTML = `<span>×</span> ${t('filter_clear')}`;
       clearBtn.onclick = () => { activeFilters.clear(); updateUI(); };
       container.appendChild(clearBtn);
   }
@@ -805,10 +854,10 @@ function showTagPopover(id) {
     pop.innerHTML = `
         <div class="nblm-popover-header">
              <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
-                <span style="font-weight:500;font-size:14px;color:#202124;">Selecciona etiquetas</span>
+                <span style="font-weight:500;font-size:14px;color:#202124;">${t('popover_title')}</span>
                 <span id="nblm-close" style="cursor:pointer;font-size:18px;">&times;</span>
              </div>
-             <input type="text" id="nblm-in" placeholder="Buscar o crear..." autofocus style="width:100%; box-sizing:border-box;">
+             <input type="text" id="nblm-in" placeholder="${t('popover_search_placeholder')}" autofocus style="width:100%; box-sizing:border-box;">
         </div>
         <div class="tag-list" id="nblm-list"></div>
         <div id="nblm-create"></div>
@@ -845,7 +894,7 @@ function showTagPopover(id) {
         if (showCreate) {
             const createOpt = document.createElement('div');
             createOpt.className = 'nblm-create-option';
-            createOpt.innerHTML = `<span>Crear etiqueta:</span> <span class="nblm-tag" style="background-color:#1a73e8; margin-left:4px;">${input.value}</span>`;
+            createOpt.innerHTML = `<span>${t('popover_create_tag')}</span> <span class="nblm-tag" style="background-color:#1a73e8; margin-left:4px;">${input.value}</span>`;
             createOpt.onclick = () => { 
                 const newTag = input.value.trim();
                 addGlobalTag(newTag); toggleTag(id, newTag); input.value = ''; render(); 
@@ -897,12 +946,15 @@ chrome.storage.sync.get(null, (syncData) => {
   }
 
   // Si Sync falló o está vacío, probar Local
-  chrome.storage.local.get(['notebookTags', 'globalTags', 'titleToIdMap', 'tagConfig', 'filterMode'], (localRes) => {
+  chrome.storage.local.get(['notebookTags', 'globalTags', 'titleToIdMap', 'tagConfig', 'filterMode', 'uiLang'], async (localRes) => {
     notebookTags = finalData.notebookTags || localRes.notebookTags || {};
     globalTags = finalData.globalTags || localRes.globalTags || [];
     titleToIdMap = finalData.titleToIdMap || localRes.titleToIdMap || {};
     tagConfig = finalData.tagConfig || localRes.tagConfig || {};
     filterMode = finalData.filterMode || localRes.filterMode || 'AND';
+    uiLang = finalData.uiLang || localRes.uiLang || 'auto';
+    
+    await loadLanguage(uiLang);
     init();
   });
 });

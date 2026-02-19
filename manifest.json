@@ -1,19 +1,47 @@
 {
   "manifest_version": 3,
-  "name": "NotebookLM Organizer",
-  "version": "1.0",
-  "description": "Organiza tus cuadernos de NotebookLM con etiquetas y búsqueda en tiempo real.",
-  "permissions": ["storage"],
-  "content_scripts": [
-    {
-      "matches": ["https://notebooklm.google.com/*"],
-      "js": ["content.js"],
-      "css": ["styles.css"]
-    }
+  "name": "__MSG_extName__",
+  "version": "1.2.1",
+  "description": "__MSG_extDesc__",
+  "default_locale": "en",
+  "permissions": [
+    "storage"
   ],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://notebooklm.google.com/*",
+        "https://notebooklm.google/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "_locales/*/messages.json"
+      ],
+      "matches": [
+        "https://notebooklm.google.com/*",
+        "https://notebooklm.google/*"
+      ]
+    }
+  ]
 }
