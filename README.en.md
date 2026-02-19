@@ -28,8 +28,17 @@ Privacy is at the core of this extension. NotebookLM Organizer is built followin
 
 ---
 
+## ⚠️ Important Note on List View
+
+Since NotebookLM does not expose internal unique identifiers in all its views, the extension uses a metadata-based "fingerprint" to identify each notebook.
+
+If you have multiple notebooks with the **same name, same number of sources, and same date**, the extension will detect a **collision** in the list view and block tagging for safety to avoid association errors. In these cases, a warning icon (⚠️) will appear, and you should use the **thumbnail view** (grid) to tag them, as that view allows for retrieving a real unique identifier.
+
+---
+
 ## ⚙️ Technical Details
 
+*   **No Frameworks or External Dependencies:** built entirely with **Vanilla JS** and **standard CSS** to ensure maximum lightness, speed, and compatibility.
 *   **Manifest V3:** The extension uses the latest version of the Chrome manifest for maximum security and performance.
 *   **Chrome Storage Sync & Local:** Uses the Storage API to keep tags synchronized between devices and perform local caching.
 *   **Dynamic i18n:** Implements a custom localization system that allows for instant language changes without a page refresh.

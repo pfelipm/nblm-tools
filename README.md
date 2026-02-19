@@ -38,6 +38,7 @@ Si tienes varios cuadernos con el **mismo nombre, mismo número de fuentes y mis
 
 ## ⚙️ Detalles técnicos
 
+*   **Sin frameworks ni dependencias externas:** desarrollada íntegramente con **Vanilla JS** y **CSS estándar** para garantizar la máxima ligereza, velocidad y compatibilidad.
 *   **Manifest V3:** la extensión utiliza la última versión del manifiesto de Chrome para garantizar la máxima seguridad y rendimiento.
 *   **Chrome Storage Sync & Local:** utiliza la API de almacenamiento para mantener las etiquetas sincronizadas entre dispositivos y realizar caché local.
 *   **i18n dinámico:** implementa un sistema de localización propio que permite el cambio de idioma instantáneo sin necesidad de recargar la página.
