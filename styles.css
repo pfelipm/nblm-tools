@@ -373,22 +373,17 @@
 
 /* Resto de estilos (Tools, Modal, Menú) */
 .nblm-tools-container {
-  padding: 16px 24px;
+  padding: 8px 24px;
   background: white;
   border-bottom: 1px solid var(--nblm-border);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  
-  /* Asegurar que ocupe todo el ancho y rompa flujos flex */
+  gap: 8px;
   width: 100%;
   box-sizing: border-box;
-  flex: 0 0 100%;
-  margin-bottom: 16px;
+  margin-bottom: 0;
   position: relative;
   z-index: 10;
-  
-  /* Soporte para CSS Grid containers */
   grid-column: 1 / -1;
   max-width: 100%;
 }
