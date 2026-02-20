@@ -24,6 +24,7 @@ Privacy is at the core of this extension. NotebookLM Organizer is built followin
 - 🔄 **Automatic Sync:** Your tags and preferences are automatically synced across all your devices via your Chrome account.
 - 💾 **Granular Backup:** Export and import your settings in JSON format, allowing you to choose which elements to restore.
 - 🌐 **Multi-language Support:** Interface fully localized in **English, Spanish, and Catalan**, with instant language switching from the UI.
+- 💡 **Featured Notebooks Handling:** For cleanliness and convenience, the extension hides the limited preview of featured notebooks in the main "All" tab and automatically disables itself when entering the dedicated "Featured" tab.
 - ⚡ **Native Interface:** Designed to provide an extended organization and search experience that feels like a native NotebookLM feature, without disrupting your workflow.
 
 ---
