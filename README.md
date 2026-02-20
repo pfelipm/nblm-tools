@@ -58,7 +58,7 @@ Sigue estos pasos para instalar la extensión de forma local:
 2. Abre Google Chrome y dirígete a la página de extensiones: `chrome://extensions`.
 3. Activa el **"Modo de desarrollador"** en la parte superior derecha.
 4. Haz clic en el botón **"Cargar descomprimida"**.
-5. Selecciona la carpeta del proyecto que has descargado.
+5. Selecciona la carpeta **extension** dentro de la carpeta del proyecto que has descargado o clonado.
 6. ¡Listo! La extensión aparecerá en tu listado de extensiones y estará activa en `notebooklm.google.com`.
 
 ---

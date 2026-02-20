@@ -58,14 +58,8 @@ Follow these steps to install the extension locally:
 2. Open Google Chrome and go to the extensions page: `chrome://extensions`.
 3. Enable **"Developer mode"** in the upper right corner.
 4. Click the **"Load unpacked"** button.
-5. Select the project folder you downloaded.
+5. Select the **extension** folder within the downloaded or cloned project folder.
 6. Done! The extension will appear in your list of extensions and will be active on `notebooklm.google.com`.
-
----
-
-## 📝 Note on publishing to the Chrome Web Store
-
-Since the extension is based on analyzing the DOM structure of the NotebookLM application, and this can change at any time without notice, the author prefers not to publish it in the Chrome Web Store for the time being. The maintenance cost and the need to adapt it to frequent changes make it more practical to distribute it as an open source project for manual installation.
 
 ---
 
