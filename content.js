@@ -310,39 +310,93 @@ function updateUI() {
 
 function updateTabContext() {
 
-    const activeTab = document.querySelector('button[role="tab"][aria-selected="true"]');
 
-    if (!activeTab) return;
+
+    // Buscar el toggle activo de Angular Material (clase mat-button-toggle-checked o aria-checked="true")
+
+
+
+    const activeToggle = document.querySelector('.mat-button-toggle-checked');
+
+
+
+    const activeBtn = activeToggle ? activeToggle.querySelector('button') : document.querySelector('button[aria-checked="true"]');
+
+
 
     
 
-    const text = activeTab.innerText.toLowerCase();
 
-    const isFeatured = text.includes('destacado') || text.includes('featured');
+
+    if (!activeBtn) return;
+
+
 
     
+
+
+
+    const text = activeBtn.innerText.toLowerCase();
+
+
+
+    // Soporte para ES (destacado), EN (featured/picks), CA (destacat)
+
+
+
+    const isFeatured = text.includes('destacado') || text.includes('featured') || text.includes('picks') || text.includes('destacat');
+
+
+
+    
+
+
 
     if (isFeatured) {
 
+
+
         document.body.classList.add('nblm-in-featured-tab');
+
+
 
     } else {
 
+
+
         document.body.classList.remove('nblm-in-featured-tab');
 
+
+
     }
+
+
 
     
 
+
+
     const filterBar = document.getElementById('nblm-filter-tags');
+
+
 
     if (filterBar) {
 
+
+
         filterBar.style.display = isFeatured ? 'none' : 'flex';
+
+
 
     }
 
+
+
 }
+
+
+
+
 
 
 
