@@ -281,57 +281,158 @@ function removeTagFromNotebook(id, tag) {
 }
 
 function updateUI() {
+
   document.querySelectorAll('.nblm-processed').forEach(node => {
+
     const container = node.querySelector('.nblm-tag-container');
+
     if (container) {
+
         const fp = getNotebookFingerprint(node);
+
         const all = document.querySelectorAll('project-button, tr, [role="row"]');
+
         let count = 0;
+
         all.forEach(r => { if (getNotebookFingerprint(r) === fp) count++; });
+
         renderTags(container, getResolvedId(node, count > 1));
+
     }
+
   });
-  renderFilterTags();
-  applyFilters();
+
+  renderFilterTags(); applyFilters();
+
 }
+
+
+
+function updateTabContext() {
+
+    const activeTab = document.querySelector('button[role="tab"][aria-selected="true"]');
+
+    if (!activeTab) return;
+
+    
+
+    const text = activeTab.innerText.toLowerCase();
+
+    const isFeatured = text.includes('destacado') || text.includes('featured');
+
+    
+
+    if (isFeatured) {
+
+        document.body.classList.add('nblm-in-featured-tab');
+
+    } else {
+
+        document.body.classList.remove('nblm-in-featured-tab');
+
+    }
+
+    
+
+    const filterBar = document.getElementById('nblm-filter-tags');
+
+    if (filterBar) {
+
+        filterBar.style.display = isFeatured ? 'none' : 'flex';
+
+    }
+
+}
+
+
 
 function refreshInjectedTexts() {
+
     const tools = document.querySelector('.nblm-tools-container');
+
     if (tools) {
+
         const searchInput = tools.querySelector('.nblm-search-input');
+
         if (searchInput) searchInput.placeholder = t('search_placeholder');
+
         const manageBtn = tools.querySelector('.nblm-manage-btn');
+
         if (manageBtn) manageBtn.innerText = t('btn_manage_tags');
+
     }
+
 }
 
+
+
 function injectSearchTools() {
-  if (document.querySelector('.nblm-tools-container')) return;
+
+  if (document.querySelector('.nblm-tools-container')) {
+
+      updateTabContext();
+
+      return;
+
+  }
+
   const featured = document.querySelector('.featured-projects-container');
+
   const listHeader = document.querySelector('.notebook-list-header') || document.querySelector('.projects-container-header');
+
   const mainContent = document.querySelector('.all-projects-container') || document.querySelector('main');
+
+
 
   if (!featured && !listHeader && !mainContent) return;
 
+
+
   const tools = document.createElement('div');
+
   tools.className = 'nblm-tools-container';
+
   tools.innerHTML = `
+
     <div class="nblm-header-row">
+
         <input type="text" class="nblm-search-input" style="flex:1; margin-right:12px;" placeholder="${t('search_placeholder')}">
+
         <button class="nblm-manage-btn">${t('btn_manage_tags')}</button>
+
     </div>
+
     <div class="nblm-filter-tags" id="nblm-filter-tags"></div>
+
   `;
 
+
+
   tools.querySelector('input').oninput = (e) => { searchQuery = e.target.value.toLowerCase(); applyFilters(); };
+
   tools.querySelector('.nblm-manage-btn').onclick = showManagementModal;
 
+
+
   if (featured) featured.insertAdjacentElement('afterend', tools);
+
   else if (listHeader) listHeader.insertAdjacentElement('afterend', tools);
+
   else if (mainContent) mainContent.prepend(tools);
 
-  if (document.querySelector('.nblm-tools-container')) renderFilterTags();
+
+
+  if (document.querySelector('.nblm-tools-container')) {
+
+      updateTabContext();
+
+      renderFilterTags();
+
+  }
+
 }
+
+
 
 function showConfirmDialog(title, message, onConfirm, confirmBtnClass = 'nblm-btn-primary') {
     const overlay = document.createElement('div');

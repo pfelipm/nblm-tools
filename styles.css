@@ -389,7 +389,8 @@
 }
 
 /* Ocultado visual de destacados en la vista principal (Sin afectar al flujo de Angular) */
-.all-projects-container .featured-projects-container {
+/* Solo se oculta si NO estamos en la pestaña de destacados */
+body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-container {
     position: absolute !important;
     height: 0 !important;
     width: 0 !important;
