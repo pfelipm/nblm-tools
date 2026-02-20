@@ -594,7 +594,7 @@ function showManagementModal() {
             </div>
             <div class="nblm-modal-body"></div>
             <div class="nblm-modal-footer">
-                ${t('attribution_created_by')} 🩵 por <a href="https://www.linkedin.com/in/pfelipm/" target="_blank">Pablo Felip</a> | <a href="https://github.com/pfelipm/notebooklm-organizer" target="_blank">GitHub</a>
+                ${t('attribution_created_by')} <a href="https://www.linkedin.com/in/pfelipm/" target="_blank">Pablo Felip</a> | <a href="https://github.com/pfelipm/notebooklm-organizer" target="_blank">GitHub</a>
             </div>
         </div>
     `;
