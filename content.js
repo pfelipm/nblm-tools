@@ -376,15 +376,15 @@ function updateTabContext() {
 
 
 
-    const filterBar = document.getElementById('nblm-filter-tags');
+    const tools = document.querySelector('.nblm-tools-container');
 
 
 
-    if (filterBar) {
+    if (tools) {
 
 
 
-        filterBar.style.display = isFeatured ? 'none' : 'flex';
+        tools.style.display = isFeatured ? 'none' : 'flex';
 
 
 
