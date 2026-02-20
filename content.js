@@ -150,7 +150,7 @@ function extractNotebookId(element) {
     }
 
     // 3. Buscar en el HTML completo del nodo por un patrón UUID
-    const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+    const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
     const htmlMatch = element.outerHTML.match(uuidPattern);
     if (htmlMatch) return htmlMatch[0];
 
@@ -411,6 +411,17 @@ function updateUI() {
   applyFilters();
 }
 
+function refreshInjectedTexts() {
+    const tools = document.querySelector('.nblm-tools-container');
+    if (tools) {
+        const searchInput = tools.querySelector('.nblm-search-input');
+        if (searchInput) searchInput.placeholder = t('search_placeholder');
+        
+        const manageBtn = tools.querySelector('.nblm-manage-btn');
+        if (manageBtn) manageBtn.innerText = t('btn_manage_tags');
+    }
+}
+
 function injectSearchTools() {
   if (document.querySelector('.nblm-tools-container')) return;
   
@@ -606,6 +617,7 @@ function showManagementModal() {
             saveAllData();
             overlay.remove();
             showManagementModal(); // Reabrir para refrescar
+            refreshInjectedTexts(); // Actualizar textos en la página de NBLM
             updateUI();
         };
     });
@@ -658,6 +670,306 @@ function showManagementModal() {
     document.body.appendChild(overlay);
     render();
 }
+
+function showImportGranularModal(data, onComplete) {
+    const overlay = document.createElement('div');
+    overlay.className = 'nblm-modal-overlay';
+    overlay.style.zIndex = '30001';
+    overlay.innerHTML = `
+        <div class="nblm-confirm-modal" style="width:400px;">
+            <div class="nblm-confirm-title">${t('import_granular_title')}</div>
+            <div class="nblm-confirm-message">${t('import_granular_msg')}</div>
+            
+            <div style="text-align:left; background:#f8f9fa; padding:16px; border-radius:8px; display:flex; flex-direction:column; gap:12px; margin-bottom:24px; width:100%; box-sizing:border-box;">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="import-opt-tags" checked style="width:16px; height:16px; cursor:pointer;">
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-weight:500; font-size:13px; color:#202124;">${t('import_opt_tags')}</span>
+                        <span style="font-size:11px; color:#5f6368;">${t('import_opt_tags_desc', data.globalTags.length)}</span>
+                    </div>
+                </label>
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="import-opt-notebooks" checked style="width:16px; height:16px; cursor:pointer;">
+                    <div style="display:flex; flex-direction:column;">
+                        <span style="font-weight:500; font-size:13px; color:#202124;">${t('import_opt_notebooks')}</span>
+                        <span style="font-size:11px; color:#5f6368;">${t('import_opt_notebooks_desc')}</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="nblm-confirm-actions" style="display:flex; gap:12px; justify-content:flex-end; width:100%;">
+                <button class="nblm-btn-cancel">${t('btn_cancel')}</button>
+                <button class="nblm-btn-primary" id="nblm-confirm-import">${t('import_btn_confirm')}</button>
+            </div>
+        </div>
+    `;
+
+    overlay.querySelector('.nblm-btn-cancel').onclick = () => overlay.remove();
+    overlay.querySelector('#nblm-confirm-import').onclick = () => {
+        const importTags = overlay.querySelector('#import-opt-tags').checked;
+        const importNotebooks = overlay.querySelector('#import-opt-notebooks').checked;
+
+        if (!importTags && !importNotebooks) {
+            overlay.remove();
+            return;
+        }
+
+        if (importTags) {
+            globalTags = data.globalTags;
+            tagConfig = data.tagConfig || {};
+        }
+
+        if (importNotebooks) {
+            notebookTags = data.notebookTags || {};
+            titleToIdMap = data.titleToIdMap || {};
+            filterMode = data.filterMode || 'AND';
+        }
+
+        overlay.remove();
+        onComplete();
+        showAlertDialog('✅', t('import_success_title'), t('import_success_msg'));
+    };
+
+    document.body.appendChild(overlay);
+}
+
+function renameTag(oldName, newName) {
+    if (!newName || oldName === newName || globalTags.includes(newName)) return;
+    globalTags = globalTags.map(t => t === oldName ? newName : t);
+    if (tagConfig[oldName]) { 
+        tagConfig[newName] = { ...tagConfig[oldName] }; 
+        delete tagConfig[oldName]; 
+    }
+    Object.keys(notebookTags).forEach(id => { 
+        notebookTags[id] = notebookTags[id].map(t => t === oldName ? newName : t); 
+    });
+    if (activeFilters.has(oldName)) { 
+        activeFilters.delete(oldName); 
+        activeFilters.add(newName); 
+    }
+    saveAllData();
+    updateUI();
+}
+
+function setTagColor(tag, color) {
+    if (!tagConfig[tag]) tagConfig[tag] = {};
+    tagConfig[tag].color = color;
+    saveAllData();
+    updateUI();
+}
+
+function renderFilterTags() {
+  const container = document.getElementById('nblm-filter-tags');
+  if (!container) return;
+  container.innerHTML = '';
+  globalTags.forEach(tag => {
+    const tagEl = document.createElement('span');
+    const isActive = activeFilters.has(tag);
+    tagEl.className = `nblm-filter-tag ${isActive ? 'active' : ''}`;
+    if (isActive) {
+        tagEl.style.backgroundColor = getTagColor(tag);
+        tagEl.style.color = 'white';
+        tagEl.style.borderColor = 'transparent';
+    }
+    tagEl.innerText = tag;
+    tagEl.onclick = () => { if (isActive) activeFilters.delete(tag); else activeFilters.add(tag); updateUI(); };
+    container.appendChild(tagEl);
+  });
+  if (activeFilters.size > 0) {
+      // Selector de Modo (AND/OR)
+      const modeToggle = document.createElement('div');
+      modeToggle.className = 'nblm-filter-mode-toggle';
+      modeToggle.innerHTML = `
+          <div class="nblm-mode-btn ${filterMode === 'AND' ? 'active' : ''}" data-mode="AND">${t('filter_mode_and')}</div>
+          <div class="nblm-mode-btn ${filterMode === 'OR' ? 'active' : ''}" data-mode="OR">${t('filter_mode_or')}</div>
+      `;
+      modeToggle.querySelectorAll('.nblm-mode-btn').forEach(btn => {
+          btn.onclick = () => {
+              filterMode = btn.dataset.mode;
+              updateUI();
+          };
+      });
+      container.appendChild(modeToggle);
+
+      const clearBtn = document.createElement('div');
+      clearBtn.className = 'nblm-clear-filters';
+      clearBtn.innerHTML = `<span>×</span> ${t('filter_clear')}`;
+      clearBtn.onclick = () => { activeFilters.clear(); updateUI(); };
+      container.appendChild(clearBtn);
+  }
+}
+
+function applyFilters() {
+  document.querySelectorAll('.nblm-processed').forEach(node => {
+    const fp = getNotebookFingerprint(node);
+    const all = document.querySelectorAll('project-button, tr, [role="row"]');
+    let count = 0;
+    all.forEach(r => { if (getNotebookFingerprint(r) === fp) count++; });
+    const id = getResolvedId(node, count > 1);
+    const titleText = node.innerText.toLowerCase();
+    const tags = notebookTags[id] || [];
+    
+    const matchesSearch = titleText.includes(searchQuery);
+    
+    let matchesTags = true;
+    if (activeFilters.size > 0) {
+        const filterArray = Array.from(activeFilters);
+        if (filterMode === 'AND') {
+            matchesTags = filterArray.every(f => tags.includes(f));
+        } else {
+            matchesTags = filterArray.some(f => tags.includes(f));
+        }
+    }
+    
+    node.style.display = (matchesSearch && matchesTags) ? '' : 'none';
+  });
+}
+
+function showFullTagsTooltip(anchor, id, sticky) {
+    if (id?.startsWith('collision:')) return;
+    closeTooltip();
+    const tooltip = document.createElement('div');
+    tooltip.className = 'nblm-tags-tooltip';
+    tooltip.dataset.id = id;
+    if (sticky) tooltip.dataset.sticky = 'true';
+    
+    tooltip.onmouseenter = () => { tooltip.dataset.hovered = 'true'; };
+    tooltip.onmouseleave = () => { 
+        tooltip.dataset.hovered = 'false'; 
+        if (tooltip.dataset.sticky !== 'true') closeTooltip(); 
+    };
+
+    const rect = anchor.getBoundingClientRect();
+    tooltip.style.top = `${rect.bottom + window.scrollY}px`;
+    tooltip.style.left = `${rect.left + window.scrollX}px`;
+    (notebookTags[id] || []).forEach(t => tooltip.appendChild(createTagElement(t, id, true)));
+    document.body.appendChild(tooltip);
+    activeTooltip = tooltip;
+}
+
+function closeTooltip() { if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; } }
+function closePopover() { if (currentPopover) { currentPopover.remove(); currentPopover = null; } }
+function addGlobalTag(tag) { 
+    if (!globalTags.includes(tag)) { 
+        globalTags.push(tag); 
+        globalTags.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })); 
+        saveAllData(); 
+        renderFilterTags(); 
+    } 
+}
+
+function showTagPopover(id) {
+    closePopover();
+    const pop = document.createElement('div');
+    pop.className = 'nblm-popover';
+    pop.style.top = '50%'; pop.style.left = '50%'; pop.style.transform = 'translate(-50%, -50%)';
+    pop.innerHTML = `
+        <div class="nblm-popover-header">
+             <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+                <span style="font-weight:500;font-size:14px;color:#202124;">${t('popover_title')}</span>
+                <span id="nblm-close" style="cursor:pointer;font-size:18px;">&times;</span>
+             </div>
+             <input type="text" id="nblm-in" placeholder="${t('popover_search_placeholder')}" autofocus style="width:100%; box-sizing:border-box;">
+        </div>
+        <div class="tag-list" id="nblm-list"></div>
+        <div id="nblm-create"></div>
+    `;
+    
+    pop.querySelector('#nblm-close').onclick = closePopover;
+    const input = pop.querySelector('#nblm-in');
+    const render = () => {
+        const q = input.value.toLowerCase();
+        const listContainer = pop.querySelector('#nblm-list');
+        listContainer.innerHTML = '';
+        
+        // Ordenar antes de mostrar para asegurar el orden alfabético correcto
+        [...globalTags]
+            .filter(t => t.toLowerCase().includes(q))
+            .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+            .forEach(t => {
+                const item = document.createElement('div');
+                const isChecked = (notebookTags[id] || []).includes(t);
+                item.className = `nblm-check-item ${isChecked ? 'checked' : ''}`;
+                const color = getTagColor(t);
+                
+                // Mostrar como pastilla (pill) real, pero sin el botón de borrar (x)
+                item.innerHTML = `
+                    <div class="nblm-check-icon" style="border-color:${color}; background:${isChecked ? color : 'transparent'}"></div>
+                    <span class="nblm-tag" style="background-color:${color}; cursor:pointer; max-width:160px;">${t}</span>
+                `;
+                
+                item.onclick = (e) => { e.stopPropagation(); toggleTag(id, t); render(); input.focus(); };
+                listContainer.appendChild(item);
+            });
+
+        const showCreate = q && !globalTags.some(t => t.toLowerCase() === q);
+        if (showCreate) {
+            const createOpt = document.createElement('div');
+            createOpt.className = 'nblm-create-option';
+            createOpt.innerHTML = `<span>${t('popover_create_tag')}</span> <span class="nblm-tag" style="background-color:#1a73e8; margin-left:4px;">${input.value}</span>`;
+            createOpt.onclick = () => { 
+                const newTag = input.value.trim();
+                addGlobalTag(newTag); toggleTag(id, newTag); input.value = ''; render(); 
+            };
+            pop.querySelector('#nblm-create').innerHTML = '';
+            pop.querySelector('#nblm-create').appendChild(createOpt);
+        } else {
+            pop.querySelector('#nblm-create').innerHTML = '';
+        }
+    };
+    input.oninput = render;
+    input.onkeyup = (e) => { 
+        if (e.key === 'Enter') {
+            const val = input.value.trim();
+            if (!val) return;
+            const existing = globalTags.find(t => t.toLowerCase() === val.toLowerCase());
+            if (existing) {
+                toggleTag(id, existing);
+                input.value = '';
+                render();
+            } else {
+                addGlobalTag(val);
+                toggleTag(id, val);
+                input.value = '';
+                render();
+            }
+        }
+    };
+    document.body.appendChild(pop);
+    currentPopover = pop;
+    render();
+}
+
+// 7. INICIO
+chrome.storage.sync.get(null, (syncData) => {
+  let finalData = {};
+  
+  // Intentar reconstruir desde trozos (Sync)
+  if (syncData && syncData._chunk_count) {
+      let fullJson = "";
+      for (let i = 0; i < syncData._chunk_count; i++) {
+          fullJson += syncData[`_chunk_${i}`] || "";
+      }
+      try {
+          finalData = JSON.parse(fullJson);
+      } catch (e) {
+          console.error("Error reconstruyendo datos de Sync:", e);
+      }
+  }
+
+  // Si Sync falló o está vacío, probar Local
+  chrome.storage.local.get(['notebookTags', 'globalTags', 'titleToIdMap', 'tagConfig', 'filterMode', 'uiLang'], async (localRes) => {
+    notebookTags = finalData.notebookTags || localRes.notebookTags || {};
+    globalTags = finalData.globalTags || localRes.globalTags || [];
+    titleToIdMap = finalData.titleToIdMap || localRes.titleToIdMap || {};
+    tagConfig = finalData.tagConfig || localRes.tagConfig || {};
+    filterMode = finalData.filterMode || localRes.filterMode || 'AND';
+    uiLang = finalData.uiLang || localRes.uiLang || 'auto';
+    
+    await loadLanguage(uiLang);
+    init();
+  });
+});
 
 function showImportGranularModal(data, onComplete) {
     const overlay = document.createElement('div');
