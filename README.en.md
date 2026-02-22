@@ -4,6 +4,8 @@
 
 **NotebookLM Organizer** is a browser extension designed to enhance your workspace organization in [NotebookLM](https://notebooklm.google.com). Featuring an advanced tagging system and dynamic filtering, it allows you to manage your notebooks with a fluid, fully integrated user experience that feels like a native functionality.
 
+![notebookLM Organizer GIF](assets/overview.gif)
+
 ---
 
 ## 🔒 Privacy & Security
