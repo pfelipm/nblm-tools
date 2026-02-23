@@ -774,7 +774,7 @@ function showTagPopover(id) {
     pop.innerHTML = `
         <div class="nblm-popover-header">
              <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
-                <span style="font-weight:500;font-size:14px;color:#202124;">${t('popover_title')}</span>
+                <span class="nblm-popover-title">${t('popover_title')}</span>
                 <span id="nblm-close" style="cursor:pointer;font-size:18px;">&times;</span>
              </div>
              <input type="text" id="nblm-in" placeholder="${t('popover_search_placeholder')}" autofocus style="width:100%; box-sizing:border-box;">

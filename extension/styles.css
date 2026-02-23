@@ -1,12 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
 :root {
-  --nblm-primary: #1a73e8;
+  /* --- PALETA DE COLORES (Variables) --- */
+  /* Colores Base */
+  --nblm-primary: #1a73e8;           /* Azul Google */
+  --nblm-primary-hover: #174ea6;     /* Azul más oscuro para hover */
   --nblm-bg-hover: rgba(26, 115, 232, 0.04);
-  --nblm-border: #dadce0;
-  --nblm-text: #3c4043;
-  --nblm-tag-bg: #1a73e8; 
-  --nblm-tag-text: #ffffff;
+  --nblm-border: #dadce0;            /* Gris borde claro */
+  
+  /* Textos */
+  --nblm-text: #3c4043;              /* Texto principal oscuro */
+  --nblm-secondary-text: #5f6368;    /* Texto secundario gris */
+  --nblm-tag-text-on-color: #ffffff; /* Texto blanco sobre etiquetas de color */
+  
+  /* Fondos de Superficies */
+  --nblm-bg-main: #ffffff;           /* Fondo principal (blanco) */
+  --nblm-bg-secondary: #f8f9fa;      /* Fondo gris muy claro (headers) */
+  --nblm-bg-tertiary: #f1f3f4;       /* Fondo gris claro (chips, hovers) */
+  --nblm-bg-input: #ffffff;          /* Fondo de inputs */
+  
+  /* Estados */
+  --nblm-danger: #d93025;            /* Rojo error */
+  --nblm-danger-bg-hover: #fce8e6;
+  --nblm-checked-bg: #e8f0fe;        /* Fondo azul muy claro para items seleccionados */
+  
+  /* Sombras */
+  --nblm-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --nblm-shadow-md: 0 1px 3px rgba(0,0,0,0.25);
+  --nblm-shadow-lg: 0 4px 16px rgba(0,0,0,0.2);
+  --nblm-shadow-modal: 0 24px 38px 3px rgba(0,0,0,0.14);
+}
+
+/* --- MODO OSCURO (Overrides de Variables) --- */
+body.dark-theme {
+  /* Colores Base */
+  --nblm-primary: #8ab4f8;           /* Azul claro legible en oscuro */
+  --nblm-primary-hover: #aecbfa;
+  --nblm-bg-hover: rgba(138, 180, 248, 0.08);
+  --nblm-border: #5f6368;            /* Bordes más sutiles en oscuro */
+  
+  /* Textos */
+  --nblm-text: #e8eaed;              /* Blanco hueso */
+  --nblm-secondary-text: #9aa0a6;    /* Gris claro */
+  --nblm-tag-text-on-color: #202124; /* Texto oscuro sobre etiquetas claras */
+  
+  /* Fondos de Superficies */
+  --nblm-bg-main: #202124;           /* Gris oscuro Google */
+  --nblm-bg-secondary: #292a2d;      /* Header modal oscuro */
+  --nblm-bg-tertiary: #303134;       /* Chips oscuros */
+  --nblm-bg-input: #202124;          /* Input oscuro */
+  
+  /* Estados */
+  --nblm-danger: #f28b82;            /* Rojo claro */
+  --nblm-danger-bg-hover: rgba(242, 139, 130, 0.1);
+  --nblm-checked-bg: rgba(138, 180, 248, 0.24);
+  
+  /* Sombras (Ajustadas para modo oscuro) */
+  --nblm-shadow-low: 0 1px 2px rgba(0,0,0,0.5);
+  --nblm-shadow-med: 0 1px 3px rgba(0,0,0,0.6);
+  --nblm-shadow-high: 0 4px 16px rgba(0,0,0,0.6);
+  --nblm-shadow-modal: 0 24px 38px 3px rgba(0,0,0,0.6);
 }
 
 /* Forzar Roboto */
@@ -47,32 +100,32 @@
 .nblm-filter-tag {
     padding: 6px 16px; /* Más padding para click fácil */
     border-radius: 16px;
-    background: #ffffff;
-    color: #1a73e8;
+    background: var(--nblm-bg-main);
+    color: var(--nblm-primary);
     font-size: 13px; /* Un poco más grande para leer mejor */
     cursor: pointer;
-    border: 1px solid #dadce0;
+    border: 1px solid var(--nblm-border);
     transition: all 0.2s;
     user-select: none;
     font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: var(--nblm-shadow-low);
 }
 
 .nblm-filter-tag:hover {
-    background: #e8f0fe;
-    border-color: #1a73e8;
+    background: var(--nblm-bg-hover); /* Uso variable bg-hover */
+    border-color: var(--nblm-primary);
 }
 
 /* Estado activo: IDÉNTICO a las etiquetas de los cuadernos (.nblm-tag) */
 .nblm-filter-tag.active {
-    background-color: var(--nblm-tag-bg); /* #1a73e8 */
-    color: var(--nblm-tag-text); /* #ffffff */
+    background-color: var(--nblm-primary); /* Variable primary (se adapta en oscuro) */
+    color: var(--nblm-tag-text-on-color);  /* Texto contrastado */
     border-color: transparent;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    box-shadow: var(--nblm-shadow-med);
 }
 
 .nblm-filter-tag.active:hover {
-    background-color: #174ea6;
+    filter: brightness(0.9); /* Efecto hover genérico */
 }
 
 /* Botón discreto para limpiar filtros */
@@ -80,7 +133,7 @@
     padding: 6px 12px;
     border-radius: 16px;
     background: transparent;
-    color: #5f6368;
+    color: var(--nblm-secondary-text);
     font-size: 13px;
     cursor: pointer;
     border: 1px solid transparent;
@@ -92,8 +145,8 @@
 }
 
 .nblm-clear-filters:hover {
-    background: #f1f3f4;
-    color: #202124;
+    background: var(--nblm-bg-tertiary);
+    color: var(--nblm-text);
 }
 
 .nblm-clear-filters span {
@@ -106,10 +159,10 @@
 .nblm-filter-mode-toggle {
     display: flex;
     align-items: center;
-    background: #f1f3f4;
+    background: var(--nblm-bg-tertiary);
     border-radius: 16px;
     padding: 2px;
-    border: 1px solid #dadce0;
+    border: 1px solid var(--nblm-border);
     margin-left: 8px;
     margin-right: 4px;
 }
@@ -120,38 +173,42 @@
     font-size: 11px;
     font-weight: 500;
     cursor: pointer;
-    color: #5f6368;
+    color: var(--nblm-secondary-text);
     transition: all 0.2s;
     user-select: none;
 }
 
 .nblm-mode-btn.active {
-    background: #ffffff;
+    background: var(--nblm-bg-main);
     color: var(--nblm-primary);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: var(--nblm-shadow-low);
 }
 
 .nblm-mode-btn:hover:not(.active) {
-    color: #202124;
+    color: var(--nblm-text);
 }
 
 /* Estilos de la barra de búsqueda */
 .nblm-search-input {
-    border: 1px solid #dadce0;
+    border: 1px solid var(--nblm-border);
     border-radius: 8px;
     padding: 8px 16px;
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s;
+    background-color: var(--nblm-bg-input);
+    color: var(--nblm-text);
 }
 
 .nblm-search-input:focus {
-    border-color: #1a73e8;
+    border-color: var(--nblm-primary);
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
+
+/* Nota: .nblm-tag usa color inline en style, pero definimos variables por si acaso */
 .nblm-tag {
-  background-color: var(--nblm-tag-bg);
-  color: var(--nblm-tag-text);
+  /* background-color se inyecta por JS, usamos variables para fallbacks */
+  color: var(--nblm-tag-text-on-color); /* Importante: texto contrastado */
   border-radius: 12px;
   padding: 2px 8px;
   font-size: 10px;
@@ -166,15 +223,15 @@
   cursor: default;
   border: 1px solid transparent;
   user-select: none;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  box-shadow: var(--nblm-shadow-low);
   box-sizing: border-box;
   line-height: 1;
   height: 18px;
 }
 
 .nblm-tag:hover {
-    background-color: #174ea6;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    filter: brightness(0.9);
+    box-shadow: var(--nblm-shadow-med);
 }
 
 /* Botón de eliminar (X) en blanco */
@@ -192,7 +249,7 @@
   justify-content: center;
   height: 14px;
   width: 14px;
-  color: white;
+  color: inherit; /* Heredar color del texto de la etiqueta */
   flex-shrink: 0;
   box-sizing: border-box;
 }
@@ -205,15 +262,15 @@
 /* Chip para mostrar "+X" etiquetas más */
 .nblm-more-tags {
     font-size: 10px;
-    color: #5f6368;
-    background: #f1f3f4;
+    color: var(--nblm-secondary-text);
+    background: var(--nblm-bg-tertiary);
     padding: 2px 8px;
     border-radius: 12px;
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
     font-weight: 500;
-    border: 1px solid #dadce0;
+    border: 1px solid var(--nblm-border);
     transition: all 0.2s;
     box-sizing: border-box;
     line-height: 1;
@@ -223,15 +280,15 @@
 }
 
 .nblm-more-tags:hover {
-    background: #e8f0fe;
-    color: #1967d2;
-    border-color: #1967d2;
+    background: var(--nblm-checked-bg);
+    color: var(--nblm-primary);
+    border-color: var(--nblm-primary);
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 /* Icono de advertencia por colisión de metadatos */
 .nblm-collision-warning {
-    color: #f4b400;
+    color: #f4b400; /* Amarillo fijo para alerta */
     cursor: help;
     margin-left: 8px;
     font-size: 14px;
@@ -242,9 +299,9 @@
 /* Tooltip interactivo */
 .nblm-tags-tooltip {
     position: fixed;
-    background: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background: var(--nblm-bg-main);
+    border: 1px solid var(--nblm-border);
+    box-shadow: var(--nblm-shadow-high);
     padding: 12px;
     border-radius: 8px;
     z-index: 10000;
@@ -261,9 +318,9 @@
 /* Popover de añadir etiqueta - CHECKBOX STYLE */
 .nblm-popover {
   position: fixed;
-  background: white;
+  background: var(--nblm-bg-main);
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow: var(--nblm-shadow-high);
   border: 1px solid var(--nblm-border);
   padding: 0; /* Padding movido a los elementos internos */
   z-index: 10000;
@@ -275,8 +332,19 @@
 
 .nblm-popover-header {
     padding: 12px;
-    border-bottom: 1px solid #f1f3f4;
-    background: #f8f9fa;
+    border-bottom: 1px solid var(--nblm-bg-tertiary);
+    background: var(--nblm-bg-secondary);
+}
+
+/* CLASE NUEVA: Título del popover */
+.nblm-popover-title {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--nblm-text);
+}
+
+.nblm-popover-header #nblm-close {
+    color: var(--nblm-secondary-text);
 }
 
 .nblm-popover input {
@@ -287,6 +355,8 @@
   outline: none;
   width: 100%;
   box-sizing: border-box;
+  background-color: var(--nblm-bg-input);
+  color: var(--nblm-text);
 }
 
 .nblm-popover input:focus {
@@ -319,8 +389,8 @@
 }
 
 .nblm-check-item.checked {
-    background-color: #e8f0fe;
-    color: #1a73e8;
+    background-color: var(--nblm-checked-bg);
+    color: var(--nblm-primary);
     font-weight: 500;
 }
 
@@ -328,7 +398,7 @@
 .nblm-check-icon {
     width: 18px;
     height: 18px;
-    border: 2px solid #5f6368;
+    border: 2px solid var(--nblm-secondary-text);
     border-radius: 2px;
     box-sizing: border-box;
     display: flex;
@@ -338,9 +408,9 @@
 }
 
 .nblm-check-item.checked .nblm-check-icon {
-    background-color: #1a73e8;
-    border-color: #1a73e8;
-    color: white;
+    background-color: var(--nblm-primary);
+    border-color: var(--nblm-primary);
+    color: var(--nblm-bg-main); /* Icono contrasta con el fondo del checkbox */
 }
 
 .nblm-check-icon::after {
@@ -358,8 +428,8 @@
     padding: 12px 16px;
     cursor: pointer;
     font-size: 13px;
-    color: #1a73e8;
-    border-top: 1px solid #f1f3f4;
+    color: var(--nblm-primary);
+    border-top: 1px solid var(--nblm-bg-tertiary);
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -367,25 +437,30 @@
 }
 
 .nblm-create-option:hover {
-    background: #e8f0fe;
+    background: var(--nblm-checked-bg);
 }
 
 
 /* Resto de estilos (Tools, Modal, Menú) */
 .nblm-tools-container {
   padding: 8px 24px;
-  background: white;
+  background: var(--nblm-bg-main);
   border-bottom: 1px solid var(--nblm-border);
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
   box-sizing: border-box;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: auto !important;
   margin-bottom: 0;
   position: relative;
   z-index: 10;
   grid-column: 1 / -1;
   max-width: 100%;
+}
+  min-height: auto; /* FIX: Evitar mínimos heredados */
 }
 
 /* Ocultado visual de destacados en la vista principal (Sin afectar al flujo de Angular) */
@@ -410,20 +485,20 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 }
 
 .nblm-manage-btn {
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--nblm-bg-main);
+  border: 1px solid var(--nblm-border);
   padding: 6px 16px;
   border-radius: 18px;
   font-size: 13px;
   cursor: pointer;
-  color: #1a73e8;
+  color: var(--nblm-primary);
   font-weight: 500;
   transition: background 0.2s;
 }
 
 .nblm-manage-btn:hover {
-    background-color: #f1f3f4;
-    border-color: #d2e3fc;
+    background-color: var(--nblm-bg-tertiary);
+    border-color: var(--nblm-primary);
 }
 
 /* Modal Overlay */
@@ -442,37 +517,37 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 
 /* Modal de Gestión de Etiquetas Mejorado */
 .nblm-modal {
-  background: white;
+  background: var(--nblm-bg-main);
   border-radius: 12px;
   width: 500px;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14);
+  box-shadow: var(--nblm-shadow-modal);
   overflow: hidden;
   border: none;
 }
 
 .nblm-modal-header {
   padding: 20px 24px;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--nblm-bg-tertiary);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f8f9fa;
+  background: var(--nblm-bg-secondary);
 }
 
 .nblm-modal-header h2 {
   margin: 0;
   font-size: 18px;
   font-weight: 500;
-  color: #202124;
+  color: var(--nblm-text);
 }
 
 .nblm-modal-close {
   cursor: pointer;
   font-size: 24px;
-  color: #5f6368;
+  color: var(--nblm-secondary-text);
   line-height: 1;
 }
 
@@ -483,14 +558,15 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 
 .nblm-modal-footer {
   padding: 12px 24px;
-  border-top: 1px solid #dadce0;
+  border-top: 1px solid var(--nblm-border);
   text-align: center;
   font-size: 11px;
-  color: #5f6368;
+  color: var(--nblm-secondary-text);
+  background: var(--nblm-bg-main);
 }
 
 .nblm-modal-footer a {
-  color: #1a73e8;
+  color: var(--nblm-primary);
   text-decoration: none;
 }
 
@@ -507,12 +583,12 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
   display: flex;
   flex-direction: column;
   padding: 16px 24px;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--nblm-bg-tertiary);
   transition: background 0.2s;
 }
 
 .nblm-manage-item:hover {
-  background: #f8f9fa;
+  background: var(--nblm-bg-secondary);
 }
 
 .nblm-manage-row {
@@ -532,16 +608,17 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
   background: transparent;
   cursor: text;
   transition: all 0.2s;
+  color: var(--nblm-text);
 }
 
 .nblm-tag-edit-input:hover {
-  background: #ffffff;
-  border-color: #dadce0;
+  background: var(--nblm-bg-input);
+  border-color: var(--nblm-border);
 }
 
 .nblm-tag-edit-input:focus {
   border-color: var(--nblm-primary);
-  background: white;
+  background: var(--nblm-bg-input);
   outline: none;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
@@ -549,8 +626,8 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 /* Sección de creación en el modal */
 .nblm-manage-create-row {
     padding: 16px 24px;
-    background: #f8f9fa;
-    border-bottom: 2px solid #f1f3f4;
+    background: var(--nblm-bg-secondary);
+    border-bottom: 2px solid var(--nblm-bg-tertiary);
     display: flex;
     gap: 12px;
     align-items: center;
@@ -559,10 +636,12 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 .nblm-manage-create-input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid #dadce0;
+    border: 1px solid var(--nblm-border);
     border-radius: 8px;
     font-size: 14px;
     outline: none;
+    background-color: var(--nblm-bg-input);
+    color: var(--nblm-text);
 }
 
 .nblm-manage-create-input:focus {
@@ -571,7 +650,7 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 
 .nblm-btn-primary {
     background: var(--nblm-primary);
-    color: white;
+    color: var(--nblm-bg-main); /* Contraste */
     border: none;
     padding: 8px 16px;
     border-radius: 18px;
@@ -582,7 +661,7 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 }
 
 .nblm-btn-primary:hover {
-    background: #174ea6;
+    filter: brightness(0.9);
 }
 
 /* Animación de resaltado para nueva etiqueta */
@@ -603,6 +682,13 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
   margin-top: 10px;
 }
 
+/* TEXTO "Selecciona un color" -> Aplicamos variable secundaria */
+.nblm-color-picker-container span {
+    font-size: 11px;
+    color: var(--nblm-secondary-text) !important; /* Importante para sobreescribir estilos en línea si los hubiera */
+    margin-right: 4px;
+}
+
 .nblm-color-swatch {
   width: 20px;
   height: 20px;
@@ -617,14 +703,14 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 }
 
 .nblm-color-swatch.active {
-  border-color: #202124;
-  box-shadow: inset 0 0 0 2px white;
+  border-color: var(--nblm-text);
+  box-shadow: inset 0 0 0 2px var(--nblm-bg-main);
   transform: scale(1.1);
 }
 
 .nblm-color-swatch.active::after {
     content: '✓';
-    color: white;
+    color: white; /* Siempre blanco dentro del color */
     font-size: 12px;
     display: flex;
     align-items: center;
@@ -637,16 +723,21 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1px dashed #dadce0;
+  border: 1px dashed var(--nblm-border);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  color: white; /* Siempre blanco para que se vea sobre el color */
+  font-size: 12px;
+  color: var(--nblm-secondary-text);
   overflow: hidden;
   position: relative;
-  text-shadow: 0 0 2px rgba(0,0,0,0.5); /* Sombra para que se vea incluso si el color es muy claro */
+  text-shadow: 0 0 2px rgba(0,0,0,0.5); /* Sombra para visibilidad */
+}
+
+/* Ajuste para el símbolo + en el botón custom */
+.nblm-custom-color-btn span {
+    color: inherit;
 }
 
 .nblm-custom-color-input {
@@ -663,29 +754,29 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
-  color: #5f6368;
+  color: var(--nblm-secondary-text);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .nblm-btn-icon:hover {
-  background: #e8eaed;
-  color: #202124;
+  background: var(--nblm-bg-tertiary);
+  color: var(--nblm-text);
 }
 
 .nblm-btn-icon.danger:hover {
-  color: #d93025;
-  background: #fce8e6;
+  color: var(--nblm-danger);
+  background: var(--nblm-danger-bg-hover);
 }
 
 /* Modal de Alerta de Colisión Personalizado */
 .nblm-alert-modal {
-    background: white;
+    background: var(--nblm-bg-main);
     border-radius: 12px;
     width: 400px;
     padding: 24px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    box-shadow: var(--nblm-shadow-modal);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -702,22 +793,22 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 .nblm-alert-title {
     font-size: 18px;
     font-weight: 500;
-    color: #202124;
+    color: var(--nblm-text);
     margin-bottom: 12px;
     font-family: 'Roboto', sans-serif !important;
 }
 
 .nblm-alert-message {
     font-size: 14px;
-    color: #5f6368;
+    color: var(--nblm-secondary-text);
     line-height: 1.5;
     margin-bottom: 24px;
     font-family: 'Roboto', sans-serif !important;
 }
 
 .nblm-alert-button {
-    background: #1a73e8;
-    color: white;
+    background: var(--nblm-primary);
+    color: var(--nblm-bg-main);
     border: none;
     padding: 10px 24px;
     border-radius: 20px;
@@ -728,7 +819,7 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 }
 
 .nblm-alert-button:hover {
-    background: #174ea6;
+    filter: brightness(0.9);
 }
 
 /* Estilos menú contextual */
@@ -741,22 +832,22 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
     background: none !important;
     border: none !important;
     font-size: 14px !important;
-    color: #3c4043 !important;
+    color: var(--nblm-text) !important;
     cursor: pointer !important;
     text-align: left !important;
 }
 
 .nblm-menu-item:hover {
-    background-color: rgba(60, 64, 67, 0.04) !important;
+    background-color: var(--nblm-bg-hover) !important;
 }
 
 /* Modal de Confirmación Personalizado */
 .nblm-confirm-modal {
-    background: white;
+    background: var(--nblm-bg-main);
     border-radius: 12px;
     width: 350px;
     padding: 24px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    box-shadow: var(--nblm-shadow-modal);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -768,14 +859,14 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 .nblm-confirm-title {
     font-size: 18px;
     font-weight: 500;
-    color: #202124;
+    color: var(--nblm-text);
     margin-bottom: 12px;
     font-family: 'Roboto', sans-serif !important;
 }
 
 .nblm-confirm-message {
     font-size: 14px;
-    color: #5f6368;
+    color: var(--nblm-secondary-text);
     line-height: 1.5;
     margin-bottom: 24px;
     font-family: 'Roboto', sans-serif !important;
@@ -785,7 +876,7 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
     text-align: left;
     width: 100%;
     margin-bottom: 24px;
-    background: #f8f9fa;
+    background: var(--nblm-bg-secondary);
     padding: 16px;
     border-radius: 8px;
     box-sizing: border-box;
@@ -799,7 +890,7 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
     align-items: center;
     gap: 10px;
     font-size: 13px;
-    color: #3c4043;
+    color: var(--nblm-text);
     cursor: pointer;
     user-select: none;
 }
@@ -819,9 +910,9 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 }
 
 .nblm-btn-cancel {
-    background: white;
-    color: #5f6368;
-    border: 1px solid #dadce0;
+    background: var(--nblm-bg-main);
+    color: var(--nblm-secondary-text);
+    border: 1px solid var(--nblm-border);
     padding: 8px 16px;
     border-radius: 18px;
     font-size: 13px;
@@ -832,11 +923,11 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 }
 
 .nblm-btn-cancel:hover {
-    background: #f1f3f4;
+    background: var(--nblm-bg-tertiary);
 }
 
 .nblm-btn-danger {
-    background: #d93025;
+    background: var(--nblm-danger);
     color: white;
     border: none;
     padding: 8px 16px;
@@ -848,16 +939,16 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
 }
 
 .nblm-btn-danger:hover {
-    background: #b21f16;
+    background: var(--nblm-danger-hover);
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 /* Language Selector */
 .nblm-lang-selector {
-  background: #f1f3f4;
+  background: var(--nblm-bg-tertiary);
   padding: 4px 8px;
   border-radius: 12px;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--nblm-border);
   display: flex;
   gap: 8px;
   align-items: center;
@@ -867,17 +958,17 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
   transition: opacity 0.2s, transform 0.1s;
   padding: 0 2px;
   font-weight: 500;
-  color: #5f6368;
+  color: var(--nblm-secondary-text);
 }
 
 .nblm-lang-opt:hover {
   transform: scale(1.1);
   opacity: 1 !important;
-  color: #1a73e8;
+  color: var(--nblm-primary);
 }
 
 .nblm-lang-opt.active {
-  color: #1a73e8;
+  color: var(--nblm-primary);
   opacity: 1 !important;
   font-weight: bold;
 }
