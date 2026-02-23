@@ -23,6 +23,7 @@ La privacidad es el pilar fundamental de esta extensión. NotebookLM Organizer h
 
 - 🏷️ **Etiquetado con colores:** crea etiquetas personalizadas con una paleta de colores vibrantes para categorizar tus proyectos visualmente.
 - 🔍 **Filtrado avanzado:** localiza cuadernos al instante combinando búsqueda por texto y filtros de etiquetas con lógica **Y (AND)** u **O (OR)**.
+- 🌓 **Modo Oscuro Automático:** la interfaz se adapta automáticamente al tema (claro u oscuro) que tengas configurado en NotebookLM, respetando tu preferencia visual al 100%.
 - 🔄 **Sincronización automática:** tus etiquetas y preferencias se sincronizan automáticamente entre todos tus dispositivos mediante tu cuenta de Chrome.
 - 💾 **Respaldo granular:** exporta e importa tu configuración en formato JSON, permitiendo elegir qué elementos restaurar.
 - 🌐 **Soporte multi-idioma:** interfaz localizada íntegramente en **español, inglés y català**, con cambio de idioma instantáneo desde la interfaz.

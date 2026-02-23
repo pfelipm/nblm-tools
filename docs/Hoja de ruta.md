@@ -18,3 +18,4 @@
 [X] Mejora visual del selector de color (visibilidad de iconos en fondos oscuros)
 [X] Kit de comunicación para lanzamiento (borradores de RRSS)
 [X] Reestructuración del repositorio para facilitar la instalación (carpeta /extension)
+[X] Soporte automático para Modo Oscuro/Claro nativo de NotebookLM

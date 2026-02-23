@@ -23,6 +23,7 @@ Privacy is at the core of this extension. NotebookLM Organizer is built followin
 
 - 🏷️ **Color-Coded Tags:** Create custom tags with a vibrant color palette to categorize your projects visually.
 - 🔍 **Advanced Filtering:** Find notebooks instantly by combining text search and tag filters with **AND** or **OR** logic.
+- 🌓 **Automatic Dark Mode:** The interface automatically adapts to the theme (light or dark) set in NotebookLM, fully respecting your visual preference.
 - 🔄 **Automatic Sync:** Your tags and preferences are automatically synced across all your devices via your Chrome account.
 - 💾 **Granular Backup:** Export and import your settings in JSON format, allowing you to choose which elements to restore.
 - 🌐 **Multi-language Support:** Interface fully localized in **English, Spanish, and Catalan**, with instant language switching from the UI.
