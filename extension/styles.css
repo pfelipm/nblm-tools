@@ -972,3 +972,18 @@ body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-conta
   opacity: 1 !important;
   font-weight: bold;
 }
+
+/* Ocultado visual de destacados en la vista principal (Sin afectar al flujo de Angular) */
+/* Solo se oculta si NO estamos en la pestaña de destacados */
+body:not(.nblm-in-featured-tab) .all-projects-container .featured-projects-container {
+    position: absolute !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: -1 !important;
+}
