@@ -23,7 +23,7 @@ La privadesa és el pilar fonamental d'aquesta extensió. NotebookLM Organizer h
 
 - 🏷️ **Etiquetatge amb colors:** crea etiquetes personalitzades amb una paleta de colors vibrants per categoritzar els teus projectes visualment.
 - 🔍 **Filtratge avançat:** localitza quaderns a l'instant combinant cerca per text i filtres d'etiquetes amb lògica **Y (AND)** o **O (OR)**.
-- 🌓 **Mode Fosc Automàtic:** la interfície s'adapta automàticament al tema (clar o fosc) que tinguis configurat a NotebookLM, respectant la teva preferència visual al 100%.
+- 🌓 **Mode fosc automàtic:** la interfície s'adapta automàticament al tema (clar o fosc) que tinguis configurat a NotebookLM, respectant la teva preferència visual al 100%.
 - 🔄 **Sincronització automàtica:** les teves etiquetes i preferències es sincronitzen automàticament entre tots els teus dispositius mitjançant el teu compte de Chrome.
 - 💾 **Còpia de seguretat granular:** exporta i importa la teva configuració en format JSON, permetent triar quins elements restaurar.
 - 🌐 **Suport multi-idioma:** interfície localitzada íntegrament en **espanyol, anglès i català**, amb canvi d'idioma instantani des de la interfície.
