@@ -1,4 +1,4 @@
-[🇪🇸 Versión en español](README.md)
+[🇪🇸 Versión en español](README.md) | [🦎 Versió en català](README.ca.md)
 
 # NotebookLM Organizer 🏷️
 
