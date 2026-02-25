@@ -231,7 +231,9 @@ function createTagElement(tag, id, inTooltip = false) {
 
 function injectMenuItem(overlay) {
     const menuContent = overlay.querySelector('.mat-mdc-menu-content');
-    if (menuContent && !menuContent.querySelector('.nblm-menu-item')) {
+    const isNotebookMenu = overlay.querySelector('.project-button-hamburger-menu') || overlay.classList.contains('project-button-hamburger-menu');
+    
+    if (menuContent && isNotebookMenu && !menuContent.querySelector('.nblm-menu-item')) {
         const item = document.createElement('button');
         item.className = 'mat-mdc-menu-item nblm-menu-item';
         item.innerHTML = `<span class="mat-mdc-menu-item-text">${t('menu_item_tag')}</span>`;
