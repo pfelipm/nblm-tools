@@ -82,7 +82,9 @@ Sigue estos pasos para instalar la extensión de forma local:
 
 Dado que la extensión se basa en el análisis de la estructura del DOM de la aplicación NotebookLM, y esta puede cambiar en cualquier momento sin previo aviso, el autor prefiere no publicarla por ahora en la Chrome Web Store. El coste de mantenimiento y la necesidad de adaptarla a cambios frecuentes hacen que sea más práctico distribuirla como un proyecto de código abierto para su instalación manual.
 
-> **Importante:** Si deseas publicar tu propia versión de esta extensión en la Chrome Web Store, deberás **eliminar la propiedad `key`** del archivo `manifest.json`. Al subir el paquete oficial, Google generará un ID único para tu publicación y el campo `key` personalizado no es necesario ni está permitido para nuevas publicaciones en la Store.
+> **Importante para la publicación:** Si deseas publicar tu propia versión en la Store, se ha incluido el archivo **`extension/manifest.webstore.json`**. Este archivo es una versión "limpia" que **no incluye la propiedad `key`**, requisito indispensable para que Google asigne un ID oficial a tu publicación. 
+> 
+> Para usarlo, simplemente renombra `manifest.webstore.json` a `manifest.json` (sobrescribiendo el original) justo antes de comprimir la carpeta `extension` en un archivo `.zip` para su subida a la consola de desarrolladores.
 
 ---
 

@@ -60,7 +60,7 @@ Encara que l'extensió sincronitza les teves dades automàticament a través del
 
 Utilitza els botons d'**Exportar (💾)** i **Importar (📂)** situats al modal de gestió d'etiquetes per descarregar un fitxer JSON amb la teva configuració. Aquesta pràctica és especialment important abans de:
 - Desinstal·lar l'extensió.
-- Realizar una actualització manual (especialment si l'ID de l'extensió pogués canviar).
+- Realitzar una actualització manual (especialment si l'ID de l'extensió pogués canviar).
 - Canviar de perfil de Chrome.
 
 ---
@@ -80,9 +80,11 @@ Segueix aquests passos per instal·lar l'extensió de forma local:
 
 ## 📝 Nota sobre la publicació a la Chrome Web Store
 
-Atès que l'extensió es basa en l'anàlisi de l'estructura del DOM de l'aplicació NotebookLM, i aquesta pot canviar en qualsevol momento sense previ avís, l'autor prefereix no publicar-la per ara a la Chrome Web Store. El cost de manteniment i la necessitat d'adaptar-la a canvis freqüents fan que sigui més pràctic distribuir-la com un projecte de codi obert per a la seva instal·lació manual.
+Atès que l'extensió es basa en l'anàlisi de l'estructura del DOM de l'aplicació NotebookLM, i aquesta pot canviar en qualsevol moment sense previ avís, l'autor prefereix no publicar-la per ara a la Chrome Web Store. El cost de manteniment i la necessitat d'adaptar-la a canvis freqüents fan que sigui més pràctic distribuir-la com un projecte de codi obert per a la seva instal·lació manual.
 
-> **Important:** Si vols publicar la teva pròpia versió d'aquesta extensió a la Chrome Web Store, hauràs d'**eliminar la propietat `key`** de l'arxiu `manifest.json`. En pujar el paquet oficial, Google generarà un ID únic per a la teva publicació i el camp `key` personalitzat no és necessari ni està permès per a noves publicacions a l'Store.
+> **Important per a la publicació:** Si vols publicar la teva pròpia versió a l'Store, s'ha inclòs el fitxer **`extension/manifest.webstore.json`**. Aquest fitxer és una versió "neta" que **no inclou la propietat `key`**, requisit indispensable perquè Google assigni un ID oficial a la teva publicació.
+> 
+> Per fer-lo servir, simplement canvia el nom de `manifest.webstore.json` a `manifest.json` (sobrescrivint l'original) just abans de comprimir la carpeta `extension` en un fitxer `.zip` per a la seva pujada a la consola de desenvolupadors.
 
 ---
 
