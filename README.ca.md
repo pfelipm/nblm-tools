@@ -54,6 +54,17 @@ Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa 
 
 ---
 
+## 💾 Còpia de seguretat i seguretat de les teves dades
+
+Encara que l'extensió sincronitza les teves dades automàticament a través del teu compte de Google, es recomana encaridament **realitzar una còpia de seguretat local periòdica** de les teves etiquetes.
+
+Utilitza els botons d'**Exportar (💾)** i **Importar (📂)** situats al modal de gestió d'etiquetes per descarregar un fitxer JSON amb la teva configuració. Aquesta pràctica és especialment important abans de:
+- Desinstal·lar l'extensió.
+- Realizar una actualització manual (especialment si l'ID de l'extensió pogués canviar).
+- Canviar de perfil de Chrome.
+
+---
+
 ## 🛠️ Instal·lació (en mode desenvolupador)
 
 Segueix aquests passos per instal·lar l'extensió de forma local:

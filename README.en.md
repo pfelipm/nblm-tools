@@ -46,10 +46,22 @@ If you have multiple notebooks with the **same name, same number of sources, and
 *   **Manifest V3:** The extension uses the latest version of the Chrome manifest for maximum security and performance.
 *   **Chrome Storage Sync & Local:** Uses the Storage API to keep tags synchronized between devices and perform local caching.
 *   **Dynamic i18n:** Implements a custom localization system that allows for instant language changes without a page refresh.
-*   **MutationObserver:** Used to efficiently and reactively detect when new notebooks are added to the list or when navigation occurs.
+*   **MutationObserver:** Used to efficiently and reactivaely detect when new notebooks are added to the list or when navigation occurs.
 *   **Data Fragmentation (Chunking):** Sophisticated system to overcome the 8KB limit of Chrome Sync storage by splitting data into chunks.
+*   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all manual installations, which is essential for synchronization (Chrome Sync) to work.
 *   **Permissions:**
     *   `storage`: To save and sync your tags and preferences.
+
+---
+
+## 💾 Data Backup & Security
+
+While the extension automatically syncs your data through your Google account, it is highly recommended to **perform regular local backups** of your tags.
+
+Use the **Export (💾)** and **Import (📂)** buttons in the tag management modal to download a JSON file with your configuration. This is especially important before:
+- Uninstalling the extension.
+- Performing a manual update (especially if the extension ID could change).
+- Switching Chrome profiles.
 
 ---
 
@@ -63,6 +75,14 @@ Follow these steps to install the extension locally:
 4. Click the **"Load unpacked"** button.
 5. Select the **extension** folder within the downloaded or cloned project folder.
 6. Done! The extension will appear in your list of extensions and will be active on `notebooklm.google.com`.
+
+---
+
+## 📝 Note on Publishing to the Chrome Web Store
+
+Since the extension relies on analyzing the DOM structure of the NotebookLM application, which can change at any time without notice, the author prefers not to publish it to the Chrome Web Store for now. The maintenance cost and the need to adapt to frequent changes make it more practical to distribute it as an open-source project for manual installation.
+
+> **Important:** If you wish to publish your own version of this extension to the Chrome Web Store, you must **remove the `key` property** from the `manifest.json` file. When uploading the official package, Google will generate a unique ID for your publication, and the custom `key` field is not necessary or allowed for new Store publications.
 
 ---
 

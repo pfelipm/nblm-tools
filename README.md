@@ -54,6 +54,17 @@ Si tienes varios cuadernos con el **mismo nombre, mismo número de fuentes y mis
 
 ---
 
+## 💾 Respaldo y seguridad de tus datos
+
+Aunque la extensión sincroniza tus datos automáticamente a través de tu cuenta de Google, se recomienda encarecidamente **realizar una copia de seguridad local periódica** de tus etiquetas. 
+
+Utiliza los botones de **Exportar (💾)** e **Importar (📂)** situados en el modal de gestión de etiquetas para descargar un archivo JSON con tu configuración. Esta práctica es especialmente importante antes de:
+- Desinstalar la extensión.
+- Realizar una actualización manual (especialmente si el ID de la extensión pudiera cambiar).
+- Cambiar de perfil de Chrome.
+
+---
+
 ## 🛠️ Instalación (en modo desarrollador)
 
 Sigue estos pasos para instalar la extensión de forma local:
