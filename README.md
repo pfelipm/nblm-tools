@@ -48,6 +48,7 @@ Si tienes varios cuadernos con el **mismo nombre, mismo número de fuentes y mis
 *   **i18n dinámico:** implementa un sistema de localización propio que permite el cambio de idioma instantáneo sin necesidad de recargar la página.
 *   **MutationObserver:** se utiliza para detectar de forma eficiente y reactiva cuándo se añaden nuevos cuadernos a la lista o se producen cambios en la navegación.
 *   **Fragmentación de datos (chunking):** sistema avanzado para superar el límite de 8 KB de Chrome Sync mediante la división de datos en fragmentos.
+*   **ID de extensión predefinido:** el `manifest.json` incluye una clave pública (`key`) para asegurar que el ID de la extensión sea idéntico en todas las instalaciones manuales, lo cual es requisito indispensable para que funcione la sincronización (Chrome Sync).
 *   **Permisos:**
     *   `storage`: para guardar y sincronizar tus etiquetas y preferencias.
 
@@ -69,6 +70,8 @@ Sigue estos pasos para instalar la extensión de forma local:
 ## 📝 Nota sobre la publicación en la Chrome Web Store
 
 Dado que la extensión se basa en el análisis de la estructura del DOM de la aplicación NotebookLM, y esta puede cambiar en cualquier momento sin previo aviso, el autor prefiere no publicarla por ahora en la Chrome Web Store. El coste de mantenimiento y la necesidad de adaptarla a cambios frecuentes hacen que sea más práctico distribuirla como un proyecto de código abierto para su instalación manual.
+
+> **Importante:** Si deseas publicar tu propia versión de esta extensión en la Chrome Web Store, deberás **eliminar la propiedad `key`** del archivo `manifest.json`. Al subir el paquete oficial, Google generará un ID único para tu publicación y el campo `key` personalizado no es necesario ni está permitido para nuevas publicaciones en la Store.
 
 ---
 

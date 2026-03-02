@@ -36,7 +36,7 @@ La privadesa és el pilar fonamental d'aquesta extensió. NotebookLM Organizer h
 
 A causa que NotebookLM no exposa identificadors únics interns en totes les seves vistes, l'extensió utilitza una "empremta digital" basada en metadades per identificar cada quadern.
 
-Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa data**, l'extensió detectarà una **col·lisió** a la vista de llista i bloquejarà l'etiquetatge per seguretat per evitar errors d'associació. En aquests casos, apareixerà una icona d'avís (⚠️) i hauràs d'utilitzar la **vista de miniatures** (quadrícula) per etiquetar-los, ja que en aquesta vista sí que és possible obtenir un identificador únic real.
+Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa data**, l'extensió detectará una **col·lisió** a la vista de llista i bloquejarà l'etiquetatge per seguretat per evitar errors d'associació. En aquests casos, apareixerà una icona d'avís (⚠️) i hauràs d'utilitzar la **vista de miniatures** (quadrícula) per etiquetar-los, ja que en aquesta vista sí que és possible obtenir un identificador únic real.
 
 ---
 
@@ -48,6 +48,7 @@ Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa 
 *   **i18n dinàmic:** implementa un sistema de localització propi que permet el canvi d'idioma instantani sense necessitat de recarregar la pàgina.
 *   **MutationObserver:** s'utilitza per detectar de forma eficient i reactiva quan s'afegeixen nous quaderns a la llista o es produeixen canvis en la navegació.
 *   **Fragmentació de dades (chunking):** sistema avançat per superar el límit de 8 KB de Chrome Sync mitjançant la divisió de dades en fragments.
+*   **ID d'extensió predefinit:** el `manifest.json` inclou una clau pública (`key`) per assegurar que l'ID de l'extensió sigui idèntic en totes les instal·lacions manuals, la qual cosa és requisit indispensable perquè funcioni la sincronització (Chrome Sync).
 *   **Permisos:**
     *   `storage`: per guardar i sincronitzar les teves etiquetes i preferències.
 
@@ -68,7 +69,9 @@ Segueix aquests passos per instal·lar l'extensió de forma local:
 
 ## 📝 Nota sobre la publicació a la Chrome Web Store
 
-Atès que l'extensió es basa en l'anàlisi de l'estructura del DOM de l'aplicació NotebookLM, i aquesta pot canviar en qualsevol moment sense previ avís, l'autor prefereix no publicar-la per ara a la Chrome Web Store. El cost de manteniment i la necessitat d'adaptar-la a canvis freqüents fan que sigui més pràctic distribuir-la com un projecte de codi obert per a la seva instal·lació manual.
+Atès que l'extensió es basa en l'anàlisi de l'estructura del DOM de l'aplicació NotebookLM, i aquesta pot canviar en qualsevol momento sense previ avís, l'autor prefereix no publicar-la per ara a la Chrome Web Store. El cost de manteniment i la necessitat d'adaptar-la a canvis freqüents fan que sigui més pràctic distribuir-la com un projecte de codi obert per a la seva instal·lació manual.
+
+> **Important:** Si vols publicar la teva pròpia versió d'aquesta extensió a la Chrome Web Store, hauràs d'**eliminar la propietat `key`** de l'arxiu `manifest.json`. En pujar el paquet oficial, Google generarà un ID únic per a la teva publicació i el camp `key` personalitzat no és necessari ni està permès per a noves publicacions a l'Store.
 
 ---
 
