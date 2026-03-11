@@ -15,6 +15,7 @@ let lastTooltipNotebookId = null;
 let titleToIdMap = {}; 
 let overriddenMessages = null; // Cache para traducciones manuales
 let hasInteracted = false; // Flag para evitar guardados vacíos accidentales
+let lastUpdated = 0; // Sello de tiempo para resolución de conflictos
 
 const IS_DEV_MODE = !chrome.runtime.getManifest().update_url;
 const PRESET_COLORS = ['#1a73e8', '#d93025', '#188038', '#f9ab00', '#e37400', '#9334e6', '#0097a7', '#607d8b'];
@@ -70,15 +71,20 @@ function saveAllData() {
         
         // CERRADURA DE SEGURIDAD: No permitimos borrar la nube (globalTags vacío)
         // a menos que el usuario haya hecho una acción explícita (hasInteracted).
-        // En Modo Dev, esto es vital porque no tenemos red de seguridad de LocalStorage.
         if (globalTags.length === 0 && !hasInteracted) {
             saveTimeout = null;
             return;
         }
 
-        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode, uiLang };
+        lastUpdated = Date.now();
+        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode, uiLang, lastUpdated };
         const jsonString = JSON.stringify(fullData);
         
+        // En Modo Dev, la caché local es nuestra red de seguridad ante desinstalaciones.
+        if (IS_DEV_MODE) {
+            chrome.storage.local.set(fullData);
+        }
+
         const CHUNK_SIZE = 7500;
         const chunks = {};
         for (let i = 0; i < Math.ceil(jsonString.length / CHUNK_SIZE); i++) {
@@ -743,20 +749,71 @@ function init() {
 }
 
 // 7. ARRANQUE
-chrome.storage.sync.get(null, (syncData) => {
-  let finalData = {};
-  if (syncData && syncData._chunk_count) {
-      let fullJson = "";
-      for (let i = 0; i < syncData._chunk_count; i++) fullJson += syncData[`_chunk_${i}`] || "";
-      try { finalData = JSON.parse(fullJson); } catch (e) { console.error("Error reconstruyendo datos de Sync:", e); }
-  }
-  notebookTags = finalData.notebookTags || {};
-  globalTags = finalData.globalTags || [];
-  titleToIdMap = finalData.titleToIdMap || {};
-  tagConfig = finalData.tagConfig || {};
-  filterMode = finalData.filterMode || 'AND';
-  uiLang = finalData.uiLang || 'auto';
-  loadLanguage(uiLang).then(() => {
+async function start() {
+    // 1. Lectura simultánea de ambos almacenamientos
+    const syncDataRaw = await new Promise(r => chrome.storage.sync.get(null, r));
+    const localRes = await new Promise(r => chrome.storage.local.get(['notebookTags', 'globalTags', 'titleToIdMap', 'tagConfig', 'filterMode', 'uiLang', 'lastUpdated'], r));
+
+    // 2. Reconstrucción de datos de la nube
+    let syncRes = {};
+    if (syncDataRaw && syncDataRaw._chunk_count) {
+        let fullJson = "";
+        for (let i = 0; i < syncDataRaw._chunk_count; i++) fullJson += syncDataRaw[`_chunk_${i}`] || "";
+        try { syncRes = JSON.parse(fullJson); } catch (e) { console.error("Error reconstruyendo datos de Sync:", e); }
+    }
+
+    const syncTS = syncRes.lastUpdated || 0;
+    const localTS = localRes.lastUpdated || 0;
+
+    // 3. Lógica de resolución de conflictos y resurrección (Especial para Modo Dev)
+    if (IS_DEV_MODE) {
+        const syncTagsCount = syncRes.globalTags?.length || 0;
+        const localTagsCount = localRes.globalTags?.length || 0;
+        
+        // HEURÍSTICA DE CONFIANZA:
+        // Sospechamos de la nube si es más nueva pero tiene poquísimas etiquetas (<3) 
+        // mientras que nosotros tenemos muchas (>10). Esto indica una reinstalación limpia en otro PC.
+        const isCloudSuspect = (syncTS > localTS) && (syncTagsCount <= 3) && (localTagsCount > 10);
+        const isCloudEmpty = syncTagsCount === 0 && localTagsCount > 0;
+
+        if (localTS > syncTS || isCloudSuspect || isCloudEmpty) {
+            console.warn("NBLM Organizer: Detectada posible inconsistencia. Aplicando recuperación heurística...");
+            
+            // Fusión aditiva por seguridad (solo en este caso de sospecha o local más nuevo)
+            globalTags = [...new Set([...(syncRes.globalTags || []), ...(localRes.globalTags || [])])].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+            notebookTags = { ...(localRes.notebookTags || {}), ...(syncRes.notebookTags || {}) };
+            titleToIdMap = { ...(localRes.titleToIdMap || {}), ...(syncRes.titleToIdMap || {}) };
+            tagConfig = { ...(syncRes.tagConfig || {}), ...(localRes.tagConfig || {}) };
+            
+            filterMode = syncRes.filterMode || localRes.filterMode || 'AND';
+            uiLang = syncRes.uiLang || localRes.uiLang || 'auto';
+            lastUpdated = Math.max(syncTS, localTS);
+            
+            hasInteracted = true; 
+            saveAllData(); 
+        } else {
+            // Caso normal: La nube parece coherente o es claramente superior
+            notebookTags = syncRes.notebookTags || {};
+            globalTags = syncRes.globalTags || [];
+            titleToIdMap = syncRes.titleToIdMap || {};
+            tagConfig = syncRes.tagConfig || {};
+            filterMode = syncRes.filterMode || 'AND';
+            uiLang = syncRes.uiLang || 'auto';
+            lastUpdated = syncTS;
+        }
+    } else {
+        // Caso normal o Modo Store
+        notebookTags = syncRes.notebookTags || localRes.notebookTags || {};
+        globalTags = syncRes.globalTags || localRes.globalTags || [];
+        titleToIdMap = syncRes.titleToIdMap || localRes.titleToIdMap || {};
+        tagConfig = syncRes.tagConfig || localRes.tagConfig || {};
+        filterMode = syncRes.filterMode || localRes.filterMode || 'AND';
+        uiLang = syncRes.uiLang || localRes.uiLang || 'auto';
+        lastUpdated = Math.max(syncTS, localTS);
+    }
+
+    await loadLanguage(uiLang);
     init();
-  });
-});
+}
+
+start();
