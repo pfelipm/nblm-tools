@@ -15,7 +15,6 @@ let lastTooltipNotebookId = null;
 let titleToIdMap = {}; 
 let overriddenMessages = null; // Cache para traducciones manuales
 let hasInteracted = false; // Flag para evitar guardados vacíos accidentales
-let lastUpdated = 0; // Sello de tiempo para resolución de conflictos
 
 const IS_DEV_MODE = !chrome.runtime.getManifest().update_url;
 const PRESET_COLORS = ['#1a73e8', '#d93025', '#188038', '#f9ab00', '#e37400', '#9334e6', '#0097a7', '#607d8b'];
@@ -71,20 +70,15 @@ function saveAllData() {
         
         // CERRADURA DE SEGURIDAD: No permitimos borrar la nube (globalTags vacío)
         // a menos que el usuario haya hecho una acción explícita (hasInteracted).
+        // En Modo Dev, esto es vital porque no tenemos red de seguridad de LocalStorage.
         if (globalTags.length === 0 && !hasInteracted) {
             saveTimeout = null;
             return;
         }
 
-        lastUpdated = Date.now();
-        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode, uiLang, lastUpdated };
+        const fullData = { notebookTags, globalTags, titleToIdMap, tagConfig, filterMode, uiLang };
         const jsonString = JSON.stringify(fullData);
         
-        // En Modo Dev, la caché local es nuestra red de seguridad ante desinstalaciones.
-        if (IS_DEV_MODE) {
-            chrome.storage.local.set(fullData);
-        }
-
         const CHUNK_SIZE = 7500;
         const chunks = {};
         for (let i = 0; i < Math.ceil(jsonString.length / CHUNK_SIZE); i++) {
@@ -314,26 +308,15 @@ function updateUI() {
 }
 
 function updateTabContext() {
-    // Buscar el toggle activo de Angular Material (clase mat-button-toggle-checked o aria-checked="true")
     const activeToggle = document.querySelector('.mat-button-toggle-checked');
     const activeBtn = activeToggle ? activeToggle.querySelector('button') : document.querySelector('button[aria-checked="true"]');
-    
     if (!activeBtn) return;
-    
     const text = activeBtn.innerText.toLowerCase();
-    // Soporte para ES (destacado), EN (featured/picks), CA (destacat)
     const isFeatured = text.includes('destacado') || text.includes('featured') || text.includes('picks') || text.includes('destacat');
-    
-    if (isFeatured) {
-        document.body.classList.add('nblm-in-featured-tab');
-    } else {
-        document.body.classList.remove('nblm-in-featured-tab');
-    }
-    
+    if (isFeatured) document.body.classList.add('nblm-in-featured-tab');
+    else document.body.classList.remove('nblm-in-featured-tab');
     const tools = document.querySelector('.nblm-tools-container');
-    if (tools) {
-        tools.style.display = isFeatured ? 'none' : 'flex';
-    }
+    if (tools) tools.style.display = isFeatured ? 'none' : 'flex';
 }
 
 function refreshInjectedTexts() {
@@ -354,9 +337,7 @@ function injectSearchTools() {
   const featured = document.querySelector('.featured-projects-container');
   const listHeader = document.querySelector('.notebook-list-header') || document.querySelector('.projects-container-header');
   const mainContent = document.querySelector('.all-projects-container') || document.querySelector('main');
-
   if (!featured && !listHeader && !mainContent) return;
-
   const tools = document.createElement('div');
   tools.className = 'nblm-tools-container';
   tools.innerHTML = `
@@ -366,14 +347,11 @@ function injectSearchTools() {
     </div>
     <div class="nblm-filter-tags" id="nblm-filter-tags"></div>
   `;
-
   tools.querySelector('input').oninput = (e) => { searchQuery = e.target.value.toLowerCase(); applyFilters(); };
   tools.querySelector('.nblm-manage-btn').onclick = showManagementModal;
-
   if (featured) featured.insertAdjacentElement('afterend', tools);
   else if (listHeader) listHeader.insertAdjacentElement('afterend', tools);
   else if (mainContent) mainContent.prepend(tools);
-
   if (document.querySelector('.nblm-tools-container')) {
       updateTabContext();
       renderFilterTags();
@@ -385,12 +363,12 @@ function showConfirmDialog(title, message, onConfirm, confirmBtnClass = 'nblm-bt
     overlay.className = 'nblm-modal-overlay';
     overlay.style.zIndex = '30000';
     overlay.innerHTML = `
-        <div class="nblm-confirm-modal" style="font-family: 'Roboto', sans-serif !important;">
-            <div class="nblm-confirm-title" style="font-family: 'Roboto', sans-serif !important;">${title}</div>
-            <div class="nblm-confirm-message" style="font-family: 'Roboto', sans-serif !important;">${message}</div>
+        <div class="nblm-confirm-modal">
+            <div class="nblm-confirm-title">${title}</div>
+            <div class="nblm-confirm-message">${message}</div>
             <div class="nblm-confirm-actions">
-                <button class="nblm-btn-cancel" style="font-family: 'Roboto', sans-serif !important;">${t('btn_cancel')}</button>
-                <button class="${confirmBtnClass}" style="font-family: 'Roboto', sans-serif !important;">${t('btn_confirm')}</button>
+                <button class="nblm-btn-cancel">${t('btn_cancel')}</button>
+                <button class="${confirmBtnClass}">${t('btn_confirm')}</button>
             </div>
         </div>
     `;
@@ -404,7 +382,6 @@ function showManagementModal() {
     overlay.className = 'nblm-modal-overlay';
     let selectedNewColor = '#1a73e8';
     let tempNewTagName = '';
-    
     const render = (tagToHighlight = null) => {
         const body = overlay.querySelector('.nblm-modal-body');
         body.innerHTML = `
@@ -434,7 +411,6 @@ function showManagementModal() {
         };
         body.querySelector('.nblm-btn-primary').onclick = handleCreate;
         createInput.onkeydown = (e) => { if (e.key === 'Enter') handleCreate(); };
-
         const list = body.querySelector('.nblm-manage-list');
         globalTags.forEach(tag => {
             const item = document.createElement('div');
@@ -470,7 +446,6 @@ function showManagementModal() {
             list.appendChild(item);
         });
     };
-    
     overlay.innerHTML = `
         <div class="nblm-modal">
             <div class="nblm-modal-header">
@@ -490,7 +465,7 @@ function showManagementModal() {
             <div class="nblm-modal-body"></div>
             ${IS_DEV_MODE ? `
                 <div style="background: #fff8e1; border-left: 4px solid #ffb300; padding: 10px 16px; margin: 0 24px 16px 24px; border-radius: 4px; font-size: 12px; color: #5f6368; line-height: 1.4;">
-                    <strong>${t('dev_mode_warning_title') || 'Aviso de Modo dev activo'}</strong>: ${t('dev_mode_warning_msg') || 'Los datos de la nube podrían borrarse si desinstalas la extensión de todos tus dispositivos. Usa el botón 💾 para realizar copias de seguridad periódicas.'}
+                    <strong>${t('dev_mode_warning_title')}</strong>: ${t('dev_mode_warning_msg')}
                 </div>
             ` : ''}
             <div class="nblm-modal-footer">
@@ -674,7 +649,6 @@ function showTagPopover(id) {
     const overlay = document.createElement('div');
     overlay.className = 'nblm-modal-overlay';
     overlay.style.zIndex = '30000';
-    
     const pop = document.createElement('div');
     pop.className = 'nblm-popover';
     pop.style.top = '50%'; pop.style.left = '50%'; pop.style.transform = 'translate(-50%, -50%)';
@@ -689,11 +663,9 @@ function showTagPopover(id) {
         <div class="tag-list" id="nblm-list"></div>
         <div id="nblm-create"></div>
     `;
-    
     const close = () => { overlay.remove(); currentPopover = null; };
     pop.querySelector('#nblm-close').onclick = close;
     overlay.onclick = (e) => { if (e.target === overlay) close(); };
-    
     const input = pop.querySelector('#nblm-in');
     const render = () => {
         const q = input.value.toLowerCase();
@@ -771,64 +743,20 @@ function init() {
 }
 
 // 7. ARRANQUE
-async function start() {
-    // 1. Lectura simultánea de ambos almacenamientos
-    const syncDataRaw = await new Promise(r => chrome.storage.sync.get(null, r));
-    const localRes = await new Promise(r => chrome.storage.local.get(['notebookTags', 'globalTags', 'titleToIdMap', 'tagConfig', 'filterMode', 'uiLang', 'lastUpdated'], r));
-
-    // 2. Reconstrucción de datos de la nube
-    let syncRes = {};
-    if (syncDataRaw && syncDataRaw._chunk_count) {
-        let fullJson = "";
-        for (let i = 0; i < syncDataRaw._chunk_count; i++) fullJson += syncDataRaw[`_chunk_${i}`] || "";
-        try { syncRes = JSON.parse(fullJson); } catch (e) { console.error("Error reconstruyendo datos de Sync:", e); }
-    }
-
-    const syncTS = syncRes.lastUpdated || 0;
-    const localTS = localRes.lastUpdated || 0;
-
-    // 3. Lógica de resolución de conflictos y resurrección (Especial para Modo Dev)
-    // CRÍTICO: Usamos funciones auxiliares para evitar el fallo del "||" con arrays/objetos vacíos
-    const getMoreRecent = (syncVal, localVal, isArray = true) => {
-        const syncExists = isArray ? (syncVal && syncVal.length > 0) : (syncVal && Object.keys(syncVal).length > 0);
-        const localExists = isArray ? (localVal && localVal.length > 0) : (localVal && Object.keys(localVal).length > 0);
-        
-        if (syncTS >= localTS && syncExists) return syncVal;
-        if (localExists) return localVal;
-        return syncVal || (isArray ? [] : {});
-    };
-
-    if (IS_DEV_MODE && (localTS > syncTS || (!syncRes.globalTags || syncRes.globalTags.length === 0) && localRes.globalTags?.length > 0)) {
-        // RESURRECCIÓN: El PC local tiene datos más nuevos O la nube está sospechosamente vacía
-        console.warn("NBLM Organizer: Detectada inconsistencia en la nube. Resucitando/Fusionando datos locales...");
-        
-        // Fusionamos etiquetas para no perder nada
-        globalTags = [...new Set([...(syncRes.globalTags || []), ...(localRes.globalTags || [])])].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
-        
-        // Para lo demás, priorizamos el sello de tiempo pero sin aceptar vacíos si tenemos local
-        notebookTags = getMoreRecent(syncRes.notebookTags, localRes.notebookTags, false);
-        titleToIdMap = getMoreRecent(syncRes.titleToIdMap, localRes.titleToIdMap, false);
-        tagConfig = { ...(syncRes.tagConfig || {}), ...(localRes.tagConfig || {}) };
-        
-        filterMode = syncRes.filterMode || localRes.filterMode || 'AND';
-        uiLang = syncRes.uiLang || localRes.uiLang || 'auto';
-        lastUpdated = Math.max(syncTS, localTS);
-        
-        hasInteracted = true; // Forzamos permiso para resubir la versión curada a la nube
-        saveAllData(); 
-    } else {
-        // Caso normal o Modo Store
-        notebookTags = syncRes.notebookTags || localRes.notebookTags || {};
-        globalTags = syncRes.globalTags || localRes.globalTags || [];
-        titleToIdMap = syncRes.titleToIdMap || localRes.titleToIdMap || {};
-        tagConfig = syncRes.tagConfig || localRes.tagConfig || {};
-        filterMode = syncRes.filterMode || localRes.filterMode || 'AND';
-        uiLang = syncRes.uiLang || localRes.uiLang || 'auto';
-        lastUpdated = Math.max(syncTS, localTS);
-    }
-
-    await loadLanguage(uiLang);
+chrome.storage.sync.get(null, (syncData) => {
+  let finalData = {};
+  if (syncData && syncData._chunk_count) {
+      let fullJson = "";
+      for (let i = 0; i < syncData._chunk_count; i++) fullJson += syncData[`_chunk_${i}`] || "";
+      try { finalData = JSON.parse(fullJson); } catch (e) { console.error("Error reconstruyendo datos de Sync:", e); }
+  }
+  notebookTags = finalData.notebookTags || {};
+  globalTags = finalData.globalTags || [];
+  titleToIdMap = finalData.titleToIdMap || {};
+  tagConfig = finalData.tagConfig || {};
+  filterMode = finalData.filterMode || 'AND';
+  uiLang = finalData.uiLang || 'auto';
+  loadLanguage(uiLang).then(() => {
     init();
-}
-
-start();
+  });
+});

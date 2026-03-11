@@ -44,34 +44,34 @@ Si tienes varios cuadernos con el **mismo nombre, mismo número de fuentes y mis
 
 *   **Sin frameworks ni dependencias externas:** desarrollada íntegramente con **Vanilla JS** y **CSS estándar** para garantizar la máxima ligereza, velocidad y compatibilidad.
 *   **Manifest V3:** la extensión utiliza la última versión del manifiesto de Chrome para garantizar la máxima seguridad y rendimiento.
-*   **Chrome Storage Sync & Local:** utiliza la API de almacenamiento para mantener las etiquetas sincronizadas entre dispositivos y realizar caché local.
-*   **i18n dinámico:** implementa un sistema de localización propio que permite el cambio de idioma instantáneo sin necesidad de recargar la página.
+*   **Chrome Storage Sync & Local:** utiliza la API de almacenamiento para mantener las etiquetas sincronizadas entre dispositivos y realizar caché local de seguridad.
+*   **Dynamic i18n:** implementa un sistema de localización propio que permite el cambio de idioma instantáneo sin necesidad de recargar la página.
 *   **MutationObserver:** se utiliza para detectar de forma eficiente y reactiva cuándo se añaden nuevos cuadernos a la lista o se producen cambios en la navegación.
-*   **Fragmentación de datos (chunking):** sistema avanzado para superar el límite de 8 KB de Chrome Sync mediante la división de datos en fragmentos.
-*   **ID de extensión predefinido:** el `manifest.json` incluye una clave pública (`key`) para asegurar que el ID de la extensión sea idéntico en todas las instalaciones manuales, lo cual es requisito indispensable para que funcione la sincronización (Chrome Sync).
+*   **Data Fragmentation (Chunking):** sistema avanzado para superar el límite de 8 KB de Chrome Sync mediante la división de datos en fragmentos.
+*   **ID de extensión predefinido:** el `manifest.json` incluye una clave pública (`key`) para asegurar que el ID de la extensión sea idéntico en todas las instalaciones manuales.
 *   **Permisos:**
     *   `storage`: para guardar y sincronizar tus etiquetas y preferencias.
 
 ---
 
-## 💾 Gestión de datos y seguridad
+## 💾 Gestión de datos y seguridad (Rama Experimental)
 
-NotebookLM Organizer integra un motor de sincronización adaptativo que detecta automáticamente el entorno de instalación para garantizar la máxima seguridad de tu organización:
+NotebookLM Organizer integra un motor de sincronización adaptativo con **recuperación heurística** para garantizar la máxima seguridad de tu organización:
 
 ### 🛠️ Funcionamiento en modo de desarrollo (instalación manual)
-Cuando la extensión se instala manualmente, Chrome aplica una política agresiva: al desinstalar la extensión de un dispositivo, los datos de sincronización vinculados a tu cuenta de Google para esa extensión pueden ser eliminados por el navegador. Para protegerte, la extensión activa un **sistema de seguridad de redundancia dual**:
+En este modo, la extensión activa un **sistema de seguridad de redundancia dual**:
 
--   **Backup local persistente (LocalStorage):** Además de la nube, tus etiquetas y configuraciones se guardan físicamente en la base de datos local de cada dispositivo.
--   **Efecto guardián (autorreparación):** Si los datos de tu cuenta de Google se borran (por una desinstalación en otro PC), cualquier dispositivo donde mantengas instalada la extensión detectará automáticamente el vacío al arrancar y **resucitará toda tu configuración** subiéndola de nuevo a la nube desde su copia local.
--   **Aviso persistente:** Mientras estés en modo de desarrollo, verás un banner informativo en el modal de gestión de etiquetas recordándote la importancia de los backups.
+-   **Backup local persistente (LocalStorage):** Además de la nube, tus etiquetas se guardan físicamente en la base de datos local de cada dispositivo.
+-   **Recuperación heurística (Efecto guardián):** Si los datos de tu cuenta de Google se borran (por una desinstalación en otro PC), cualquier dispositivo donde mantengas la extensión detectará la anomalía. Si la nube aparece vacía o con una pérdida masiva de datos (>50% de etiquetas perdidas), la extensión **fusionará automáticamente** los datos de la nube con su copia local para resucitar tu configuración.
+-   **Aviso persistente:** Verás un banner informativo en el modal de gestión de etiquetas.
 
 ### 🏪 Funcionamiento en modo store (Chrome Web Store)
-Si la extensión se instala desde la tienda oficial, detecta el entorno y simplifica su lógica. En este modo, confía plenamente en la infraestructura nativa de Google Sync (que es mucho más estable en el canal oficial) y opera de forma más ligera sin necesidad de mantener backups locales redundantes.
+En la tienda oficial, la extensión simplifica su lógica y confía plenamente en la infraestructura nativa de Google Sync, operando sin backups locales redundantes.
 
 ### ⚠️ Recomendaciones de seguridad
--   **Conserva siempre un "guardián":** Mientras mantengas la extensión instalada en al menos un dispositivo, tus datos podrán recuperarse automáticamente en los demás gracias a la redundancia local.
--   **Exportación manual (💾):** Realiza copias de seguridad periódicas descargando tu configuración en formato JSON. Es tu red de seguridad definitiva por si todo lo demás falla. *Shit happens* 😅
--   **Actualizaciones:** Para instalar una nueva versión del código en modo dev, no es necesario desinstalar la extensión. Simplemente sobreescribe los archivos en tu carpeta local y pulsa el botón de recarga en `chrome://extensions`.
+-   **Conserva siempre un "guardián":** Mientras mantengas la extensión instalada en al menos un dispositivo, tus datos podrán recuperarse automáticamente gracias a la redundancia local.
+-   **Exportación manual (💾):** Realiza copias de seguridad periódicas en JSON. Es tu red de seguridad definitiva. *Shit happens* 😅.
+-   **Actualizaciones:** No desinstales la extensión para actualizar en modo dev. Sobreescribe los archivos y pulsa recargar en `chrome://extensions`.
 
 ---
 
