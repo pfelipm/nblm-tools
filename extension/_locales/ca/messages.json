@@ -46,6 +46,6 @@
   "lang_en": { "message": "Anglès" },
   "lang_es": { "message": "Espanyol" },
   "lang_ca": { "message": "Català" },
-  "dev_mode_warning_title": { "message": "Atenció: Backup manual obligatori" },
-  "dev_mode_warning_msg": { "message": "En aquest mode, en desinstal·lar l'extensió s'esborraran TOTES les teves etiquetes del compte de Google. HAS de fer una exportació manual (💾) abans de desinstal·lar per no perdre la teva organització de forma definitiva." }
+  "dev_mode_warning_title": { "message": "Mode de desenvolupament actiu" },
+  "dev_mode_warning_msg": { "message": "Les teves etiquetes personalitzades i l'etiquetatge dels teus quaderns es podrien esborrar del teu compte de Google si desinstal·les l'extensió de tots els teus dispositius. Utilitza el botó 💾 per fer còpies de seguretat periòdiques de la teva configuració." }
 }

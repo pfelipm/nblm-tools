@@ -46,6 +46,6 @@
   "lang_en": { "message": "English" },
   "lang_es": { "message": "Spanish" },
   "lang_ca": { "message": "Catalan" },
-  "dev_mode_warning_title": { "message": "Attention: Manual backup required" },
-  "dev_mode_warning_msg": { "message": "In this mode, uninstalling the extension will delete ALL your tags from your Google account. You MUST perform a manual export (💾) before uninstalling to avoid permanent loss of your organization." }
+  "dev_mode_warning_title": { "message": "Development mode active" },
+  "dev_mode_warning_msg": { "message": "Your custom tags and notebook tagging could be deleted from your Google account if you uninstall the extension from all your devices. Use the 💾 button to make periodic backups of your configuration." }
 }
