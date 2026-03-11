@@ -44,11 +44,11 @@ If you have multiple notebooks with the **same name, same number of sources, and
 
 *   **No Frameworks or External Dependencies:** built entirely with **Vanilla JS** and **standard CSS** to ensure maximum lightness, speed, and compatibility.
 *   **Manifest V3:** The extension uses the latest version of the Chrome manifest for maximum security and performance.
-*   **Chrome Storage Sync & Local:** Uses the Storage API to keep tags synchronized between devices and perform local caching.
+*   **Chrome Storage Sync:** Uses the Storage API to keep tags synchronized between devices.
 *   **Dynamic i18n:** Implements a custom localization system that allows for instant language changes without a page refresh.
 *   **MutationObserver:** Used to efficiently and reactivaely detect when new notebooks are added to the list or when navigation occurs.
 *   **Data Fragmentation (Chunking):** Sophisticated system to overcome the 8KB limit of Chrome Sync storage by splitting data into chunks.
-*   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all manual installations, which is essential for synchronization (Chrome Sync) to work.
+*   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all manual installations.
 *   **Permissions:**
     *   `storage`: To save and sync your tags and preferences.
 
@@ -56,22 +56,21 @@ If you have multiple notebooks with the **same name, same number of sources, and
 
 ## 💾 Data management and security
 
-NotebookLM Organizer features an adaptive synchronization engine that automatically detects the installation environment to ensure maximum security for your organization:
+NotebookLM Organizer relies on **Google Chrome Sync** infrastructure to keep your organization synchronized across devices. The behavior of this synchronization varies depending on the installation method:
 
-### 🛠️ Working in development mode (manual installation)
-When the extension is installed manually, Chrome applies an aggressive policy: when uninstalling the extension from a device, the sync data linked to your Google account for that extension may be deleted by the browser. To protect you, the extension activates a **dual redundancy security system**:
+### 🛠️ Manual installation (Development mode)
+When the extension is manually installed from a folder, Chrome applies a strict policy: when uninstalling the extension from a device, the data linked to your Google account for this extension **may be immediately and permanently deleted**.
 
--   **Persistent local backup (LocalStorage):** In addition to the cloud, your tags and settings are physically saved in each device's local database.
--   **Guardian effect (self-healing):** If your Google account data is deleted (due to an uninstallation on another PC), any device where you keep the extension installed will automatically detect the gap at startup and **resurrect your entire configuration** by uploading it back to the cloud from its local copy.
--   **Persistent warning:** While in development mode, you will see an info banner in the tag management modal reminding you of the importance of backups.
+-   **No local backup:** In this mode, the extension does not maintain automatic backups on your hard drive to maximize compatibility with the native system.
+-   **User responsibility:** It is **essential** to perform a manual export before uninstalling the extension if you wish to keep your tags.
+-   **Persistent warning:** You will see a warning banner in the tag management modal while this mode is active.
 
-### 🏪 Working in store mode (Chrome Web Store)
-If the extension is installed from the official store, it detects the environment and simplifies its logic. In this mode, it fully trusts the native Google Sync infrastructure (which is much more stable in the official channel) and operates more lightly without the need to maintain redundant local backups.
+### 🏪 Official installation (Store mode)
+If the extension is installed from the Chrome Web Store, data persistence in your Google account is officially managed and is much more stable against uninstallations.
 
 ### ⚠️ Security recommendations
--   **Always keep a "guardian":** As long as you keep the extension installed on at least one device, your data can be automatically recovered on others thanks to local redundancy.
--   **Manual export (💾):** Perform periodic backups by downloading your configuration in JSON format. It is your ultimate safety net if everything else fails. *Shit happens* 😅
--   **Updates:** To install a new version of the code in dev mode, it is not necessary to uninstall the extension. Simply overwrite the files in your local folder and click the reload button at `chrome://extensions`.
+-   **Manual export (💾):** Perform periodic backups by downloading your configuration in JSON format. It is your only absolute guarantee of recovery against changes in Google's policies. *Shit happens* 😅.
+-   **Updates:** To install a new version of the code in dev mode, do not uninstall the extension. Overwrite the files in your folder and click the reload button at `chrome://extensions`.
 
 ---
 
@@ -92,7 +91,7 @@ Follow these steps to install the extension locally:
 
 Since the extension relies on analyzing the DOM structure of the NotebookLM application, which can change at any time without notice, the author prefers not to publish it to the Chrome Web Store for now. The maintenance cost and the need to adapt to frequent changes make it more practical to distribute it as an open-source project for manual installation.
 
-> **Important for Publishing:** If you wish to publish your own version to the Store, the file **`extension/manifest.webstore.json`** has been included. This file is a "clean" version that **does not include the `key` property**, which is essential for Google to assign an official ID to your publication.
+> **Important for Publishing:** If you wish to publish your own version to the Store, the file **`extension/manifest.webstore.json`** has been included. This file is a "clean" version that **does not include the `key` property**, which is essential for Google to assign an official ID to your publication. 
 > 
 > To use it, simply rename `manifest.webstore.json` to `manifest.json` (overwriting the original) right before compressing the `extension` folder into a `.zip` file for upload to the developer console.
 

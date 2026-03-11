@@ -46,6 +46,6 @@
   "lang_en": { "message": "Inglés" },
   "lang_es": { "message": "Español" },
   "lang_ca": { "message": "Catalán" },
-  "dev_mode_warning_title": { "message": "Modo de desarrollo activo" },
-  "dev_mode_warning_msg": { "message": "Tus etiquetas personalizadas y el etiquetado de tus cuadernos podrían borrarse de tu cuenta de Google si desinstalas la extensión de todos tus dispositivos. Usa el botón 💾 para realizar copias de seguridad periódicas de tu configuración." }
+  "dev_mode_warning_title": { "message": "Atención: Backup manual obligatorio" },
+  "dev_mode_warning_msg": { "message": "En este modo, al desinstalar la extensión se borrarán TODAS tus etiquetas de la cuenta de Google. DEBES realizar una exportación manual (💾) antes de desinstalar para no perder tu organización de forma definitiva." }
 }
