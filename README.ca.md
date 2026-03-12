@@ -76,17 +76,18 @@ Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb 
 
 ---
 
-## 🧠 Filosofia de disseny: Independència i Resiliència
+## 🧠 Filosofia de disseny: independència i resiliència
 
-Durant el desenvolupament d'aquesta extensió, ens vam enfrontar a una decisió de disseny crítica: com evitar que Google esborri les dades de sincronització en desinstal·lar la versió de desenvolupament?
+Durant el desenvolupament d'aquesta extensió, es va plantejar una decisió de disseny crítica: com evitar que Google esborri les dades de sincronització en desinstal·lar la versió de desenvolupament?
 
-Una solució ràpida hauria estat registrar l'extensió a la Chrome Web Store per obtenir un **ID oficial**, el qual protegeix les dades al núvol de neteges automàtiques. No obstant això, vam optar per **no fer-ho** per prioritzar els següents principis:
+Una solució ràpida hauria estat registrar l'extensió a la Chrome Web Store per obtenir un **ID oficial**, el qual protegeix les dades al núvol de neteges automàtiques. No obstant això, es va optar per **no fer-ho** per prioritzar els següents principis:
 
-1.  **Sobirania i Codi Obert:** En no dependre d'un ID assignat per una botiga propietària, el projecte és 100% independent i portable. Qualsevol persona pot clonar el repositori i tenir un sistema funcional i segur sense passar pel control d'una plataforma externa.
-2.  **Arquitectura de Resiliència:** En lloc de confiar en una política de base de dades de tercers (que pot canviar), hem construït la nostra pròpia infraestructura de seguretat. L'extensió és ara un sistema autònom capaç d'autoreparar-se.
-3.  **Transparència:** Aquest camí ens va obligar a crear l'**Assistent de Conflictes**, la qual cosa dona a l'usuari un control total i una visibilitat absoluta sobre la seva informació, quelcom que el sistema "invisible" de Google no proporciona.
+1.  **Sobirania i codi obert:** en no dependre d'un ID assignat per una botiga propietària, el projecte és 100% independent i portable. Qualsevol persona pot clonar el repositori i tenir un sistema funcional i segur sense passar pel control d'una plataforma externa.
+2.  **Arquitectura de resiliència:** en lloc de confiar en una política de base de dades de tercers (que pot canviar), s'ha construït una infraestructura de seguretat pròpia. L'extensió és ara un sistema autònom capaç d'autoreparar-se.
+3.  **Transparència:** aquest camí va obligar a crear l'**Assistent de conflictes**, la qual cosa dona a l'usuari un control total i una visibilitat absoluta sobre la seva informació, quelcom que el sistema "invisible" de Google no proporciona.
 
-En resum: hem triat el camí del **maestratge tècnic** sobre el camí curt, garantint que NotebookLM Organizer sigui una eina tan robusta com independent.
+En resum: s'ha triat el camí del **maestratge tècnic** sobre el camí curt, garantint que NotebookLM Organizer sigui una eina tan robusta com independent.
+
 
 ---
 

@@ -76,17 +76,17 @@ When an inconsistency is detected, the extension shows a detailed dialog with co
 
 ---
 
-## 🧠 Design Philosophy: Independence and Resilience
+## 🧠 Design philosophy: independence and resilience
 
-During the development of this extension, we faced a critical design decision: how to prevent Google from deleting sync data when uninstalling the development version?
+During the development of this extension, a critical design decision was faced: how to prevent Google from deleting sync data when uninstalling the development version?
 
-A quick fix would have been to register the extension in the Chrome Web Store to obtain an **official ID**, which protects cloud data from automatic cleanups. However, we chose **not to do so** to prioritize the following principles:
+A quick fix would have been to register the extension in the Chrome Web Store to obtain an **official ID**, which protects cloud data from automatic cleanups. However, the choice was made **not to do so** to prioritize the following principles:
 
-1.  **Sovereignty and Open Source:** By not relying on an ID assigned by a proprietary store, the project remains 100% independent and portable. Anyone can clone the repository and have a functional and secure system without going through the control of an external platform.
-2.  **Resilience Architecture:** Instead of trusting a third-party database policy (which can change), we have built our own security infrastructure. The extension is now an autonomous system capable of self-healing.
-3.  **Transparency:** This path forced us to create the **Conflict Assistant**, which gives the user total control and absolute visibility over their information—something Google's "invisible" system does not provide.
+1.  **Sovereignty and open source:** by not relying on an ID assigned by a proprietary store, the project remains 100% independent and portable. Anyone can clone the repository and have a functional and secure system without going through the control of an external platform.
+2.  **Resilience architecture:** instead of trusting a third-party database policy (which can change), a custom security infrastructure has been built. The extension is now an autonomous system capable of self-healing.
+3.  **Transparency:** this path forced the creation of the **Conflict assistant**, which gives the user total control and absolute visibility over their information—something Google's "invisible" system does not provide.
 
-In short: we have chosen the path of **technical mastery** over the short path, ensuring that NotebookLM Organizer is as robust as it is independent.
+In short: the path of **technical mastery** has been chosen over the short path, ensuring that NotebookLM Organizer is as robust as it is independent.
 
 ---
 

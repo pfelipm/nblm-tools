@@ -76,17 +76,17 @@ Cuando se detecta una inconsistencia, la extensión muestra un diálogo detallad
 
 ---
 
-## 🧠 Filosofía de diseño: Independencia y Resiliencia
+## 🧠 Filosofía de diseño: independencia y resiliencia
 
-Durante el desarrollo de esta extensión, nos enfrentamos a una decisión de diseño crítica: ¿cómo evitar que Google borre los datos de sincronización al desinstalar la versión de desarrollo?
+Durante el desarrollo de esta extensión, se planteó una decisión de diseño crítica: ¿cómo evitar que Google borre los datos de sincronización al desinstalar la versión de desarrollo?
 
-Una solución rápida hubiera sido registrar la extensión en la Chrome Web Store para obtener un **ID oficial**, el cual protege los datos en la nube de limpiezas automáticas. Sin embargo, optamos por **no hacerlo** para priorizar los siguientes principios:
+Una solución rápida hubiera sido registrar la extensión en la Chrome Web Store para obtener un **ID oficial**, el cual protege los datos en la nube de limpiezas automáticas. Sin embargo, se optó por **no hacerlo** para priorizar los siguientes principios:
 
-1.  **Soberanía y Código Abierto:** Al no depender de un ID asignado por una tienda propietaria, el proyecto es 100% independiente y portable. Cualquier persona puede clonar el repositorio y tener un sistema funcional y seguro sin pasar por el control de una plataforma externa.
-2.  **Arquitectura de Resiliencia:** En lugar de confiar en una política de base de datos de terceros (que puede cambiar), hemos construido nuestra propia infraestructura de seguridad. La extensión es ahora un sistema autónomo capaz de autorrepararse.
-3.  **Transparencia:** Este camino nos obligó a crear el **Asistente de Conflictos**, lo que da al usuario un control total y una visibilidad absoluta sobre su información, algo que el sistema "invisible" de Google no proporciona.
+1.  **Soberanía y código abierto:** al no depender de un ID asignado por una tienda propietaria, el proyecto es 100% independiente y portable. Cualquier persona puede clonar el repositorio y tener un sistema funcional y seguro sin pasar por el control de una plataforma externa.
+2.  **Arquitectura de resiliencia:** en lugar de confiar en una política de base de datos de terceros (que puede cambiar), se ha construido una infraestructura de seguridad propia. La extensión es ahora un sistema autónomo capaz de autorrepararse.
+3.  **Transparencia:** este camino obligó a crear el **Asistente de conflictos**, lo que da al usuario un control total y una visibilidad absoluta sobre su información, algo que el sistema "invisible" de Google no proporciona.
 
-En resumen: hemos elegido el camino de la **maestría técnica** sobre el camino corto, garantizando que NotebookLM Organizer sea una herramienta tan robusta como independiente.
+En resumen: se ha elegido el camino de la **maestría técnica** sobre el camino corto, garantizando que NotebookLM Organizer sea una herramienta tan robusta como independiente.
 
 ---
 
