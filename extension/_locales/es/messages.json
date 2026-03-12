@@ -47,5 +47,17 @@
   "lang_es": { "message": "Español" },
   "lang_ca": { "message": "Catalán" },
   "dev_mode_warning_title": { "message": "Modo de desarrollo activo" },
-  "dev_mode_warning_msg": { "message": "Tus etiquetas personalizadas y el etiquetado de tus cuadernos podrían borrarse de tu cuenta de Google si desinstalas la extensión de todos tus dispositivos. Usa el botón 💾 para realizar copias de seguridad periódicas de tu configuración." }
+  "dev_mode_warning_msg": { "message": "Tus etiquetas personalizadas y el etiquetado de tus cuadernos podrían borrarse de tu cuenta de Google si desinstalas la extensión de todos tus dispositivos. Usa el botón 💾 para realizar copias de seguridad periódicas de tu configuración." },
+  "conflict_title": { "message": "Discrepancia de datos detectada" },
+  "conflict_msg": { "message": "La configuración en la nube es muy distinta a la guardada en este equipo. Esto suele ocurrir tras una desinstalación o una limpieza masiva. ¿Qué versión deseas mantener?" },
+  "conflict_metric_label": { "message": "Métrica" },
+  "conflict_local_label": { "message": "Este equipo (Local)" },
+  "conflict_cloud_label": { "message": "Nube (Google Sync)" },
+  "conflict_global_tags": { "message": "Etiquetas definidas" },
+  "conflict_unique_notebooks": { "message": "Cuadernos organizados" },
+  "conflict_total_assignments": { "message": "Total etiquetas aplicadas" },
+  "conflict_last_updated": { "message": "Última modificación" },
+  "conflict_no_data": { "message": "Sin datos" },
+  "conflict_btn_keep_local": { "message": "Usar datos de este equipo (Recuperar)" },
+  "conflict_btn_accept_cloud": { "message": "Usar datos de la nube (Aceptar borrado)" }
 }

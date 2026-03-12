@@ -47,5 +47,17 @@
   "lang_es": { "message": "Spanish" },
   "lang_ca": { "message": "Catalan" },
   "dev_mode_warning_title": { "message": "Development mode active" },
-  "dev_mode_warning_msg": { "message": "Your custom tags and notebook tagging could be deleted from your Google account if you uninstall the extension from all your devices. Use the 💾 button to make periodic backups of your configuration." }
+  "dev_mode_warning_msg": { "message": "Your custom tags and notebook tagging could be deleted from your Google account if you uninstall the extension from all your devices. Use the 💾 button to make periodic backups of your configuration." },
+  "conflict_title": { "message": "Data discrepancy detected" },
+  "conflict_msg": { "message": "The cloud configuration is very different from the one saved on this device. This usually happens after an uninstallation or a massive cleanup. Which version do you want to keep?" },
+  "conflict_metric_label": { "message": "Metric" },
+  "conflict_local_label": { "message": "This device (Local)" },
+  "conflict_cloud_label": { "message": "Cloud (Google Sync)" },
+  "conflict_global_tags": { "message": "Defined tags" },
+  "conflict_unique_notebooks": { "message": "Organized notebooks" },
+  "conflict_total_assignments": { "message": "Total tags applied" },
+  "conflict_last_updated": { "message": "Last modification" },
+  "conflict_no_data": { "message": "No data" },
+  "conflict_btn_keep_local": { "message": "Use device data (Recover)" },
+  "conflict_btn_accept_cloud": { "message": "Use cloud data (Accept deletion)" }
 }

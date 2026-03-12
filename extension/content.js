@@ -748,6 +748,73 @@ function init() {
   setInterval(processNewNodes, 3000); setInterval(injectSearchTools, 5000);
 }
 
+function showConflictDialog(localRes, syncRes, onDecision) {
+    const overlay = document.createElement('div');
+    overlay.className = 'nblm-modal-overlay';
+    overlay.style.zIndex = '40000';
+
+    const getMetrics = (data) => {
+        const globalTagsCount = data.globalTags?.length || 0;
+        const notebookTags = data.notebookTags || {};
+        const uniqueNotebooks = Object.keys(notebookTags).length;
+        const totalAssignments = Object.values(notebookTags).reduce((sum, tags) => sum + (tags?.length || 0), 0);
+        const lastDate = data.lastUpdated ? new Date(data.lastUpdated).toLocaleString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : t('conflict_no_data') || '---';
+        return { globalTagsCount, uniqueNotebooks, totalAssignments, lastDate };
+    };
+
+    const localM = getMetrics(localRes);
+    const syncM = getMetrics(syncRes);
+
+    overlay.innerHTML = `
+        <div class="nblm-confirm-modal" style="width: 500px; max-width: 90vw;">
+            <div class="nblm-alert-icon" style="margin-bottom: 16px;">⚠️</div>
+            <div class="nblm-confirm-title" style="margin-bottom: 12px;">${t('conflict_title')}</div>
+            <div class="nblm-confirm-message" style="margin-bottom: 20px; text-align: left;">${t('conflict_msg')}</div>
+            
+            <table class="nblm-conflict-table" style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #e0e0e0;">
+                        <th style="text-align: left; padding: 8px;">${t('conflict_metric_label')}</th>
+                        <th style="text-align: right; padding: 8px;">${t('conflict_local_label')}</th>
+                        <th style="text-align: right; padding: 8px;">${t('conflict_cloud_label')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px;">${t('conflict_global_tags')}</td>
+                        <td style="text-align: right; padding: 8px; font-weight: 500;">${localM.globalTagsCount}</td>
+                        <td style="text-align: right; padding: 8px; font-weight: 500;">${syncM.globalTagsCount}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px;">${t('conflict_unique_notebooks')}</td>
+                        <td style="text-align: right; padding: 8px; font-weight: 500;">${localM.uniqueNotebooks}</td>
+                        <td style="text-align: right; padding: 8px; font-weight: 500;">${syncM.uniqueNotebooks}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 8px;">${t('conflict_total_assignments')}</td>
+                        <td style="text-align: right; padding: 8px; font-weight: 500;">${localM.totalAssignments}</td>
+                        <td style="text-align: right; padding: 8px; font-weight: 500;">${syncM.totalAssignments}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;">${t('conflict_last_updated')}</td>
+                        <td style="text-align: right; padding: 8px; font-size: 11px; color: #5f6368;">${localM.lastDate}</td>
+                        <td style="text-align: right; padding: 8px; font-size: 11px; color: #5f6368;">${syncM.lastDate}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="nblm-confirm-actions" style="flex-direction: column; gap: 10px;">
+                <button class="nblm-btn-primary" id="keep-local" style="width: 100%;">${t('conflict_btn_keep_local')}</button>
+                <button class="nblm-btn-cancel" id="accept-cloud" style="width: 100%; border: 1px solid #dadce0;">${t('conflict_btn_accept_cloud')}</button>
+            </div>
+        </div>
+    `;
+
+    overlay.querySelector('#keep-local').onclick = () => { onDecision('local'); overlay.remove(); };
+    overlay.querySelector('#accept-cloud').onclick = () => { onDecision('cloud'); overlay.remove(); };
+    document.body.appendChild(overlay);
+}
+
 // 7. ARRANQUE
 async function start() {
     // 1. Lectura simultánea de ambos almacenamientos
@@ -766,52 +833,56 @@ async function start() {
     const localTS = localRes.lastUpdated || 0;
 
     // 3. Lógica de resolución de conflictos y resurrección (Especial para Modo Dev)
+    const applyData = (data, source) => {
+        notebookTags = data.notebookTags || {};
+        globalTags = data.globalTags || [];
+        titleToIdMap = data.titleToIdMap || {};
+        tagConfig = data.tagConfig || {};
+        filterMode = data.filterMode || 'AND';
+        uiLang = data.uiLang || 'auto';
+        lastUpdated = data.lastUpdated || (source === 'local' ? localTS : syncTS);
+    };
+
     if (IS_DEV_MODE) {
         const syncTagsCount = syncRes.globalTags?.length || 0;
         const localTagsCount = localRes.globalTags?.length || 0;
         
-        // HEURÍSTICA DE CONFIANZA (Mejorada):
-        // Sospechamos de la nube si:
-        // 1. Es más nueva pero tiene una pérdida masiva de datos (menos de la mitad que en local).
-        // 2. O si la nube está directamente vacía pero nosotros tenemos datos.
         const hasMassiveLoss = (localTagsCount >= 3) && (syncTagsCount <= localTagsCount / 2);
         const isCloudSuspect = (syncTS > localTS) && hasMassiveLoss;
         const isCloudEmpty = (syncTagsCount === 0) && (localTagsCount > 0);
 
-        if (localTS > syncTS || isCloudSuspect || isCloudEmpty) {
-            console.warn("NBLM Organizer: Detectada posible inconsistencia. Aplicando recuperación heurística...");
-            
-            // Fusión aditiva por seguridad (solo en este caso de sospecha o local más nuevo)
-            globalTags = [...new Set([...(syncRes.globalTags || []), ...(localRes.globalTags || [])])].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
-            notebookTags = { ...(localRes.notebookTags || {}), ...(syncRes.notebookTags || {}) };
-            titleToIdMap = { ...(localRes.titleToIdMap || {}), ...(syncRes.titleToIdMap || {}) };
-            tagConfig = { ...(syncRes.tagConfig || {}), ...(localRes.tagConfig || {}) };
-            
-            filterMode = syncRes.filterMode || localRes.filterMode || 'AND';
-            uiLang = syncRes.uiLang || localRes.uiLang || 'auto';
-            lastUpdated = Math.max(syncTS, localTS);
-            
+        if (isCloudSuspect || isCloudEmpty) {
+            // CONFLICTO MASIVO: Mostramos diálogo en lugar de decidir solos
+            showConflictDialog(localRes, syncRes, (decision) => {
+                if (decision === 'local') {
+                    // Fusión aditiva para recuperar
+                    globalTags = [...new Set([...(syncRes.globalTags || []), ...(localRes.globalTags || [])])].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+                    notebookTags = { ...(localRes.notebookTags || {}), ...(syncRes.notebookTags || {}) };
+                    titleToIdMap = { ...(localRes.titleToIdMap || {}), ...(syncRes.titleToIdMap || {}) };
+                    tagConfig = { ...(syncRes.tagConfig || {}), ...(localRes.tagConfig || {}) };
+                    filterMode = localRes.filterMode || syncRes.filterMode || 'AND';
+                    uiLang = localRes.uiLang || 'auto';
+                    lastUpdated = Math.max(syncTS, localTS);
+                    hasInteracted = true; 
+                    saveAllData(); 
+                } else {
+                    applyData(syncRes, 'cloud');
+                    // Al aceptar la nube, guardamos en local para sincronizar el estado del PC
+                    chrome.storage.local.set({ notebookTags, globalTags, titleToIdMap, tagConfig, filterMode, uiLang, lastUpdated });
+                }
+                loadLanguage(uiLang).then(() => init());
+            });
+            return; // Detenemos start normal mientras se decide
+        } else if (localTS > syncTS) {
+            // Actualización local normal (sin diálogo, es un flujo habitual de uso secuencial)
+            applyData(localRes, 'local');
             hasInteracted = true; 
             saveAllData(); 
         } else {
-            // Caso normal: La nube parece coherente o es claramente superior
-            notebookTags = syncRes.notebookTags || {};
-            globalTags = syncRes.globalTags || [];
-            titleToIdMap = syncRes.titleToIdMap || {};
-            tagConfig = syncRes.tagConfig || {};
-            filterMode = syncRes.filterMode || 'AND';
-            uiLang = syncRes.uiLang || 'auto';
-            lastUpdated = syncTS;
+            applyData(syncRes, 'cloud');
         }
     } else {
-        // Caso normal o Modo Store
-        notebookTags = syncRes.notebookTags || localRes.notebookTags || {};
-        globalTags = syncRes.globalTags || localRes.globalTags || [];
-        titleToIdMap = syncRes.titleToIdMap || localRes.titleToIdMap || {};
-        tagConfig = syncRes.tagConfig || localRes.tagConfig || {};
-        filterMode = syncRes.filterMode || localRes.filterMode || 'AND';
-        uiLang = syncRes.uiLang || localRes.uiLang || 'auto';
-        lastUpdated = Math.max(syncTS, localTS);
+        applyData(syncRes, 'cloud');
     }
 
     await loadLanguage(uiLang);
