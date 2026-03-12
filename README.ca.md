@@ -58,7 +58,7 @@ Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa 
 
 NotebookLM Organizer integra un motor de sincronització adaptatiu que detecta automàticament l'entorn d'instal·lació per garantir la màxima seguretat de la teva organització.
 
-Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·lar una extensió carregada manualment (Mode Dev), hem implementat un sistema de **Redundància Dual** i un **Assistent de Resolució de Conflictes**.
+Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·lar una extensió carregada manualment (Mode Dev), s'ha implementat un sistema de **Redundància Dual** i un **Assistent de Resolució de Conflictes**.
 
 ### 🛠️ Modes de seguretat en Desenvolupament (Instal·lació manual)
 Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres nivells de protecció configurables des del modal de gestió d'etiquetes:

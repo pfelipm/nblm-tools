@@ -58,7 +58,7 @@ If you have multiple notebooks with the **same name, same number of sources, and
 
 NotebookLM Organizer features an adaptive synchronization engine that automatically detects the installation environment to ensure maximum security for your organization.
 
-Because Google Chrome may delete sync data when uninstalling a manually loaded extension (Dev Mode), we have implemented a **Dual Redundancy** system and a **Conflict Resolution Assistant**.
+Because Google Chrome may delete sync data when uninstalling a manually loaded extension (Dev Mode), a **Dual Redundancy** system and a **Conflict Resolution Assistant** have been implemented.
 
 ### 🛠️ Security modes in Development (Manual installation)
 While the extension is used in development mode, you will have three levels of protection configurable from the tag management modal:
