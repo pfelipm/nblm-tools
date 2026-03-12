@@ -28,7 +28,7 @@ La privadesa és el pilar fonamental d'aquesta extensió. NotebookLM Organizer h
 - 💾 **Respatller granular:** exporta i importa la teva configuració en format JSON, permetent triar quins elements restaurar.
 - 🌐 **Suport multi-idioma:** interfície localitzada íntegrament en **espanyol, anglès i català**, amb canvi d'idioma instantani des de la interfície.
 - 💡 **Gestió de destacats:** per neteja i conveniència, l'extensió oculta la vista prèvia limitada de quaderns destacats a la pestanya principal "Tots" i s'inhibeix automàticament a la pestanya de "Destacats".
-- ⚡ **Interfície nativa:** dissenyada per oferir una experiència d'ús amb funcions ampliades que se sentin com natives de NotebookLM, sense trencar el teu flux de treball.
+- ⚡ **Interfície nativa:** dissenyada per oferir una experiència d'ús amb funcions ampliades que se sentin com natives de NotebookLM, sense trencar el teu flux de workflow.
 
 ---
 
@@ -48,7 +48,7 @@ Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa 
 *   **Dynamic i18n:** implementa un sistema de localització propi que permet el canvi d'idioma instantani sense necessitat de recarregar la pàgina.
 *   **MutationObserver:** s'utilitza per detectar de forma eficient i reactiva quan s'afegeixen nous quaderns a la llista o es produeixen canvis en la navegació.
 *   **Fragmentació de dades (chunking):** sistema avançat per superar el límit de 8 KB de Chrome Sync mitjançant la divisió de dades en fragments.
-*   **ID d'extensió predefinit:** el `manifest.json` inclou una clau pública (`key`) per assegurar que l'ID de l'extensió sigui idèntic en totes les instal·lacions manuals.
+*   **ID d'extensió predefinit:** el `manifest.json` inclou una clau pública (`key`) per assegurar que l'ID de l'extensió sigui idèntic en totes les instal·lacions manuals. Això és indispensable perquè Chrome Sync reconegui que es tracta de la mateixa extensió i permeti la sincronització. **Important:** tot i que l'ID sigui el mateix per a tots els usuaris d'aquest repositori, les teves dades estan vinculades exclusivament al teu compte de Google i ningú més pot accedir-hi.
 *   **Permisos:**
     *   `storage`: per guardar i sincronitzar les teves etiquetes i preferències.
 
@@ -103,7 +103,16 @@ Si l'extensió s'instal·la des de la botiga oficial, detecta l'entorn i simplif
 
 ## 🛠️ Instal·lació (en mode desenvolupador)
 
-...
+Segueix aquests passos per instal·lar l'extensió de forma local:
+
+1. Descarrega i descomprimeix l'arxiu zip o clona aquest repositori al teu equip.
+2. Obre Google Chrome i ves a la pàgina d'extensions: `chrome://extensions`.
+3. Activa el **"Mode de desenvolupador"** a la part superior dreta.
+4. Fes clic en el botó **"Carrega descomprimida"**.
+5. Selecciona la carpeta **extension** dins de la carpeta del projecte que has descarregat o clonat.
+6. Fet! L'extensió apareixerà al teu llistat d'extensions i estarà activa a `notebooklm.google.com`.
+
+---
 
 ## 📝 Nota sobre la publicació a la Chrome Web Store
 
@@ -117,4 +126,10 @@ Atès que l'extensió es basa en l'anàlisi de l'estructura del DOM de l'aplicac
 
 ## 🤝 Crèdits
 
-... Applied fuzzy match at line 101-108.
+Aquest projecte ha estat creat i és mantingut per **Pablo Felip** ([LinkedIn](https://www.linkedin.com/in/pfelipm/) | [GitHub](https://github.com/pfelipm)).
+
+---
+
+## 📄 Llicència
+
+Aquest projecte es distribueix sota els termes de l'arxiu [LICENSE](LICENSE).

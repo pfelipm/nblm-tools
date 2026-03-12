@@ -48,7 +48,7 @@ If you have multiple notebooks with the **same name, same number of sources, and
 *   **Dynamic i18n:** Implements a custom localization system that allows for instant language changes without a page refresh.
 *   **MutationObserver:** Used to efficiently and reactivaely detect when new notebooks are added to the list or when navigation occurs.
 *   **Data Fragmentation (Chunking):** Sophisticated system to overcome the 8KB limit of Chrome Sync storage by splitting data into chunks.
-*   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all manual installations.
+*   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all your manual installations. This is essential for Chrome Sync to recognize them as the same extension and allow synchronization. **Important:** Although the ID is the same for all users of this repository, your data is linked exclusively to your Google account, and no one else can access it.
 *   **Permissions:**
     *   `storage`: To save and sync your tags and preferences.
 
