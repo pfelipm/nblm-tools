@@ -50,28 +50,27 @@ Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa 
 *   **Fragmentació de dades (chunking):** sistema avançat per superar el límit de 8 KB de Chrome Sync mitjançant la divisió de dades en fragments.
 *   **ID d'extensió predefinit:** el `manifest.json` inclou una clau pública (`key`) per assegurar que l'ID de l'extensió sigui idèntic en totes les instal·lacions manuals. Això és indispensable perquè Chrome Sync reconegui que es tracta de la mateixa extensió i permeti la sincronització. **Important:** tot i que l'ID sigui el mateix per a tots els usuaris d'aquest repositori, les teves dades estan vinculades exclusivament al teu compte de Google i ningú més pot accedir-hi.
 *   **Permisos:**
-    *   **Fragmentació de dades (chunking):** sistema avançat per superar el límit de 8 KB de Chrome Sync mitjançant la divisió de dades en fragments.
+    *   `storage`: per guardar i sincronitzar les teves etiquetes i preferències.
 
-    ---
+---
 
-    ## 💾 Gestió de dades i seguretat avançada
+## 💾 Gestió de dades i seguretat avançada
 
-    NotebookLM Organizer integra un motor de sincronització adaptatiu que detecta automàticament l'entorn d'instal·lació per garantir la màxima seguretat de la teva organització.
+NotebookLM Organizer integra un motor de sincronització adaptatiu que detecta automàticament l'entorn d'instal·lació per garantir la màxima seguretat de la teva organització.
 
-    Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·lar una extensió carregada manualment (Mode Dev), s'ha implementat un sistema de **redundància dual** i un **assistent de resolució de conflictes**.
+Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·lar una extensió carregada manualment (Mode Dev), s'ha implementat un sistema de **redundància dual** i un **assistent de resolució de conflictes**.
 
-    ### 🛠️ Modes de seguretat en desenvolupament (instal·lació manual)
-    Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres nivells de protecció configurables des del modal de gestió d'etiquetes:
+### 🛠️ Modes de seguretat en desenvolupament (instal·lació manual)
+Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres nivells de protecció configurables des del modal de gestió d'etiquetes:
 
-    ![Modes de sincronització](assets/modos-sync-dev.png)
+![Modes de sincronització](assets/modos-sync-dev.png)
 
-    1.  **Intel·ligent (recomanat):** utilitza una **heurística de confiança**. Si detecta una pèrdua massiva de dades al núvol (tenint almenys 3 etiquetes en local i detectant-ne menys de la meitat al núvol), el sistema activa l'assistent de recuperació.
-    2.  **Validació manual:** el mode més estricte. Sempre que hi hagi una discrepància en les mètriques entre aquest equip i el núvol, l'extensió et demanarà confirmar quina versió vols mantenir.
-    3.  **Només núvol:** desactiva la redundància local i es comporta de forma minimalista, confiant exclusivament en Google Sync (comportament idèntic a la versió de la botiga).
+1.  **Intel·ligent (recomanat):** utilitza una **heurística de confiança**. Si detecta una pèrdua massiva de dades al núvol (tenint almenys 3 etiquetes en local i detectant-ne menys de la meitat al núvol), el sistema activa l'assistent de recuperació.
+2.  **Validació manual:** el mode més estricte. Sempre que hi hagi una discrepància en les mètriques entre aquest equip i el núvol, l'extensió et demanarà confirmar quina versió vols mantenir.
+3.  **Només núvol:** desactiva la redundància local i es comporta de forma minimalista, confiant exclusivament en Google Sync (comportament idèntic a la versió de la botiga).
 
-    ### 🔄 Assistent de recuperació
-    Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb mètriques comparatives perquè prenguis una decisió informada:
-
+### 🔄 Assistent de recuperació
+Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb mètriques comparatives perquè prenguis una decisió informada:
 
 ![Diàleg de conflicte](assets/alerta-fusión.png)
 
@@ -84,11 +83,10 @@ Durant el desenvolupament d'aquesta extensió, es va plantejar una decisió de d
 Una solució ràpida hauria estat registrar l'extensió a la Chrome Web Store per obtenir un **ID oficial**. En utilitzar aquest identificador en la versió de desenvolupament, les dades al núvol quedarien "ancorades" a la versió de la botiga, de manera que el navegador deixaria d'eliminar-les automàticament en desinstal·lar una instància local. No obstant això, es va optar per **no fer-ho** per prioritzar els següents principis:
 
 1.  **Sobirania i codi obert:** en no dependre d'un ID assignat per una botiga propietària, el projecte és 100% independent i portable. Qualsevol persona pot clonar el repositori i tenir un sistema funcional i segur sense passar pel control d'una plataforma externa.
-2.  **Arquitectura de resiliència:** en lloc de confiar en una política de base de dades de tercers (que pot canviar), s'ha construït una infraestructura de seguretat pròpia. L'extensió és ara un sistema autònom capaç d'autoreparar-se.
-3.  **Transparència:** aquest camí va obligar a crear l'**Assistent de conflictes**, la qual cosa dona a l'usuari un control total i una visibilitat absoluta sobre la seva informació, quelcom que el sistema "invisible" de Google no proporciona.
+2.  **Arquitectura de resiliència:** en lloc de confiar en una política de base de datos de tercers (que pot canviar), s'ha construït una infraestructura de seguretat pròpia. L'extensió és ara un sistema autònom capaç d'autoreparar-se.
+3.  **Transparència:** aquest camí va obligar a crear l'**assistent de conflictes**, la qual cosa dona a l'usuari un control total i una visibilitat absoluta sobre la seva informació, quelcom que el sistema "invisible" de Google no proporciona.
 
 En resum: s'ha triat el camí del **maestratge tècnic** sobre el camí curt, garantint que NotebookLM Organizer sigui una eina tan robusta com independent.
-
 
 ---
 
