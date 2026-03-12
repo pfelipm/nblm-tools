@@ -42,11 +42,11 @@ If you have multiple notebooks with the **same name, same number of sources, and
 
 ## ⚙️ Technical Details
 
-*   **No Frameworks or External Dependencies:** built entirely with **Vanilla JS** and **standard CSS** to ensure maximum lightness, speed, and compatibility.
+*   **No Frameworks or External Dependencies:** Built entirely with **Vanilla JS** and **standard CSS** to ensure maximum lightness, speed, and compatibility.
 *   **Manifest V3:** The extension uses the latest version of the Chrome manifest for maximum security and performance.
 *   **Chrome Storage Sync & Local:** Uses the Storage API to keep tags synchronized between devices and perform local safety caching.
 *   **Dynamic i18n:** Implements a custom localization system that allows for instant language changes without a page refresh.
-*   **MutationObserver:** Used to efficiently and reactivaely detect when new notebooks are added to the list or when navigation occurs.
+*   **MutationObserver:** Used to efficiently and reactively detect when new notebooks are added to the list or when navigation occurs.
 *   **Data Fragmentation (Chunking):** Sophisticated system to overcome the 8KB limit of Chrome Sync storage by splitting data into chunks.
 *   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all your manual installations. This is essential for Chrome Sync to recognize them as the same extension and allow synchronization. **Important:** Although the ID is the same for all users of this repository, your data is linked exclusively to your Google account, and no one else can access it.
 *   **Permissions:**
@@ -54,55 +54,64 @@ If you have multiple notebooks with the **same name, same number of sources, and
 
 ---
 
-## 💾 Data management and security
+## 💾 Data Management and Security
 
 NotebookLM Organizer features an adaptive synchronization engine that automatically detects the installation environment to ensure maximum security for your organization.
 
 Because Google Chrome may delete sync data when uninstalling a manually loaded extension (Dev Mode), a **Dual Redundancy** system and a **Conflict Resolution Assistant** have been implemented.
 
-### 🛠️ Security modes in Development (Manual installation)
+### 🛠️ Security Modes in Development (Manual Installation)
 While the extension is used in development mode, you will have three levels of protection configurable from the tag management modal:
 
 ![Sync modes](assets/modos-sync-dev.png)
 
 1.  **Intelligent (Recommended):** Uses a **trust heuristic**. If it detects a massive data loss in the cloud (having at least 3 tags locally and detecting less than half in the cloud), the system activates the recovery assistant.
-2.  **Manual validation:** The strictest mode. Whenever there is a discrepancy in metrics between this device and the cloud, the extension will ask you to confirm which version you want to keep.
-3.  **Cloud only:** Disables local redundancy and behaves minimalistically, relying exclusively on Google Sync (identical behavior to the store version).
+2.  **Manual Validation:** The strictest mode. Whenever there is a discrepancy in metrics between this device and the cloud, the extension will ask you to confirm which version you want to keep.
+3.  **Cloud Only:** Disables local redundancy and behaves minimalistically, relying exclusively on Google Sync (identical behavior to the store version).
 
-### 🔄 Recovery assistant
+### 🔄 Recovery Assistant
 When an inconsistency is detected, the extension shows a detailed dialog with comparative metrics so you can make an informed decision:
 
 ![Conflict dialog](assets/alerta-fusión.png)
 
 ---
 
-## 🧠 Design philosophy: independence and resilience
+## 🧠 Design Philosophy: Independence and Resilience
 
 During the development of this extension, a critical design decision was faced: how to prevent Google from deleting sync data when uninstalling the development version?
 
 A quick fix would have been to register the extension in the Chrome Web Store to obtain an **official ID**, which protects cloud data from automatic cleanups. However, the choice was made **not to do so** to prioritize the following principles:
 
-1.  **Sovereignty and open source:** by not relying on an ID assigned by a proprietary store, the project remains 100% independent and portable. Anyone can clone the repository and have a functional and secure system without going through the control of an external platform.
-2.  **Resilience architecture:** instead of trusting a third-party database policy (which can change), a custom security infrastructure has been built. The extension is now an autonomous system capable of self-healing.
-3.  **Transparency:** this path forced the creation of the **Conflict assistant**, which gives the user total control and absolute visibility over their information—something Google's "invisible" system does not provide.
+1.  **Sovereignty and Open Source:** By not relying on an ID assigned by a proprietary store, the project remains 100% independent and portable. Anyone can clone the repository and have a functional and secure system without going through the control of an external platform.
+2.  **Resilience Architecture:** Instead of trusting a third-party database policy (which can change), a custom security infrastructure has been built. The extension is now an autonomous system capable of self-healing.
+3.  **Transparency:** This path forced the creation of the **Conflict Assistant**, which gives the user total control and absolute visibility over their information—something Google's "invisible" system does not provide.
 
 In short: the path of **technical mastery** has been chosen over the short path, ensuring that NotebookLM Organizer is as robust as it is independent.
 
 ---
 
-## 🏪 Working in official mode (Chrome Web Store)
+## 🏪 Working in Official Mode (Chrome Web Store)
 If the extension is installed from the official store, it detects the environment and simplifies its logic to the maximum. In this mode, it fully trusts the native Google Sync infrastructure and operates lightly without the need to maintain redundant local backups or show conflict dialogs.
 
-### ⚠️ Final security recommendations
--   **Always keep a "guardian":** As long as you keep the extension installed on at least one device, your data can be automatically recovered thanks to local redundancy.
--   **Manual export (💾):** Perform periodic backups by downloading your configuration in JSON format. It is your only absolute guarantee of recovery against changes in Google's policies. *Shit happens* 😅.
+### ⚠️ Final Security Recommendations
+-   **Always Keep a "Guardian":** As long as you keep the extension installed on at least one device, your data can be automatically recovered thanks to local redundancy.
+-   **Manual Export (💾):** Perform periodic backups by downloading your configuration in JSON format. It is your only absolute guarantee of recovery against changes in Google's policies. *Shit happens* 😅.
 -   **Updates:** To install a new version of the code in dev mode, do not uninstall the extension. Simply overwrite the files in your folder and click the reload button at `chrome://extensions`.
 
 ---
 
-## 🛠️ Installation (in developer mode)
+## 🛠️ Installation (in Developer Mode)
 
-...
+Follow these steps to install the extension locally:
+
+1. Download and unzip the zip file or clone this repository on your machine.
+2. Open Google Chrome and go to the extensions page: `chrome://extensions`.
+3. Enable **"Developer mode"** in the upper right corner.
+4. Click the **"Load unpacked"** button.
+5. Select the **extension** folder within the downloaded or cloned project folder.
+6. Done! The extension will appear in your list of extensions and will be active on `notebooklm.google.com`.
+
+---
 
 ## 📝 Note on Publishing to the Chrome Web Store
 
@@ -116,4 +125,10 @@ Since the extension relies on analyzing the DOM structure of the NotebookLM appl
 
 ## 🤝 Credits
 
-... Applied fuzzy match at line 101-108.
+This project was created and is maintained by **Pablo Felip** ([LinkedIn](https://www.linkedin.com/in/pfelipm/) | [GitHub](https://github.com/pfelipm)).
+
+---
+
+## 📄 License
+
+This project is distributed under the terms of the [LICENSE](LICENSE) file.
