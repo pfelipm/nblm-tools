@@ -91,12 +91,16 @@ En resumen: se ha elegido el camino de la **maestría técnica** sobre el camino
 ---
 
 ## 🏪 Funcionamiento en modo oficial (Chrome Web Store)
-Si la extensión se instala desde la tienda oficial, detecta el entorno y simplifica su lógica al máximo. En este modo, confía plenamente en la infraestructura nativa de Google Sync y opera de forma ligera sin necesidad de mantener backups locales redundantes ni mostrar diálogos de conflicto.
 
-### ⚠️ Recomendaciones de seguridad
--   **Conserva siempre un "guardián":** Mientras mantengas la extensión instalada en al menos un dispositivo, tus datos podrán recuperarse automáticamente en los demás gracias a la redundancia local.
--   **Exportación manual (💾):** Realiza copias de seguridad periódicas descargando tu configuración en formato JSON. Es tu red de seguridad definitiva por si todo lo demás falla. *Shit happens* 😅.
--   **Actualizaciones:** Para instalar una nueva versión del código en modo dev, no es necesario desinstalar la extensión. Simplemente sobreescribe los archivos en tu carpeta local y pulsa el botón de recarga en `chrome://extensions`.
+Si la extensión se instala desde la tienda oficial, detecta el entorno y simplifica su lógica al máximo. En este modo, confia plenamente en la infraestructura nativa de Google Sync y opera de forma ligera sin necesidad de mantener backups locales redundantes ni mostrar diálogos de conflicto.
+
+---
+
+## ⚠️ Recomendaciones de seguridad
+
+-   **Exportación manual (💾):** independientemente del modo de instalación, se recomienda realizar copias de seguridad periódicas descargando la configuración en formato JSON. Es la red de seguridad definitiva por si todo lo demás falla. *Shit happens* 😅.
+-   **Conserva siempre un "guardián" (solo modo dev):** mientras mantengas la extensión instalada en al menos un dispositivo, tus datos podrán recuperarse automáticamente en los demás gracias a la redundancia local.
+-   **Actualizaciones (solo modo dev):** para instalar una nueva versión del código, no es necesario desinstalar la extensión. Simplemente sobreescribe los archivos en tu carpeta local y pulsa el botón de recarga en `chrome://extensions`.
 
 ---
 

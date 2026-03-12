@@ -91,12 +91,16 @@ In short: the path of **technical mastery** has been chosen over the short path,
 ---
 
 ## 🏪 Working in Official Mode (Chrome Web Store)
+
 If the extension is installed from the official store, it detects the environment and simplifies its logic to the maximum. In this mode, it fully trusts the native Google Sync infrastructure and operates lightly without the need to maintain redundant local backups or show conflict dialogs.
 
-### ⚠️ Final Security Recommendations
--   **Always Keep a "Guardian":** As long as you keep the extension installed on at least one device, your data can be automatically recovered thanks to local redundancy.
--   **Manual Export (💾):** Perform periodic backups by downloading your configuration in JSON format. It is your only absolute guarantee of recovery against changes in Google's policies. *Shit happens* 😅.
--   **Updates:** To install a new version of the code in dev mode, do not uninstall the extension. Simply overwrite the files in your folder and click the reload button at `chrome://extensions`.
+---
+
+## ⚠️ Security Recommendations
+
+-   **Manual Export (💾):** Regardless of the installation mode, it is recommended to perform periodic backups by downloading the configuration in JSON format. It is your ultimate safety net if everything else fails. *Shit happens* 😅.
+-   **Always Keep a "Guardian" (dev mode only):** As long as you keep the extension installed on at least one device, your data can be automatically recovered on others thanks to local redundancy.
+-   **Updates (dev mode only):** To install a new version of the code, it is not necessary to uninstall the extension. Simply overwrite the files in your local folder and click the reload button at `chrome://extensions`.
 
 ---
 

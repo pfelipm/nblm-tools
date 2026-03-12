@@ -94,12 +94,16 @@ En resum: s'ha triat el camí del **maestratge tècnic** sobre el camí curt, ga
 
 Si l'extensió s'instal·la des de la botiga oficial, detecta l'entorn i simplifica la seva lògica al màxim. En aquest mode, confia plenament en la infraestructura nativa de Google Sync i opera de forma lleugera sense necessitat de mantenir backups locals redundants ni mostrar diàlegs de conflicte.
 
-### ⚠️ Recomanacions finals de seguretat
--   **Conserva sempre un "guardià":** Mentre mantinguis l'extensió instal·lada en almenys un dispositiu, les teves dades es podran recuperar automàticament en els altres gràcies a la redundància local.
--   **Exportació manual (💾):** Realitza còpies de seguretat periòdiques descarregant la teva configuració en format JSON. És la teva única garantia absoluta de recuperació davant canvis en les polítiques de Google. *Shit happens* 😅.
--   **Actualitzacions:** Per instal·lar una nova versió del codi en mode dev, no desinstal·lis l'extensió. Simplement sobreescriu els fitxers a la teva carpeta i prem el botó de recàrrega a `chrome://extensions`.
+---
+
+## ⚠️ Recomanacions de seguretat
+
+-   **Exportació manual (💾):** independentment del mode d'instal·lació, es recomana realitzar còpies de seguretat periòdiques descarregant la configuració en format JSON. És la xarxa de seguretat definitiva per si tota la resta falla. *Shit happens* 😅.
+-   **Conserva sempre un "guardià" (només mode dev):** mentre mantinguis l'extensió instal·lada en almenys un dispositiu, les teves dades es podran recuperar automàticament en els altres gràcies a la redundància local.
+-   **Actualitzacions (només mode dev):** per instal·lar una nova versió del codi, no cal desinstal·lar l'extensió. Simplement sobreescriu els fitxers a la teva carpeta local i prem el botó de recàrrega a `chrome://extensions`.
 
 ---
+
 
 ## 🛠️ Instal·lació
 
