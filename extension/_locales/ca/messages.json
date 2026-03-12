@@ -58,6 +58,15 @@
   "conflict_total_assignments": { "message": "Total etiquetes aplicades" },
   "conflict_last_updated": { "message": "Última modificació" },
   "conflict_no_data": { "message": "Sense dades" },
-  "conflict_btn_keep_local": { "message": "Utilitza les dades de l'equip (Recuperar)" },
-  "conflict_btn_accept_cloud": { "message": "Utilitza les dades del núvol (Acceptar esborrat)" }
+  "conflict_btn_merge": { "message": "Combinar ambdues versions (fusió)" },
+  "conflict_btn_keep_local_only": { "message": "Utilitza només les dades de l'equip (recuperar)" },
+  "conflict_btn_accept_cloud": { "message": "Utilitza només les dades del núvol (acceptar esborrat)" },
+  "settings_sync_mode_label": { "message": "Seguretat de sincronització (Mode Dev)" },
+  "sync_mode_off": { "message": "Només núvol" },
+  "sync_mode_heuristic": { "message": "Intel·ligent (Recomanat)" },
+  "sync_mode_always": { "message": "Validació manual" },
+  "sync_mode_off_tooltip": { "message": "Desactiva la xarxa de seguretat local. Es comporta com una extensió oficial, confiant exclusivament en Google Sync (risc de pèrdua en desinstal·lar en mode dev)." },
+  "sync_mode_heuristic_tooltip": { "message": "La protecció s'activa si tens almenys 3 etiquetes en local i es detecta una pèrdua superior al 50% de les dades al núvol (ex: després d'una desinstal·lació accidental)." },
+  "sync_mode_always_tooltip": { "message": "Llança el diàleg comparatiu sempre que es detecti qualsevol diferència entre aquest equip i el núvol en arrancar." },
+  "dev_mode_warning_main_msg": { "message": "En aquest mode, en desinstal·lar l'extensió s'esborraran TOTES les teves etiquetes del compte de Google. HAS de fer una exportació manual (💾) abans de desinstal·lar." }
 }

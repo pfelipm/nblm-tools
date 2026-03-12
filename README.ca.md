@@ -36,57 +36,74 @@ La privadesa és el pilar fonamental d'aquesta extensió. NotebookLM Organizer h
 
 Atès que NotebookLM no exposa identificadors únics interns en totes les seves vistes, l'extensió utilitza una "petjada digital" basada en metadades per identificar cada quadern. 
 
-Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa data**, l'extensió detectará una **col·lisió** a la vista de llista i bloquejarà l'etiquetatge per seguretat per evitar errors d'associació. En aquests casos, apareixerà una icona d'avís (⚠️) i hauràs d'utilitzar la **vista de miniaturas** (quadrícula) per etiquetar-los, ja que en aquesta vista sí que és possible obtenir un identificador único real.
+Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa data**, l'extensió detectarà una **col·lisió** a la vista de llista i bloquejarà l'etiquetatge per seguretat per evitar errors d'associació. En aquests casos, apareixerà una icona d'avís (⚠️) i hauràs d'utilitzar la **vista de miniatures** (quadrícula) per etiquetar-los, ja que en aquesta vista sí que és possible obtenir un identificador único real.
 
 ---
 
 ## ⚙️ Detalls tècnics
 
-*   **Sense frameworks ni dependències externes:** desenvolupada íntegramente amb **Vanilla JS** i **CSS estàndard** per garantir la màxima lleugeresa, velocitat i compatibilitat.
+*   **Sense frameworks ni dependències externes:** desenvolupada íntegrament amb **Vanilla JS** i **CSS estàndard** per garantir la màxima lleugeresa, velocitat i compatibilitat.
 *   **Manifest V3:** l'extensió utilitza l'última versió del manifest de Chrome per garantir la màxima seguretat i rendiment.
 *   **Chrome Storage Sync & Local:** utilitza l'API d'emmagatzematge per mantenir les etiquetes sincronitzades entre dispositius i realitzar cachè local de seguretat.
 *   **Dynamic i18n:** implementa un sistema de localització propi que permet el canvi d'idioma instantani sense necessitat de recarregar la pàgina.
 *   **MutationObserver:** s'utilitza per detectar de forma eficient i reactiva quan s'afegeixen nous quaderns a la llista o es produeixen canvis en la navegació.
 *   **Fragmentació de dades (chunking):** sistema avançat per superar el límit de 8 KB de Chrome Sync mitjançant la divisió de dades en fragments.
-*   **ID d'extensió predefinit:** el `manifest.json` incluye una clau pública (`key`) per assegurar que l'ID de l'extensió sigui idèntic en totes les instal·lacions manuals.
+*   **ID d'extensió predefinit:** el `manifest.json` inclou una clau pública (`key`) per assegurar que l'ID de l'extensió sigui idèntic en totes les instal·lacions manuals.
 *   **Permisos:**
     *   `storage`: per guardar i sincronitzar les teves etiquetes i preferències.
 
 ---
 
-## 💾 Gestió de dades i seguretat (Branca Experimental)
+## 💾 Gestió de dades i seguretat avançada
 
-NotebookLM Organizer integra un motor de sincronización adaptatiu con **recuperació heurística** per garantir la màxima seguretat de la teva organització:
+NotebookLM Organizer integra un motor de sincronització adaptatiu que detecta automàticament l'entorn d'instal·lació per garantir la màxima seguretat de la teva organització.
 
-### 🛠️ Funcionament en mode de desenvolupament (instal·lació manual)
-En aquest mode, l'extensió activa un **sistema de seguretat de redundància dual**:
+Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·lar una extensió carregada manualment (Mode Dev), hem implementat un sistema de **Redundància Dual** i un **Assistent de Resolució de Conflictes**.
 
--   **Backup local persistent (LocalStorage):** A més del núvol, les teves etiquetes es guarden físicament a la base de dades local de cada dispositiu.
--   **Recuperació heurística (Efecte guardià):** Si les dades del teu compte de Google s'esborren (per una desinstal·lació en un altre PC), qualsevol dispositiu on mantinguis instal·lada l'extensió detectarà l'anomalia. Si el núvol apareix buit o amb una pèrdua massiva de dades (**tenint almenys 3 etiquetes i detectant menys de la meitat que en local**), l'extensió **fusionarà automàticament** les dades del núvol amb la seva còpia local per ressuscitar la teva configuració.
--   **Avís persistent:** Veuràs un bàner informatiu al modal de gestió d'etiquetes.
+### 🛠️ Modes de seguretat en Desenvolupament (Instal·lació manual)
+Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres nivells de protecció configurables des del modal de gestió d'etiquetes:
 
-### 🏪 Funcionament en mode store (Chrome Web Store)
-A la botiga oficial, l'extensió simplifica la seva lògica i confia plenament en la infraestructura nativa de Google Sync, operant sense backups locals redundants.
+![Modes de sincronització](assets/modos-sync-dev.png)
 
-### ⚠️ Recomanacions de seguretat
--   **Conserva sempre un "guardià":** Mentre mantinguis l'extensió instal·lada en almenys un dispositiu, les teves dades es podran recuperar automàticament gràcies a la redundància local.
--   **Exportació manual (💾):** Realitza còpies de seguretat periòdiques en JSON. És la teva xarxa de seguretat definitiva per si tota la resta falla. *Shit happens* 😅.
--   **Actualitzacions:** No desinstal·lis l'extensió per actualitzar en mode dev. Sobreescriu els fitxers i prem recarregar a `chrome://extensions`.
+1.  **Intel·ligent (Recomanat):** Utilitza una **heurística de confiança**. Si detecta una pèrdua massiva de dades al núvol (tenint almenys 3 etiquetes en local i detectant-ne menys de la meitat al núvol), el sistema activa l'assistent de recuperació.
+2.  **Validació manual:** El mode més estricte. Sempre que hi hagi una discrepància en les mètriques entre aquest equip i el núvol, l'extensió et demanarà confirmar quina versió vols mantenir.
+3.  **Només núvol:** Desactiva la redundància local i es comporta de forma minimalista, confiant exclusivament en Google Sync (comportament idèntic a la versió de la botiga).
+
+### 🔄 Assistent de recuperació
+Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb mètriques comparatives perquè prenguis una decisió informada:
+
+![Diàleg de conflicte](assets/alerta-fusión.png)
+
+---
+
+## 🧠 Filosofia de disseny: Independència i Resiliència
+
+Durant el desenvolupament d'aquesta extensió, ens vam enfrontar a una decisió de disseny crítica: com evitar que Google esborri les dades de sincronització en desinstal·lar la versió de desenvolupament?
+
+Una solució ràpida hauria estat registrar l'extensió a la Chrome Web Store per obtenir un **ID oficial**, el qual protegeix les dades al núvol de neteges automàtiques. No obstant això, vam optar per **no fer-ho** per prioritzar els següents principis:
+
+1.  **Sobirania i Codi Obert:** En no dependre d'un ID assignat per una botiga propietària, el projecte és 100% independent i portable. Qualsevol persona pot clonar el repositori i tenir un sistema funcional i segur sense passar pel control d'una plataforma externa.
+2.  **Arquitectura de Resiliència:** En lloc de confiar en una política de base de dades de tercers (que pot canviar), hem construït la nostra pròpia infraestructura de seguretat. L'extensió és ara un sistema autònom capaç d'autoreparar-se.
+3.  **Transparència:** Aquest camí ens va obligar a crear l'**Assistent de Conflictes**, la qual cosa dona a l'usuari un control total i una visibilitat absoluta sobre la seva informació, quelcom que el sistema "invisible" de Google no proporciona.
+
+En resum: hem triat el camí del **maestratge tècnic** sobre el camí curt, garantint que NotebookLM Organizer sigui una eina tan robusta com independent.
+
+---
+
+## 🏪 Funcionament en mode oficial (Chrome Web Store)
+
+Si l'extensió s'instal·la des de la botiga oficial, detecta l'entorn i simplifica la seva lògica al màxim. En aquest mode, confia plenament en la infraestructura nativa de Google Sync i opera de forma lleugera sense necessitat de mantenir backups locals redundants ni mostrar diàlegs de conflicte.
+
+### ⚠️ Recomanacions finals de seguretat
+-   **Conserva sempre un "guardià":** Mentre mantinguis l'extensió instal·lada en almenys un dispositiu, les teves dades es podran recuperar automàticament en els altres gràcies a la redundància local.
+-   **Exportació manual (💾):** Realitza còpies de seguretat periòdiques descarregant la teva configuració en format JSON. És la teva única garantia absoluta de recuperació davant canvis en les polítiques de Google. *Shit happens* 😅.
+-   **Actualitzacions:** Per instal·lar una nova versió del codi en mode dev, no desinstal·lis l'extensió. Simplement sobreescriu els fitxers a la teva carpeta i prem el botó de recàrrega a `chrome://extensions`.
 
 ---
 
 ## 🛠️ Instal·lació (en mode desenvolupador)
 
-Segueix aquests passos per instal·lar l'extensió de forma local:
-
-1. Descarrega i descomprimeix l'arxiu zip o clona aquest repositori al teu equip.
-2. Obre Google Chrome i ves a la pàgina d'extensions: `chrome://extensions`.
-3. Activa el **"Mode de desenvolupador"** a la part superior dreta.
-4. Fes clic en el botó **"Carrega descomprimida"**.
-5. Selecciona la carpeta **extension** dins de la carpeta del projecte que has descarregat o clonat.
-6. Fet! L'extensió apareixerá al teu llistat d'extensions i estará activa a `notebooklm.google.com`.
-
----
+...
 
 ## 📝 Nota sobre la publicació a la Chrome Web Store
 
@@ -100,10 +117,4 @@ Atès que l'extensió es basa en l'anàlisi de l'estructura del DOM de l'aplicac
 
 ## 🤝 Crèdits
 
-Este projecte ha estat creat i és mantingut per **Pablo Felip** ([LinkedIn](https://www.linkedin.com/in/pfelipm/) | [GitHub](https://github.com/pfelipm)).
-
----
-
-## 📄 Llicència
-
-Aquest projecte es distribueix sota els termes de l'arxiu [LICENSE](LICENSE).
+... Applied fuzzy match at line 101-108.

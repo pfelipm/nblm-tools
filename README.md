@@ -54,25 +54,49 @@ Si tienes varios cuadernos con el **mismo nombre, mismo número de fuentes y mis
 
 ---
 
-## 💾 Gestión de datos y seguridad (Rama Experimental)
+## 💾 Gestión de datos y seguridad avanzada
 
-NotebookLM Organizer integra un motor de sincronización adaptativo con **recuperación heurística** para garantizar la máxima seguridad de tu organización:
+NotebookLM Organizer integra un motor de sincronización adaptativo que detecta automáticamente el entorno de instalación para garantizar la máxima seguridad de tu organización. 
 
-### 🛠️ Funcionamiento en modo de desarrollo (instalación manual)
-En este modo, la extensión activa un **sistema de seguridad de redundancia dual**:
+Debido a que Google Chrome puede eliminar los datos de sincronización al desinstalar una extensión cargada manualmente (Modo Dev), hemos implementado un sistema de **Redundancia Dual** y un **Asistente de Resolución de Conflictos**.
 
--   **Backup local persistente (LocalStorage):** Además de la nube, tus etiquetas se guardan físicamente en la base de datos local de cada dispositivo.
--   **Recuperación heurística (Efecto guardián):** Si los datos de tu cuenta de Google se borran (por una desinstalación en otro PC), cualquier dispositivo donde mantengas la extensión detectará la anomalía. Si la nube aparece vacía o con una pérdida masiva de datos (**teniendo al menos 3 etiquetas y detectando menos de la mitad que en local**), la extensión **fusionará automáticamente** los datos de la nube con su copia local para resucitar tu configuración.
+### 🛠️ Modos de seguridad en Desarrollo (Instalación manual)
+Mientras la extensión se use en modo de desarrollo, dispondrás de tres niveles de protección configurables desde el modal de gestión de etiquetas:
 
--   **Aviso persistente:** Verás un banner informativo en el modal de gestión de etiquetas.
+![Modos de sincronización](assets/modos-sync-dev.png)
 
-### 🏪 Funcionamiento en modo store (Chrome Web Store)
-En la tienda oficial, la extensión simplifica su lógica y confía plenamente en la infraestructura nativa de Google Sync, operando sin backups locales redundantes.
+1.  **Inteligente (Recomendado):** Utiliza una **heurística de confianza**. Si detecta una pérdida masiva de datos en la nube (teniendo al menos 3 etiquetas en local y detectando menos de la mitad en la nube), el sistema activa el asistente de recuperación.
+2.  **Validación manual:** El modo más estricto. Siempre que haya una discrepancia en las métricas entre este equipo y la nube, la extensión te pedirá confirmar qué versión deseas mantener.
+3.  **Solo nube:** Desactiva la redundancia local y se comporta de forma minimalista, confiando exclusivamente en Google Sync (comportamiento idéntico a la versión de la tienda).
+
+### 🔄 Asistente de recuperación
+Cuando se detecta una inconsistencia, la extensión muestra un diálogo detallado con métricas comparativas para que tomes una decisión informada:
+
+![Diálogo de conflicto](assets/alerta-fusión.png)
+
+---
+
+## 🧠 Filosofía de diseño: Independencia y Resiliencia
+
+Durante el desarrollo de esta extensión, nos enfrentamos a una decisión de diseño crítica: ¿cómo evitar que Google borre los datos de sincronización al desinstalar la versión de desarrollo?
+
+Una solución rápida hubiera sido registrar la extensión en la Chrome Web Store para obtener un **ID oficial**, el cual protege los datos en la nube de limpiezas automáticas. Sin embargo, optamos por **no hacerlo** para priorizar los siguientes principios:
+
+1.  **Soberanía y Código Abierto:** Al no depender de un ID asignado por una tienda propietaria, el proyecto es 100% independiente y portable. Cualquier persona puede clonar el repositorio y tener un sistema funcional y seguro sin pasar por el control de una plataforma externa.
+2.  **Arquitectura de Resiliencia:** En lugar de confiar en una política de base de datos de terceros (que puede cambiar), hemos construido nuestra propia infraestructura de seguridad. La extensión es ahora un sistema autónomo capaz de autorrepararse.
+3.  **Transparencia:** Este camino nos obligó a crear el **Asistente de Conflictos**, lo que da al usuario un control total y una visibilidad absoluta sobre su información, algo que el sistema "invisible" de Google no proporciona.
+
+En resumen: hemos elegido el camino de la **maestría técnica** sobre el camino corto, garantizando que NotebookLM Organizer sea una herramienta tan robusta como independiente.
+
+---
+
+## 🏪 Funcionamiento en modo oficial (Chrome Web Store)
+Si la extensión se instala desde la tienda oficial, detecta el entorno y simplifica su lógica al máximo. En este modo, confía plenamente en la infraestructura nativa de Google Sync y opera de forma ligera sin necesidad de mantener backups locales redundantes ni mostrar diálogos de conflicto.
 
 ### ⚠️ Recomendaciones de seguridad
--   **Conserva siempre un "guardián":** Mientras mantengas la extensión instalada en al menos un dispositivo, tus datos podrán recuperarse automáticamente gracias a la redundancia local.
--   **Exportación manual (💾):** Realiza copias de seguridad periódicas en JSON. Es tu red de seguridad definitiva. *Shit happens* 😅.
--   **Actualizaciones:** No desinstales la extensión para actualizar en modo dev. Sobreescribe los archivos y pulsa recargar en `chrome://extensions`.
+-   **Conserva siempre un "guardián":** Mientras mantengas la extensión instalada en al menos un dispositivo, tus datos podrán recuperarse automáticamente en los demás gracias a la redundancia local.
+-   **Exportación manual (💾):** Realiza copias de seguridad periódicas descargando tu configuración en formato JSON. Es tu red de seguridad definitiva por si todo lo demás falla. *Shit happens* 😅.
+-   **Actualizaciones:** Para instalar una nueva versión del código en modo dev, no es necesario desinstalar la extensión. Simplemente sobreescribe los archivos en tu carpeta local y pulsa el botón de recarga en `chrome://extensions`.
 
 ---
 

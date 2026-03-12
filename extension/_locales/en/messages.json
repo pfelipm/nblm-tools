@@ -58,6 +58,15 @@
   "conflict_total_assignments": { "message": "Total tags applied" },
   "conflict_last_updated": { "message": "Last modification" },
   "conflict_no_data": { "message": "No data" },
-  "conflict_btn_keep_local": { "message": "Use device data (Recover)" },
-  "conflict_btn_accept_cloud": { "message": "Use cloud data (Accept deletion)" }
+  "conflict_btn_merge": { "message": "Combine both versions (merge)" },
+  "conflict_btn_keep_local_only": { "message": "Use only device data (recover)" },
+  "conflict_btn_accept_cloud": { "message": "Use only cloud data (accept deletion)" },
+  "settings_sync_mode_label": { "message": "Sync security (Dev Mode)" },
+  "sync_mode_off": { "message": "Cloud only" },
+  "sync_mode_heuristic": { "message": "Intelligent (Recommended)" },
+  "sync_mode_always": { "message": "Manual validation" },
+  "sync_mode_off_tooltip": { "message": "Disables the local security net. Behaves like an official extension, relying exclusively on Google Sync (risk of loss when uninstalling in dev mode)." },
+  "sync_mode_heuristic_tooltip": { "message": "Protection activates if you have at least 3 local tags and a loss of more than 50% of cloud data is detected (e.g., after an accidental uninstallation)." },
+  "sync_mode_always_tooltip": { "message": "Launches the comparative dialog whenever any difference is detected between this device and the cloud at startup." },
+  "dev_mode_warning_main_msg": { "message": "In this mode, uninstalling the extension will delete ALL your tags from your Google account. You MUST perform a manual export (💾) before uninstalling." }
 }

@@ -58,6 +58,15 @@
   "conflict_total_assignments": { "message": "Total etiquetas aplicadas" },
   "conflict_last_updated": { "message": "Última modificación" },
   "conflict_no_data": { "message": "Sin datos" },
-  "conflict_btn_keep_local": { "message": "Usar datos de este equipo (Recuperar)" },
-  "conflict_btn_accept_cloud": { "message": "Usar datos de la nube (Aceptar borrado)" }
+  "conflict_btn_merge": { "message": "Combinar ambas versiones (fusión)" },
+  "conflict_btn_keep_local_only": { "message": "Usar solo datos de este equipo (recuperar)" },
+  "conflict_btn_accept_cloud": { "message": "Usar solo datos de la nube (aceptar borrado)" },
+  "settings_sync_mode_label": { "message": "Seguridad de sincronización (Modo Dev)" },
+  "sync_mode_off": { "message": "Solo nube" },
+  "sync_mode_heuristic": { "message": "Inteligente (Recomendado)" },
+  "sync_mode_always": { "message": "Validación manual" },
+  "sync_mode_off_tooltip": { "message": "Desactiva la red de seguridad local. Se comporta como una extensión oficial, confiando exclusivamente en Google Sync (riesgo de pérdida al desinstalar en modo dev)." },
+  "sync_mode_heuristic_tooltip": { "message": "La protección se activa si tienes al menos 3 etiquetas en local y se detecta una pérdida superior al 50% de los datos en la nube (ej: tras una desinstalación accidental)." },
+  "sync_mode_always_tooltip": { "message": "Lanza el diálogo comparativo siempre que se detecte cualquier diferencia entre este equipo y la nube al arrancar." },
+  "dev_mode_warning_main_msg": { "message": "En este modo, al desinstalar la extensión se borrarán TODAS tus etiquetas de la cuenta de Google. DEBES realizar una exportación manual (💾) antes de desinstalar." }
 }

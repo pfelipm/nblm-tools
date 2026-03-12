@@ -16,6 +16,7 @@ let titleToIdMap = {};
 let overriddenMessages = null; // Cache para traducciones manuales
 let hasInteracted = false; // Flag para evitar guardados vacíos accidentales
 let lastUpdated = 0; // Sello de tiempo para resolución de conflictos
+let syncMode = 'heuristic'; // 'off', 'heuristic', 'always' (Solo en LocalStorage)
 
 const IS_DEV_MODE = !chrome.runtime.getManifest().update_url;
 const PRESET_COLORS = ['#1a73e8', '#d93025', '#188038', '#f9ab00', '#e37400', '#9334e6', '#0097a7', '#607d8b'];
@@ -469,16 +470,50 @@ function showManagementModal() {
                 </div>
             </div>
             <div class="nblm-modal-body"></div>
+            
             ${IS_DEV_MODE ? `
-                <div style="background: #fff8e1; border-left: 4px solid #ffb300; padding: 10px 16px; margin: 0 24px 16px 24px; border-radius: 4px; font-size: 12px; color: #5f6368; line-height: 1.4;">
-                    <strong>${t('dev_mode_warning_title')}</strong>: ${t('dev_mode_warning_msg')}
+                <div class="nblm-sync-settings" style="margin: 0 24px 16px 24px; padding: 12px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dadce0;">
+                    <div style="font-size: 11px; font-weight: 500; color: #5f6368; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">${t('settings_sync_mode_label')}</div>
+                    <div style="display: flex; gap: 8px;">
+                        <select id="nblm-sync-mode-select" style="flex: 1; padding: 6px; border-radius: 4px; border: 1px solid #dadce0; font-size: 13px; outline: none; cursor: pointer;">
+                            <option value="off" ${syncMode === 'off' ? 'selected' : ''}>${t('sync_mode_off')}</option>
+                            <option value="heuristic" ${syncMode === 'heuristic' ? 'selected' : ''}>${t('sync_mode_heuristic')}</option>
+                            <option value="always" ${syncMode === 'always' ? 'selected' : ''}>${t('sync_mode_always')}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="nblm-dev-banner" style="background: ${syncMode === 'off' ? '#feeef3' : '#fff8e1'}; border-left: 4px solid ${syncMode === 'off' ? '#d93025' : '#ffb300'}; padding: 10px 16px; margin: 0 24px 16px 24px; border-radius: 4px; font-size: 12px; color: #5f6368; line-height: 1.4;">
+                    <strong>${syncMode === 'off' ? t('dev_mode_warning_title') : t('dev_mode_warning_title')}</strong>: 
+                    ${syncMode === 'off' ? t('dev_mode_warning_main_msg') : t('dev_mode_warning_msg')}
                 </div>
             ` : ''}
+
             <div class="nblm-modal-footer">
                 ${t('attribution_created_by')} <a href="https://www.linkedin.com/in/pfelipm/" target="_blank">Pablo Felip</a> | <a href="https://github.com/pfelipm/notebooklm-organizer" target="_blank">GitHub</a>
             </div>
         </div>
     `;
+
+    if (IS_DEV_MODE) {
+        const select = overlay.querySelector('#nblm-sync-mode-select');
+        const updateTooltip = (val) => {
+            if (val === 'off') select.title = t('sync_mode_off_tooltip');
+            else if (val === 'heuristic') select.title = t('sync_mode_heuristic_tooltip');
+            else if (val === 'always') select.title = t('sync_mode_always_tooltip');
+        };
+        
+        updateTooltip(syncMode);
+        
+        select.onchange = (e) => {
+            syncMode = e.target.value;
+            chrome.storage.local.set({ syncMode });
+            updateTooltip(syncMode);
+            // Refrescamos el modal para actualizar el banner inferior
+            overlay.remove();
+            showManagementModal();
+        };
+    }
     overlay.querySelectorAll('.nblm-lang-opt').forEach(opt => {
         opt.onclick = async () => {
             uiLang = opt.dataset.lang; await loadLanguage(uiLang); saveAllData();
@@ -764,6 +799,7 @@ function showConflictDialog(localRes, syncRes, onDecision) {
 
     const localM = getMetrics(localRes);
     const syncM = getMetrics(syncRes);
+    const hasCloudData = syncM.globalTagsCount > 0;
 
     overlay.innerHTML = `
         <div class="nblm-confirm-modal" style="width: 500px; max-width: 90vw;">
@@ -804,12 +840,14 @@ function showConflictDialog(localRes, syncRes, onDecision) {
             </table>
 
             <div class="nblm-confirm-actions" style="flex-direction: column; gap: 10px;">
-                <button class="nblm-btn-primary" id="keep-local" style="width: 100%;">${t('conflict_btn_keep_local')}</button>
+                ${hasCloudData ? `<button class="nblm-btn-primary" id="merge-data" style="width: 100%;">${t('conflict_btn_merge')}</button>` : ''}
+                <button class="${hasCloudData ? 'nblm-btn-cancel' : 'nblm-btn-primary'}" id="keep-local" style="width: 100%; border: 1px solid #dadce0;">${t('conflict_btn_keep_local_only')}</button>
                 <button class="nblm-btn-cancel" id="accept-cloud" style="width: 100%; border: 1px solid #dadce0;">${t('conflict_btn_accept_cloud')}</button>
             </div>
         </div>
     `;
 
+    if (hasCloudData) overlay.querySelector('#merge-data').onclick = () => { onDecision('merge'); overlay.remove(); };
     overlay.querySelector('#keep-local').onclick = () => { onDecision('local'); overlay.remove(); };
     overlay.querySelector('#accept-cloud').onclick = () => { onDecision('cloud'); overlay.remove(); };
     document.body.appendChild(overlay);
@@ -831,6 +869,7 @@ async function start() {
 
     const syncTS = syncRes.lastUpdated || 0;
     const localTS = localRes.lastUpdated || 0;
+    syncMode = localRes.syncMode || 'heuristic'; // Recuperamos el modo persistido en local
 
     // 3. Lógica de resolución de conflictos y resurrección (Especial para Modo Dev)
     const applyData = (data, source) => {
@@ -843,38 +882,57 @@ async function start() {
         lastUpdated = data.lastUpdated || (source === 'local' ? localTS : syncTS);
     };
 
-    if (IS_DEV_MODE) {
-        const syncTagsCount = syncRes.globalTags?.length || 0;
-        const localTagsCount = localRes.globalTags?.length || 0;
+    if (IS_DEV_MODE && syncMode !== 'off') {
+        const syncM = { 
+            tags: syncRes.globalTags?.length || 0, 
+            notes: Object.keys(syncRes.notebookTags || {}).length,
+            assigns: Object.values(syncRes.notebookTags || {}).reduce((s, t) => s + (t?.length || 0), 0)
+        };
+        const localM = { 
+            tags: localRes.globalTags?.length || 0, 
+            notes: Object.keys(localRes.notebookTags || {}).length,
+            assigns: Object.values(localRes.notebookTags || {}).reduce((s, t) => s + (t?.length || 0), 0)
+        };
         
-        const hasMassiveLoss = (localTagsCount >= 3) && (syncTagsCount <= localTagsCount / 2);
+        const hasMassiveLoss = (localM.tags >= 3) && (syncM.tags <= localM.tags / 2);
         const isCloudSuspect = (syncTS > localTS) && hasMassiveLoss;
-        const isCloudEmpty = (syncTagsCount === 0) && (localTagsCount > 0);
+        const isCloudEmpty = (syncM.tags === 0) && (localM.tags > 0);
+        
+        // Condición para el modo "always": cualquier discrepancia en las métricas principales
+        const hasDiscrepancy = syncM.tags !== localM.tags || syncM.notes !== localM.notes || syncM.assigns !== localM.assigns;
+        const forceDialog = (syncMode === 'always' && hasDiscrepancy);
 
-        if (isCloudSuspect || isCloudEmpty) {
-            // CONFLICTO MASIVO: Mostramos diálogo en lugar de decidir solos
+        if (isCloudSuspect || isCloudEmpty || forceDialog) {
+            // CONFLICTO DETECTADO (o modo Manual activado)
             showConflictDialog(localRes, syncRes, (decision) => {
-                if (decision === 'local') {
-                    // Fusión aditiva para recuperar
+                if (decision === 'merge') {
+                    // UNIÓN: Fusionamos ambos
                     globalTags = [...new Set([...(syncRes.globalTags || []), ...(localRes.globalTags || [])])].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
-                    notebookTags = { ...(localRes.notebookTags || {}), ...(syncRes.notebookTags || {}) };
+                    notebookTags = { ...(localRes.notebookTags || {}) };
+                    Object.keys(syncRes.notebookTags || {}).forEach(id => {
+                        notebookTags[id] = [...new Set([...(notebookTags[id] || []), ...syncRes.notebookTags[id]])];
+                    });
                     titleToIdMap = { ...(localRes.titleToIdMap || {}), ...(syncRes.titleToIdMap || {}) };
-                    tagConfig = { ...(syncRes.tagConfig || {}), ...(localRes.tagConfig || {}) };
+                    tagConfig = { ...(localRes.tagConfig || {}), ...(syncRes.tagConfig || {}) };
                     filterMode = localRes.filterMode || syncRes.filterMode || 'AND';
                     uiLang = localRes.uiLang || 'auto';
                     lastUpdated = Math.max(syncTS, localTS);
                     hasInteracted = true; 
                     saveAllData(); 
+                } else if (decision === 'local') {
+                    // RECUPERAR: El local machaca a la nube
+                    applyData(localRes, 'local');
+                    hasInteracted = true;
+                    saveAllData();
                 } else {
+                    // BORRADO: La nube machaca a local
                     applyData(syncRes, 'cloud');
-                    // Al aceptar la nube, guardamos en local para sincronizar el estado del PC
                     chrome.storage.local.set({ notebookTags, globalTags, titleToIdMap, tagConfig, filterMode, uiLang, lastUpdated });
                 }
                 loadLanguage(uiLang).then(() => init());
             });
             return; // Detenemos start normal mientras se decide
         } else if (localTS > syncTS) {
-            // Actualización local normal (sin diálogo, es un flujo habitual de uso secuencial)
             applyData(localRes, 'local');
             hasInteracted = true; 
             saveAllData(); 
