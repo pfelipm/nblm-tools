@@ -101,9 +101,14 @@ Si l'extensió s'instal·la des de la botiga oficial, detecta l'entorn i simplif
 
 ---
 
-## 🛠️ Instal·lació (en mode desenvolupador)
+## 🛠️ Instal·lació
 
-Segueix aquests passos per instal·lar l'extensió de forma local:
+La forma més senzilla i recomanada d'instal·lar l'extensió és a través de la **Chrome Web Store**:
+
+👉 [**Instal·la des de la Chrome Web Store**](https://chromewebstore.google.com/detail/bolafachcnffchfenddbfpbfcfhgahen?utm_source=item-share-cb)
+
+### Instal·lació manual (mode desenvolupador)
+Si prefereixes instal·lar-la manualment per fer proves o contribuir al codi, segueix aquests passos:
 
 1. Descarrega i descomprimeix l'arxiu zip o clona aquest repositori al teu equip.
 2. Obre Google Chrome i ves a la pàgina d'extensions: `chrome://extensions`.
@@ -114,13 +119,11 @@ Segueix aquests passos per instal·lar l'extensió de forma local:
 
 ---
 
-## 📝 Nota sobre la publicació a la Chrome Web Store
+## 📝 Nota sobre el manteniment
 
-Atès que l'extensió es basa en l'anàlisi de l'estructura del DOM de l'aplicació NotebookLM, i aquesta pot canviar en qualsevol moment sense previ avís, l'autor prefereix no publicar-la per ara a la Chrome Web Store. El cost de manteniment i la necessitat d'adaptar-la a canvis freqüents fan que sigui més pràctic distribuir-la com un projecte de codi obert per a la seva instal·lació manual.
+Aquesta extensió està disponible de forma oficial a la **Chrome Web Store**. No obstant això, atès que el seu funcionament es basa en l'anàlisi de l'estructura del DOM de l'aplicació NotebookLM, i aquesta pot canviar en qualsevol moment sense previ avís, l'autor adverteix que el manteniment davant canvis estructurals de Google es realitzarà de forma voluntària. El cost de manteniment i la necessitat d'adaptar-la a canvis freqüents fan que sigui un projecte impulsat per la comunitat i el codi obert.
 
-> **Important per a la publicació:** Si vols publicar la teva pròpia versió a la Store, s'ha inclòs l'arxiu **`extension/manifest.webstore.json`**. Aquest arxiu és una versió "neta" que **no inclou la propietat `key`**, requisit indispensable perquè Google assigni un ID oficial a la teva publicació. 
-> 
-> Per fer-lo servir, simplement canvia el nom de `manifest.webstore.json` a `manifest.json` (sobreescrivint l'original) just abans de comprimir la carpeta `extension` en un arxiu `.zip` per a la seva pujada a la consola de desarrolladors.
+> **Important per a desenvolupadors:** Si vols publicar la teva pròpia versió a la Store, s'ha inclòs l'arxiu **`extension/manifest.webstore.json`**. Aquest arxiu és una versió "neta" que **no inclou la propietat `key`** (obligatòria per obtenir un ID oficial nou). Per fer-lo servir, simplement canvia el nom de `manifest.webstore.json` a `manifest.json` just abans d'empaquetar la carpeta `extension` per a la seva pujada a la consola de desenvolupadors.
 
 ---
 

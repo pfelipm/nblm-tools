@@ -100,9 +100,14 @@ Si la extensión se instala desde la tienda oficial, detecta el entorno y simpli
 
 ---
 
-## 🛠️ Instalación (en modo desarrollador)
+## 🛠️ Instalación
 
-Sigue estos pasos para instalar la extensión de forma local:
+La forma más sencilla y recomendada de instalar la extensión es a través de la **Chrome Web Store**:
+
+👉 [**Instalar desde la Chrome Web Store**](https://chromewebstore.google.com/detail/bolafachcnffchfenddbfpbfcfhgahen?utm_source=item-share-cb)
+
+### Instalación manual (modo desarrollador)
+Si prefieres instalarla manualmente para realizar pruebas o contribuir al código, sigue estos pasos:
 
 1. Descarga y descomprime el archivo zip o clona este repositorio en tu equipo.
 2. Abre Google Chrome y dirígete a la página de extensiones: `chrome://extensions`.
@@ -113,13 +118,11 @@ Sigue estos pasos para instalar la extensión de forma local:
 
 ---
 
-## 📝 Nota sobre la publicación en la Chrome Web Store
+## 📝 Nota sobre el mantenimiento
 
-Dado que la extensión se basa en el análisis de la estructura del DOM de la aplicación NotebookLM, y esta puede cambiar en cualquier momento sin previo aviso, el autor prefiere no publicarla por ahora en la Chrome Web Store. El coste de mantenimiento y la necesidad de adaptarla a cambios frecuentes hacen que sea más práctico distribuirla como un proyecto de código abierto para su instalación manual.
+Esta extensión está disponible de forma oficial en la **Chrome Web Store**. No obstante, dado que su funcionamiento se basa en el análisis de la estructura del DOM de la aplicación NotebookLM, y esta puede cambiar en cualquier momento sin previo aviso, el autor advierte que el mantenimiento ante cambios estructurales de Google se realizará de forma voluntaria. El coste de mantenimiento y la necesidad de adaptarla a cambios frecuentes hacen que sea un proyecto impulsado por la comunidad y el código abierto.
 
-> **Importante para la publicación:** Si deseas publicar tu propia versión en la Store, se ha incluido el archivo **`extension/manifest.webstore.json`**. Este archivo es una versión "limpia" que **no incluye la propiedad `key`**, requisito indispensable para que Google asigne un ID oficial a tu publicación. 
-> 
-> Para usarlo, simplemente renombra `manifest.webstore.json` a `manifest.json` (sobrescribiendo el original) justo antes de comprimir la carpeta `extension` en un archivo `.zip` para su subida a la consola de desarrolladores.
+> **Importante para desarrolladores:** Si deseas publicar tu propia versión en la Store, se ha incluido el archivo **`extension/manifest.webstore.json`**. Este archivo es una versión "limpia" que **no incluye la propiedad `key`** (obligatoria para obtener un ID oficial nuevo). Para usarlo, simplemente renombra `manifest.webstore.json` a `manifest.json` justo antes de empaquetar la carpeta `extension` para su subida a la consola de desarrolladores.
 
 ---
 

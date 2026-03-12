@@ -48,7 +48,7 @@ If you have multiple notebooks with the **same name, same number of sources, and
 *   **Dynamic i18n:** Implements a custom localization system that allows for instant language changes without a page refresh.
 *   **MutationObserver:** Used to efficiently and reactively detect when new notebooks are added to the list or when navigation occurs.
 *   **Data Fragmentation (Chunking):** Sophisticated system to overcome the 8KB limit of Chrome Sync storage by splitting data into chunks.
-*   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all your manual installations. This is essential for Chrome Sync to recognize them as the same extension and allow synchronization. **Important:** Although the ID is the same for all users of this repository, your data is linked exclusively to your Google account, and no one else can access it.
+*   **Predefined extension ID:** The `manifest.json` file includes a public key (`key`) to ensure the extension ID is identical across all manual installations. This is essential for Chrome Sync to recognize them as the same extension and allow synchronization. **Important:** Although the ID is the same for all users of this repository, your data is linked exclusively to your Google account, and no one else can access it.
 *   **Permissions:**
     *   `storage`: To save and sync your tags and preferences.
 
@@ -100,9 +100,14 @@ If the extension is installed from the official store, it detects the environmen
 
 ---
 
-## 🛠️ Installation (in Developer Mode)
+## 🛠️ Installation
 
-Follow these steps to install the extension locally:
+The easiest and recommended way to install the extension is through the **Chrome Web Store**:
+
+👉 [**Install from Chrome Web Store**](https://chromewebstore.google.com/detail/bolafachcnffchfenddbfpbfcfhgahen?utm_source=item-share-cb)
+
+### Manual installation (developer mode)
+If you prefer to install it manually for testing or to contribute to the code, follow these steps:
 
 1. Download and unzip the zip file or clone this repository on your machine.
 2. Open Google Chrome and go to the extensions page: `chrome://extensions`.
@@ -113,13 +118,11 @@ Follow these steps to install the extension locally:
 
 ---
 
-## 📝 Note on Publishing to the Chrome Web Store
+## 📝 Note on Maintenance
 
-Since the extension relies on analyzing the DOM structure of the NotebookLM application, which can change at any time without notice, the author prefers not to publish it to the Chrome Web Store for now. The maintenance cost and the need to adapt to frequent changes make it more practical to distribute it as an open-source project for manual installation.
+This extension is officially available on the **Chrome Web Store**. However, as its operation relies on analyzing the DOM structure of the NotebookLM application, which can change at any time without notice, the author warns that maintenance against Google's structural changes will be performed on a voluntary basis. The cost of maintenance and the need to adapt to frequent changes make this a community-driven and open-source project.
 
-> **Important for Publishing:** If you wish to publish your own version to the Store, the file **`extension/manifest.webstore.json`** has been included. This file is a "clean" version that **does not include the `key` property**, which is essential for Google to assign an official ID to your publication. 
-> 
-> To use it, simply rename `manifest.webstore.json` to `manifest.json` (overwriting the original) right before compressing the `extension` folder into a `.zip` file for upload to the developer console.
+> **Important for developers:** If you wish to publish your own version to the Store, the file **`extension/manifest.webstore.json`** has been included. This file is a "clean" version that **does not include the `key` property** (essential for obtaining a new official ID). To use it, simply rename `manifest.webstore.json` to `manifest.json` right before packing the `extension` folder for upload to the developer console.
 
 ---
 
