@@ -62,7 +62,7 @@ NotebookLM Organizer integra un motor de sincronización adaptativo con **recupe
 En este modo, la extensión activa un **sistema de seguridad de redundancia dual**:
 
 -   **Backup local persistente (LocalStorage):** Además de la nube, tus etiquetas se guardan físicamente en la base de datos local de cada dispositivo.
--   **Recuperación heurística (Efecto guardián):** Si los datos de tu cuenta de Google se borran (por una desinstalación en otro PC), cualquier dispositivo donde mantengas la extensión detectará la anomalía. Si la nube aparece vacía o con una pérdida masiva de datos (**menos de la mitad de etiquetas que en local**), la extensión **fusionará automáticamente** los datos de la nube con su copia local para resucitar tu configuración.
+-   **Recuperación heurística (Efecto guardián):** Si los datos de tu cuenta de Google se borran (por una desinstalación en otro PC), cualquier dispositivo donde mantengas la extensión detectará la anomalía. Si la nube aparece vacía o con una pérdida masiva de datos (**teniendo al menos 3 etiquetas y detectando menos de la mitad que en local**), la extensión **fusionará automáticamente** los datos de la nube con su copia local para resucitar tu configuración.
 
 -   **Aviso persistente:** Verás un banner informativo en el modal de gestión de etiquetas.
 

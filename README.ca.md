@@ -62,7 +62,7 @@ NotebookLM Organizer integra un motor de sincronización adaptatiu con **recuper
 En aquest mode, l'extensió activa un **sistema de seguretat de redundància dual**:
 
 -   **Backup local persistent (LocalStorage):** A més del núvol, les teves etiquetes es guarden físicament a la base de dades local de cada dispositiu.
--   **Recuperació heurística (Efecte guardià):** Si les dades del teu compte de Google s'esborren (per una desinstal·lació en un altre PC), qualsevol dispositiu on mantinguis instal·lada l'extensió detectarà l'anomalia. Si el núvol apareix buit o amb una pèrdua massiva de dades (>50% d'etiquetes perdudes), l'extensió **fusionarà automàticament** les dades del núvol amb la seva còpia local per ressuscitar la teva configuració.
+-   **Recuperació heurística (Efecte guardià):** Si les dades del teu compte de Google s'esborren (per una desinstal·lació en un altre PC), qualsevol dispositiu on mantinguis instal·lada l'extensió detectarà l'anomalia. Si el núvol apareix buit o amb una pèrdua massiva de dades (**tenint almenys 3 etiquetes i detectant menys de la meitat que en local**), l'extensió **fusionarà automàticament** les dades del núvol amb la seva còpia local per ressuscitar la teva configuració.
 -   **Avís persistent:** Veuràs un bàner informatiu al modal de gestió d'etiquetes.
 
 ### 🏪 Funcionament en mode store (Chrome Web Store)

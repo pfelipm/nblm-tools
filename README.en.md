@@ -62,7 +62,7 @@ NotebookLM Organizer features an adaptive synchronization engine with **heuristi
 In this mode, the extension activates a **dual redundancy security system**:
 
 -   **Persistent local backup (LocalStorage):** In addition to the cloud, your tags are physically saved in each device's local database.
--   **Heuristic recovery (Guardian effect):** If your Google account data is deleted (due to an uninstallation on another PC), any device where you keep the extension installed will detect the anomaly. If the cloud appears empty or with a massive loss of data (>50% of tags lost), the extension will **automatically merge** the cloud data with its local copy to resurrect your configuration.
+-   **Heuristic recovery (Guardian effect):** If your Google account data is deleted (due to an uninstallation on another PC), any device where you keep the extension installed will detect the anomaly. If the cloud appears empty or with a massive loss of data (**having at least 3 tags and detecting less than half than local**), the extension will **automatically merge** the cloud data with its local copy to resurrect your configuration.
 -   **Persistent warning:** You will see an info banner in the tag management modal.
 
 ### 🏪 Working in store mode (Chrome Web Store)
