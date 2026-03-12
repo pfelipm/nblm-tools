@@ -50,27 +50,28 @@ Si tienes varios cuadernos con el **mismo nombre, mismo número de fuentes y mis
 *   **Data Fragmentation (Chunking):** sistema avanzado para superar el límite de 8 KB de Chrome Sync mediante la división de datos en fragmentos.
 *   **ID de extensión predefinido:** el `manifest.json` incluye una clave pública (`key`) para asegurar que el ID de la extensión sea idéntico en todas tus instalaciones manuales. Esto es indispensable para que Chrome Sync reconozca que se trata de la misma extensión y permita la sincronización. **Importante:** aunque el ID sea el mismo para todos los usuarios de este repositorio, tus datos están vinculados exclusivamente a tu cuenta de Google y nadie más puede acceder a ellos.
 *   **Permisos:**
-    *   `storage`: para guardar y sincronizar tus etiquetas y preferencias.
+    *   **Fragmentación de datos (chunking):** sistema avanzado para superar el límite de 8 KB de Chrome Sync mediante la división de datos en fragmentos.
 
----
+    ---
 
-## 💾 Gestión de datos y seguridad avanzada
+    ## 💾 Gestión de datos y seguridad avanzada
 
-NotebookLM Organizer integra un motor de sincronización adaptativo que detecta automáticamente el entorno de instalación para garantizar la máxima seguridad de tu organización. 
+    NotebookLM Organizer integra un motor de sincronización adaptativo que detecta automáticamente el entorno de instalación para garantizar la máxima seguridad de tu organización. 
 
-Debido a que Google Chrome puede eliminar los datos de sincronización al desinstalar una extensión cargada manualmente (Modo Dev), se ha implementado un sistema de **Redundancia Dual** y un **Asistente de Resolución de Conflictos**.
+    Debido a que Google Chrome puede eliminar los datos de sincronización al desinstalar una extensión cargada manualmente (Modo Dev), se ha implementado un sistema de **redundancia dual** y un **asistente de resolución de conflictos**.
 
-### 🛠️ Modos de seguridad en Desarrollo (Instalación manual)
-Mientras la extensión se use en modo de desarrollo, dispondrás de tres niveles de protección configurables desde el modal de gestión de etiquetas:
+    ### 🛠️ Modos de seguridad en desarrollo (instalación manual)
+    Mientras la extensión se use en modo de desarrollo, dispondrás de tres niveles de protección configurables desde el modal de gestión de etiquetas:
 
-![Modos de sincronización](assets/modos-sync-dev.png)
+    ![Modos de sincronización](assets/modos-sync-dev.png)
 
-1.  **Inteligente (Recomendado):** Utiliza una **heurística de confianza**. Si detecta una pérdida masiva de datos en la nube (teniendo al menos 3 etiquetas en local y detectando menos de la mitad en la nube), el sistema activa el asistente de recuperación.
-2.  **Validación manual:** El modo más estricto. Siempre que haya una discrepancia en las métricas entre este equipo y la nube, la extensión te pedirá confirmar qué versión deseas mantener.
-3.  **Solo nube:** Desactiva la redundancia local y se comporta de forma minimalista, confiando exclusivamente en Google Sync (comportamiento idéntico a la versión de la tienda).
+    1.  **Inteligente (recomendado):** utiliza una **heurística de confianza**. Si detecta una pérdida masiva de datos en la nube (teniendo al menos 3 etiquetas en local y detectando menos de la mitad en la nube), el sistema activa el asistente de recuperación.
+    2.  **Validación manual:** el modo más estricto. Siempre que haya una discrepancia en las métricas entre este equipo y la nube, la extensión te pedirá confirmar qué versión deseas mantener.
+    3.  **Solo nube:** desactiva la redundancia local y se comporta de forma minimalista, confiando exclusivamente en Google Sync (comportamiento idéntico a la versión de la tienda).
 
-### 🔄 Asistente de recuperación
-Cuando se detecta una inconsistencia, la extensión muestra un diálogo detallado con métricas comparativas para que tomes una decisión informada:
+    ### 🔄 Asistente de recuperación
+    Cuando se detecta una inconsistencia, la extensión muestra un diálogo detallado con métricas comparativas para que tomes una decisión informada:
+
 
 ![Diálogo de conflicto](assets/alerta-fusión.png)
 

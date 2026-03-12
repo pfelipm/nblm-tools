@@ -50,27 +50,28 @@ Si tens diversos quaderns amb el **mateix nom, mateix nombre de fonts i mateixa 
 *   **Fragmentació de dades (chunking):** sistema avançat per superar el límit de 8 KB de Chrome Sync mitjançant la divisió de dades en fragments.
 *   **ID d'extensió predefinit:** el `manifest.json` inclou una clau pública (`key`) per assegurar que l'ID de l'extensió sigui idèntic en totes les instal·lacions manuals. Això és indispensable perquè Chrome Sync reconegui que es tracta de la mateixa extensió i permeti la sincronització. **Important:** tot i que l'ID sigui el mateix per a tots els usuaris d'aquest repositori, les teves dades estan vinculades exclusivament al teu compte de Google i ningú més pot accedir-hi.
 *   **Permisos:**
-    *   `storage`: per guardar i sincronitzar les teves etiquetes i preferències.
+    *   **Fragmentació de dades (chunking):** sistema avançat per superar el límit de 8 KB de Chrome Sync mitjançant la divisió de dades en fragments.
 
----
+    ---
 
-## 💾 Gestió de dades i seguretat avançada
+    ## 💾 Gestió de dades i seguretat avançada
 
-NotebookLM Organizer integra un motor de sincronització adaptatiu que detecta automàticament l'entorn d'instal·lació per garantir la màxima seguretat de la teva organització.
+    NotebookLM Organizer integra un motor de sincronització adaptatiu que detecta automàticament l'entorn d'instal·lació per garantir la màxima seguretat de la teva organització.
 
-Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·lar una extensió carregada manualment (Mode Dev), s'ha implementat un sistema de **Redundància Dual** i un **Assistent de Resolució de Conflictes**.
+    Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·lar una extensió carregada manualment (Mode Dev), s'ha implementat un sistema de **redundància dual** i un **assistent de resolució de conflictes**.
 
-### 🛠️ Modes de seguretat en Desenvolupament (Instal·lació manual)
-Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres nivells de protecció configurables des del modal de gestió d'etiquetes:
+    ### 🛠️ Modes de seguretat en desenvolupament (instal·lació manual)
+    Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres nivells de protecció configurables des del modal de gestió d'etiquetes:
 
-![Modes de sincronització](assets/modos-sync-dev.png)
+    ![Modes de sincronització](assets/modos-sync-dev.png)
 
-1.  **Intel·ligent (Recomanat):** Utilitza una **heurística de confiança**. Si detecta una pèrdua massiva de dades al núvol (tenint almenys 3 etiquetes en local i detectant-ne menys de la meitat al núvol), el sistema activa l'assistent de recuperació.
-2.  **Validació manual:** El mode més estricte. Sempre que hi hagi una discrepància en les mètriques entre aquest equip i el núvol, l'extensió et demanarà confirmar quina versió vols mantenir.
-3.  **Només núvol:** Desactiva la redundància local i es comporta de forma minimalista, confiant exclusivament en Google Sync (comportament idèntic a la versió de la botiga).
+    1.  **Intel·ligent (recomanat):** utilitza una **heurística de confiança**. Si detecta una pèrdua massiva de dades al núvol (tenint almenys 3 etiquetes en local i detectant-ne menys de la meitat al núvol), el sistema activa l'assistent de recuperació.
+    2.  **Validació manual:** el mode més estricte. Sempre que hi hagi una discrepància en les mètriques entre aquest equip i el núvol, l'extensió et demanarà confirmar quina versió vols mantenir.
+    3.  **Només núvol:** desactiva la redundància local i es comporta de forma minimalista, confiant exclusivament en Google Sync (comportament idèntic a la versió de la botiga).
 
-### 🔄 Assistent de recuperació
-Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb mètriques comparatives perquè prenguis una decisió informada:
+    ### 🔄 Assistent de recuperació
+    Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb mètriques comparatives perquè prenguis una decisió informada:
+
 
 ![Diàleg de conflicte](assets/alerta-fusión.png)
 
