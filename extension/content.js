@@ -770,11 +770,13 @@ async function start() {
         const syncTagsCount = syncRes.globalTags?.length || 0;
         const localTagsCount = localRes.globalTags?.length || 0;
         
-        // HEURÍSTICA DE CONFIANZA:
-        // Sospechamos de la nube si es más nueva pero tiene poquísimas etiquetas (<3) 
-        // mientras que nosotros tenemos muchas (>10). Esto indica una reinstalación limpia en otro PC.
-        const isCloudSuspect = (syncTS > localTS) && (syncTagsCount <= 3) && (localTagsCount > 10);
-        const isCloudEmpty = syncTagsCount === 0 && localTagsCount > 0;
+        // HEURÍSTICA DE CONFIANZA (Mejorada):
+        // Sospechamos de la nube si:
+        // 1. Es más nueva pero tiene una pérdida masiva de datos (menos de la mitad que en local).
+        // 2. O si la nube está directamente vacía pero nosotros tenemos datos.
+        const hasMassiveLoss = (localTagsCount >= 3) && (syncTagsCount <= localTagsCount / 2);
+        const isCloudSuspect = (syncTS > localTS) && hasMassiveLoss;
+        const isCloudEmpty = (syncTagsCount === 0) && (localTagsCount > 0);
 
         if (localTS > syncTS || isCloudSuspect || isCloudEmpty) {
             console.warn("NBLM Organizer: Detectada posible inconsistencia. Aplicando recuperación heurística...");
