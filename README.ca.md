@@ -80,7 +80,7 @@ Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb 
 
 Durant el desenvolupament d'aquesta extensió, es va plantejar una decisió de disseny crítica: com evitar que Google esborri les dades de sincronització en desinstal·lar la versió de desenvolupament?
 
-Una solució ràpida hauria estat registrar l'extensió a la Chrome Web Store per obtenir un **ID oficial**, el qual protegeix les dades al núvol de neteges automàtiques. No obstant això, es va optar per **no fer-ho** per prioritzar els següents principis:
+Una solució ràpida hauria estat registrar l'extensió a la Chrome Web Store per obtenir un **ID oficial**. En utilitzar aquest identificador en la versió de desenvolupament, les dades al núvol quedarien "ancorades" a la versió de la botiga, de manera que el navegador deixaria d'eliminar-les automàticament en desinstal·lar una instància local. No obstant això, es va optar per **no fer-ho** per prioritzar els següents principis:
 
 1.  **Sobirania i codi obert:** en no dependre d'un ID assignat per una botiga propietària, el projecte és 100% independent i portable. Qualsevol persona pot clonar el repositori i tenir un sistema funcional i segur sense passar pel control d'una plataforma externa.
 2.  **Arquitectura de resiliència:** en lloc de confiar en una política de base de dades de tercers (que pot canviar), s'ha construït una infraestructura de seguretat pròpia. L'extensió és ara un sistema autònom capaç d'autoreparar-se.

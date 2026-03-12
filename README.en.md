@@ -80,7 +80,7 @@ When an inconsistency is detected, the extension shows a detailed dialog with co
 
 During the development of this extension, a critical design decision was faced: how to prevent Google from deleting sync data when uninstalling the development version?
 
-A quick fix would have been to register the extension in the Chrome Web Store to obtain an **official ID**, which protects cloud data from automatic cleanups. However, the choice was made **not to do so** to prioritize the following principles:
+A quick fix would have been to register the extension in the Chrome Web Store to obtain an **official ID**. By using this identifier in the development version, cloud data would be "anchored" to the store version, meaning the browser would stop automatically deleting it when uninstalling a local instance. However, the choice was made **not to do so** to prioritize the following principles:
 
 1.  **Sovereignty and Open Source:** By not relying on an ID assigned by a proprietary store, the project remains 100% independent and portable. Anyone can clone the repository and have a functional and secure system without going through the control of an external platform.
 2.  **Resilience Architecture:** Instead of trusting a third-party database policy (which can change), a custom security infrastructure has been built. The extension is now an autonomous system capable of self-healing.

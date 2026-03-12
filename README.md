@@ -80,7 +80,7 @@ Cuando se detecta una inconsistencia, la extensión muestra un diálogo detallad
 
 Durante el desarrollo de esta extensión, se planteó una decisión de diseño crítica: ¿cómo evitar que Google borre los datos de sincronización al desinstalar la versión de desarrollo?
 
-Una solución rápida hubiera sido registrar la extensión en la Chrome Web Store para obtener un **ID oficial**, el cual protege los datos en la nube de limpiezas automáticas. Sin embargo, se optó por **no hacerlo** para priorizar los siguientes principios:
+Una solución rápida hubiera sido registrar la extensión en la Chrome Web Store para obtener un **ID oficial**. Al usar este identificador en la versión de desarrollo, los datos en la nube quedarían "anclados" a la versión de la tienda, de modo que el navegador dejaría de eliminarlos automáticamente al desinstalar una instancia local. Sin embargo, se optó por **no hacerlo** para priorizar los siguientes principios:
 
 1.  **Soberanía y código abierto:** al no depender de un ID asignado por una tienda propietaria, el proyecto es 100% independiente y portable. Cualquier persona puede clonar el repositorio y tener un sistema funcional y seguro sin pasar por el control de una plataforma externa.
 2.  **Arquitectura de resiliencia:** en lugar de confiar en una política de base de datos de terceros (que puede cambiar), se ha construido una infraestructura de seguridad propia. La extensión es ahora un sistema autónomo capaz de autorrepararse.
