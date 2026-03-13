@@ -63,7 +63,9 @@ Because Google Chrome may delete sync data when uninstalling a manually loaded e
 ### 🛠️ Security Modes in Development (Manual Installation)
 While the extension is used in development mode, you will have three levels of protection configurable from the tag management modal:
 
-![Sync modes](assets/modos-sync-dev-en.png)
+<p align="center">
+  <img src="assets/modos-sync-dev-en.png" alt="Sync modes">
+</p>
 
 1.  **Intelligent (Recommended):** Uses a **trust heuristic**. If it detects a massive data loss in the cloud (having at least 3 tags locally and detecting less than half in the cloud), the system activates the recovery assistant.
 2.  **Manual Validation:** The strictest mode. Whenever there is a discrepancy in metrics between this device and the cloud, the extension will ask you to confirm which version you want to keep.
@@ -72,7 +74,9 @@ While the extension is used in development mode, you will have three levels of p
 ### 🔄 Recovery Assistant
 When an inconsistency is detected, the extension shows a detailed dialog with comparative metrics so you can make an informed decision:
 
-![Conflict dialog](assets/alerta-fusión-en.png)
+<p align="center">
+  <img src="assets/alerta-fusión-en.png" alt="Conflict dialog">
+</p>
 
 ---
 
