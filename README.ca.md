@@ -63,7 +63,7 @@ Atès que Google Chrome pot eliminar les dades de sincronització en desinstal·
 ### 🛠️ Modes de seguretat en desenvolupament (instal·lació manual)
 Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres nivells de protecció configurables des del modal de gestió d'etiquetes:
 
-![Modes de sincronització](assets/modos-sync-dev.png)
+![Modes de sincronització](assets/modos-sync-dev-ca.png)
 
 1.  **Intel·ligent (recomanat):** utilitza una **heurística de confiança**. Si detecta una pèrdua massiva de dades al núvol (tenint almenys 3 etiquetes en local i detectant-ne menys de la meitat al núvol), el sistema activa l'assistent de recuperació.
 2.  **Validació manual:** el mode més estricte. Sempre que hi hagi una discrepància en les mètriques entre aquest equip i el núvol, l'extensió et demanarà confirmar quina versió vols mantenir.
@@ -72,7 +72,7 @@ Mentre l'extensió s'utilitzi en mode de desenvolupament, disposaràs de tres ni
 ### 🔄 Assistent de recuperació
 Quan es detecta una inconsistència, l'extensió mostra un diàleg detallat amb mètriques comparatives perquè prenguis una decisió informada:
 
-![Diàleg de conflicte](assets/alerta-fusión.png)
+![Diàleg de conflicte](assets/alerta-fusión-ca.png)
 
 ---
 

@@ -63,7 +63,7 @@ Debido a que Google Chrome puede eliminar los datos de sincronización al desins
 ### 🛠️ Modos de seguridad en desarrollo (instalación manual)
 Mientras la extensión se use en modo de desarrollo, dispondrás de tres niveles de protección configurables desde el modal de gestión de etiquetas:
 
-![Modos de sincronización](assets/modos-sync-dev.png)
+![Modos de sincronización](assets/modos-sync-dev-es.png)
 
 1.  **Inteligente (recomendado):** utiliza una **heurística de confianza**. Si detecta una pérdida masiva de datos en la nube (teniendo al menos 3 etiquetas en local y detectando menos de la mitad en la nube), el sistema activa el asistente de recuperación.
 2.  **Validación manual:** el modo más estricto. Siempre que haya una discrepancia en las métricas entre este equipo y la nube, la extensión te pedirá confirmar qué versión deseas mantener.
@@ -72,7 +72,7 @@ Mientras la extensión se use en modo de desarrollo, dispondrás de tres niveles
 ### 🔄 Asistente de recuperación
 Cuando se detecta una inconsistencia, la extensión muestra un diálogo detallado con métricas comparativas para que tomes una decisión informada:
 
-![Diálogo de conflicto](assets/alerta-fusión.png)
+![Diálogo de conflicto](assets/alerta-fusión-es.png)
 
 ---
 
