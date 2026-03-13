@@ -94,6 +94,8 @@ En resumen: se ha elegido el camino de la **maestría técnica** sobre el camino
 
 Si la extensión se instala desde la tienda oficial, detecta el entorno y simplifica su lógica al máximo. En este modo, confia plenamente en la infraestructura nativa de Google Sync y opera de forma ligera sin necesidad de mantener backups locales redundantes ni mostrar diálogos de conflicto.
 
+**Importante:** al desinstalar la extensión oficial, Google elimina automáticamente todos los datos sincronizados asociados a tu cuenta para esta extensión. Si deseas conservar tu organización para una instalación futura, realiza siempre una exportación manual antes de eliminarla.
+
 ---
 
 ## ⚠️ Recomendaciones de seguridad

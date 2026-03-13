@@ -94,6 +94,8 @@ In short: the path of **technical mastery** has been chosen over the short path,
 
 If the extension is installed from the official store, it detects the environment and simplifies its logic to the maximum. In this mode, it fully trusts the native Google Sync infrastructure and operates lightly without the need to maintain redundant local backups or show conflict dialogs.
 
+**Important:** When uninstalling the official extension, Google automatically deletes all associated synced data from your account. If you wish to preserve your organization for a future installation, always perform a manual export before removing the extension.
+
 ---
 
 ## ⚠️ Security Recommendations

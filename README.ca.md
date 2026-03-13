@@ -94,6 +94,8 @@ En resum: s'ha triat el camí del **maestratge tècnic** sobre el camí curt, ga
 
 Si l'extensió s'instal·la des de la botiga oficial, detecta l'entorn i simplifica la seva lògica al màxim. En aquest mode, confia plenament en la infraestructura nativa de Google Sync i opera de forma lleugera sense necessitat de mantenir backups locals redundants ni mostrar diàlegs de conflicte.
 
+**Important:** en desinstal·lar l'extensió oficial, Google elimina automàticament totes les dades sincronitzades associades al teu compte per a aquesta extensió. Si vols conservar la teva organització per a una instal·lació futura, realitza sempre una exportació manual abans d'eliminar-la.
+
 ---
 
 ## ⚠️ Recomanacions de seguretat
